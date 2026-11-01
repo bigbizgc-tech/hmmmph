@@ -1,5 +1,5 @@
 // Shared page chrome + component helpers. Every page renders through renderPage().
-import { BIZ, SOCIALS, LEVELS } from './data/business.mjs';
+import { BIZ, SOCIALS, LEVELS, POLICY, PLATFORMS, REEL } from './data/business.mjs';
 import { ICONS } from './data/icons.mjs';
 import { OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, offerPath } from './data/offers.mjs';
 
@@ -59,7 +59,7 @@ export function makeCtx(page, all) {
 
   const socialRow = (cls = 'socials') => `<ul class="${cls}">${SOCIALS.map((s) => `<li><a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}: ${esc(s.handle)}">${icon(s.key)}<span>${s.label}</span></a></li>`).join('')}</ul>`;
 
-  return { page, all, r, link, btn, classified, mark, offerCard, crumbs, contactLines, socialRow, icon, arrow, logoMark, esc, BIZ, SOCIALS, LEVELS, OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, offerPath };
+  return { POLICY, PLATFORMS, REEL, page, all, r, link, btn, classified, mark, offerCard, crumbs, contactLines, socialRow, icon, arrow, logoMark, esc, BIZ, SOCIALS, LEVELS, OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, offerPath };
 }
 
 // ── Chrome ───────────────────────────────────────────────────────────────────

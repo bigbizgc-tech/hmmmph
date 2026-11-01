@@ -43,7 +43,7 @@ Pages without `file` (thank-you, vault, privacy, terms, 404) give no clearance f
 | `c.contactLines()` | Big phone number + email with copy buttons. |
 | `c.socialRow()` | Social links with icons. |
 | `c.icon('x')` | Brand icon SVG: x, tiktok, instagram, facebook, youtube, discord. |
-| `c.BIZ`, `c.SOCIALS`, `c.LEVELS`, `c.OFFERS`, `c.BOOSTS`, `c.PLANS`, `c.ADDONS`, `c.SERVICES`, `c.offerPath(o)` | Data. Never hard-code a price: read it from the offer. |
+| `c.BIZ`, `c.SOCIALS`, `c.LEVELS`, `c.POLICY` (refund/billing wording: use it verbatim), `c.PLATFORMS`, `c.REEL`, `c.OFFERS`, `c.BOOSTS`, `c.PLANS`, `c.ADDONS`, `c.SERVICES`, `c.offerPath(o)` | Data. Never hard-code a price: read it from the offer. |
 
 ## CSS components (in `src/assets/css/site.css`)
 

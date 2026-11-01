@@ -53,3 +53,15 @@ export const LEVELS = [
 ];
 
 export const XP = { visit: 10, read: 15, quiz: 30, lead: 50, mark: 25, blackout: 20 };
+
+// Refund + billing policy. DRAFT written for the 2.0 launch: the owner must confirm it.
+// Every page that mentions refunds or cancelling must say the same thing as this.
+export const POLICY = {
+  updated: 'November 1, 2026',
+  boosts: 'Cancel before your ad is set up and you get a full refund. Once ad money has been paid to a platform, that part can’t be returned. If we don’t deliver the run, you get the setup part back too.',
+  plans: 'Monthly plans run month to month. Cancel any time before your next billing date and you won’t be charged again. A month that has already started isn’t refunded.',
+  addons: 'If we haven’t started the work, you get a full refund. One round of edits is included once it’s delivered.',
+  quoted: 'Quoted jobs follow the written quote you approve before work starts.',
+  rejected: 'If a platform rejects an ad, we fix it and resubmit. If it still can’t run, unspent ad money is refunded.',
+  payment: 'After you send the form or call, we confirm the details and how you’d like to pay before anything starts.',
+};
