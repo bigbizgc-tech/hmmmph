@@ -1,4 +1,5 @@
 node_modules/
-.shots/
+.shots*/
 .preview/
+.out*/
 .DS_Store

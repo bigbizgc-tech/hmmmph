@@ -11,8 +11,8 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const DOCS = join(ROOT, 'docs');
-const OUT = join(ROOT, '.shots');
+const DOCS = join(ROOT, process.env.DOCS || 'docs');
+const OUT = join(ROOT, process.env.SHOTS || '.shots');
 const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.xml': 'application/xml', '.txt': 'text/plain' };
 
 async function listPages(dir = DOCS, base = '') {

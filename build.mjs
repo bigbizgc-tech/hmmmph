@@ -10,7 +10,9 @@ import { LEVELS, XP } from './src/data/business.mjs';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const PREVIEW = process.argv.includes('--preview');
-const OUT = join(ROOT, PREVIEW ? '.preview' : 'docs');
+const OUT = join(ROOT, process.env.OUT_DIR || (PREVIEW ? '.preview' : 'docs'));
+// LENIENT=1: skip page modules that fail to load (parallel editing) and report broken links as warnings.
+const LENIENT = !!process.env.LENIENT;
 const config = { ...baseConfig, ...(PREVIEW ? { previewMode: true, xPixelId: '' } : {}) };
 
 async function loadPages() {
@@ -18,9 +20,16 @@ async function loadPages() {
   const files = (await readdir(dir)).filter((f) => f.endsWith('.mjs')).sort();
   const pages = [];
   for (const f of files) {
-    const mod = await import(pathToFileURL(join(dir, f)).href);
-    let exp = mod.default;
-    if (typeof exp === 'function') exp = await exp();
+    let exp;
+    try {
+      const mod = await import(pathToFileURL(join(dir, f)).href + (LENIENT ? '?t=' + process.hrtime.bigint() : ''));
+      exp = mod.default;
+      if (typeof exp === 'function') exp = await exp();
+    } catch (e) {
+      if (!LENIENT) throw new Error(`${f}: ${e.message}`);
+      console.warn(`⚠ skipped ${f}: ${e.message}`);
+      continue;
+    }
     for (const p of Array.isArray(exp) ? exp : [exp]) {
       for (const k of ['path', 'title', 'description', 'body']) if (!p[k]) throw new Error(`${f}: page missing "${k}"`);
       pages.push(p);
@@ -80,7 +89,9 @@ async function main() {
     const assets = PREVIEW
       ? { inline: true, css, siteJs, configJs, bare: page.path === 'index.html' }
       : { inline: false };
-    const html = renderPage(page, pages, config, assets);
+    let html;
+    try { html = renderPage(page, pages, config, assets); }
+    catch (e) { if (!LENIENT) throw new Error(`${page.path}: ${e.message}`); console.warn(`⚠ skipped ${page.path}: ${e.message}`); continue; }
     out.push({ path: page.path, html });
     await mkdir(dirname(join(OUT, page.path)), { recursive: true });
     await writeFile(join(OUT, page.path), html);
@@ -100,7 +111,7 @@ async function main() {
   console.log(`Built ${out.length} pages → ${OUT.replace(ROOT + '/', '')}/  (${files.length} clearance files)`);
   if (problems.length) {
     console.error(problems.join('\n'));
-    process.exitCode = 1;
+    if (!LENIENT) process.exitCode = 1;
   }
 }
 
