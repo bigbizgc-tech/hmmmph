@@ -13,7 +13,9 @@ const PREVIEW = process.argv.includes('--preview');
 const OUT = join(ROOT, process.env.OUT_DIR || (PREVIEW ? '.preview' : 'docs'));
 // LENIENT=1: skip page modules that fail to load (parallel editing) and report broken links as warnings.
 const LENIENT = !!process.env.LENIENT;
-const config = { ...baseConfig, ...(PREVIEW ? { previewMode: true, xPixelId: '' } : {}) };
+// BS_CONFIG_OVERRIDE='{"xPixelId":"test"}' lets QA build a variant without editing src/config.mjs.
+const override = process.env.BS_CONFIG_OVERRIDE ? JSON.parse(process.env.BS_CONFIG_OVERRIDE) : {};
+const config = { ...baseConfig, ...(PREVIEW ? { previewMode: true, xPixelId: '' } : {}), ...override };
 
 async function loadPages() {
   const dir = join(ROOT, 'src/pages');

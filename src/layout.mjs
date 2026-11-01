@@ -187,7 +187,8 @@ export function renderPage(page, all, config, assets) {
   const { r } = ctx;
   const body = page.body(ctx);
   const canonical = config.siteUrl + '/' + (page.path === 'index.html' ? '' : page.path);
-  const title = page.path === 'index.html' ? page.title : `${page.title} · Blackout Syndicate`;
+  // The artifact preview's entry page is named like a product in the gallery.
+  const title = page.path === 'index.html' ? (assets.bare ? 'Blackout Syndicate 2.0' : page.title) : `${page.title} · Blackout Syndicate`;
   const ld = page.jsonld ? `<script type="application/ld+json">${JSON.stringify(page.jsonld(ctx, config))}</script>` : '';
   const css = assets.inline ? `<style>${assets.css}</style>` : `<link rel="stylesheet" href="${r}assets/css/site.css">`;
   const cfg = assets.inline ? `<script>${assets.configJs}</script>` : `<script src="${r}assets/js/config.js"></script>`;
@@ -211,6 +212,7 @@ export function renderPage(page, all, config, assets) {
 <meta name="twitter:image" content="${config.siteUrl}/assets/img/og.png">
 ${page.noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="icon" href="${r}assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="${r}assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="${FONTS}">

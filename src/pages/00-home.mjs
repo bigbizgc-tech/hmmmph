@@ -7,7 +7,7 @@ const css = `
 .hero__sky{position:absolute;inset:0;width:100%;height:100%;z-index:-2;display:block}
 .hero__in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:clamp(28px,4vw,64px);align-items:end;padding-block:clamp(40px,6vw,84px) clamp(48px,7vw,96px)}
 .hero__main{display:grid;gap:clamp(20px,2.6vw,30px);min-width:0}
-.hero__title{margin:0;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(104px,30vw,288px);line-height:.8;letter-spacing:-.012em}
+.hero__title{margin:0;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(104px,36vw,288px);line-height:.8;letter-spacing:-.012em}
 .hero__stack{display:grid;--x:30%;--y:50%}
 .hero__stack>span{grid-area:1/1}
 .hero__dark{color:transparent;-webkit-text-stroke:2px rgba(242,234,216,.5)}
@@ -16,7 +16,7 @@ const css = `
 .hero__whisper{display:block;font-family:var(--f-serif);font-style:italic;font-weight:500;text-transform:none;font-size:clamp(24px,3.4vw,46px);letter-spacing:0;color:var(--gold);line-height:1;margin-top:.3em}
 .hero .lede{max-width:52ch}
 .hero__call{font-family:var(--f-type);font-size:14px;letter-spacing:.08em;color:var(--ash)}
-.hero__call a{color:var(--paper);text-decoration:none;border-bottom:1px solid var(--brass)}
+.hero__call a{color:var(--paper);text-decoration:none;border-bottom:1px solid var(--brass);white-space:nowrap}
 .visitor{background:color-mix(in srgb,var(--coal) 88%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid var(--smoke);padding:22px 20px 20px;display:grid;gap:14px;position:relative;min-width:0}
 .visitor::before{content:"";position:absolute;inset:-1px -1px auto auto;width:30px;height:30px;border-top:2px solid var(--gold);border-right:2px solid var(--gold)}
 .visitor__head{display:flex;justify-content:space-between;align-items:center;gap:10px}
