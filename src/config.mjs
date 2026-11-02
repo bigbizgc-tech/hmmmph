@@ -9,7 +9,7 @@ export default {
   // ── X PIXEL ────────────────────────────────────────────────────────────────
   // X Ads Manager → Tools → Events Manager → "Add event source" → X Pixel.
   // Paste the pixel ID (looks like "o1a2b"). Leave '' to load no tracking at all.
-  xPixelId: '',
+  xPixelId: 'rhx35',
   // Event IDs come from Events Manager → "Add events". They look like "tw-o1a2b-o3c4d".
   // An event left as '' simply doesn't fire.
   xEvents: {
