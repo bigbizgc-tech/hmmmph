@@ -24,7 +24,7 @@ const css = `
 .gs-pop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,22px)}
 @media (max-width:980px){.gs-pop{grid-template-columns:1fr}}
 @media (min-width:981px){.gs-pop{grid-template-rows:auto auto 1fr auto auto;row-gap:14px}.gs-pop>.file{grid-row:span 5;grid-template-rows:subgrid}}
-/* prices hidden: the class (its price stays) and, when there's a donation link, the Washington trip */
+/* the class (its price shows in both modes) and, when there's a donation link, the Washington trip */
 .gs-extra{display:grid;gap:clamp(14px,2vw,22px)}
 .gs-extra--2{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
 @media (max-width:900px){.gs-extra--2{grid-template-columns:1fr}}
@@ -46,9 +46,8 @@ export default {
   body: (c) => {
     const picks = ['spark', 'surge', 'total-blackout'].map((s) => bySlug[s]);
     const K = CLASSES[0];
-    // With prices hidden the class keeps its price on a gold button; the trip card shows whenever there's a donation link.
-    const extra = [
-      c.priced ? '' : `
+    // The class keeps its price on a gold button in both modes (owner: "leave a $40 button"); the trip card shows whenever there's a donation link.
+    const extra = [`
       <div class="panel gs-class">
         <div class="gs-class__txt">
           <p class="label">Live class · With Biz</p>
@@ -64,7 +63,7 @@ export default {
   <div class="wrap gs__in">
     <p class="label">You found the door · ${BIZ.area.join(' · ')}</p>
     <h1 class="gs__title">Get started.<span class="whisper">Three ways in. Pick one.</span></h1>
-    <p class="lede"><strong>Real ads. Real people. No bots.</strong> Paid reach for creators, streamers, solo businesses and local shops. ${c.priced ? 'Prices are on every package.' : 'Ask us for pricing on any package.'} Nothing runs until you say go.</p>
+    <p class="lede"><strong>Real ads. Real people. No bots.</strong> Paid reach for creators, streamers, solo businesses and local shops. ${c.priced ? 'Prices are on every package.' : 'Free quote on any package: just ask for the price.'} Nothing runs until you say go.</p>
   </div>
 </header>
 

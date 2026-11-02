@@ -184,12 +184,12 @@ const META = {
 };
 // The same, with no price (showPrices false). Offers not listed use the default plain template below.
 const META_PLAIN = {
-  spark: (o) => `${o.name}: a small, real paid push on the platform you pick, a ${o.run} with the ${S['post-kit'].name} included. Ask us for pricing. ${where}`,
-  surge: (o) => `${o.name}: paid ads every month on up to 2 platforms, aim adjusted as numbers come in, and a monthly recap. Ask us for pricing. ${where}`,
-  overdrive: (o) => `${o.name}: everything in ${S.surge.name} plus automatic posting and AI tools set up for you. Month to month. Ask us for pricing. ${where}`,
-  'total-blackout': (o) => `${o.name}: ads, AI-made posts, an AI assistant that answers customers and a clean web page, done for you. Ask us for pricing. ${BIZ.city}, ${BIZ.region}.`,
-  'post-kit': (o) => `${o.name}: a 30-day posting calendar and 12 captions written for your business, emailed as a PDF within 2 business days. Ask us for pricing.`,
-  'profile-fix': (o) => `${o.name}: a rewritten bio, a pinned post plan, organized highlights and a shot list, so your page makes sense before ads send people. Ask us for pricing.`,
+  spark: (o) => `${o.name}: a small, real paid push on the platform you pick, a ${o.run} with the ${S['post-kit'].name} included. Free quote. Ask for price. ${where}`,
+  surge: (o) => `${o.name}: paid ads every month on up to 2 platforms, aim adjusted as numbers come in, and a monthly recap. Free quote. Ask for price. ${where}`,
+  overdrive: (o) => `${o.name}: everything in ${S.surge.name} plus automatic posting and AI tools set up for you. Month to month. Free quote. Ask for price. ${where}`,
+  'total-blackout': (o) => `${o.name}: ads, AI-made posts, an AI assistant that answers customers and a clean web page, done for you. Free quote. Ask for price. ${BIZ.city}, ${BIZ.region}.`,
+  'post-kit': (o) => `${o.name}: a 30-day posting calendar and 12 captions written for your business, emailed as a PDF within 2 business days. Free quote. Ask for price.`,
+  'profile-fix': (o) => `${o.name}: a rewritten bio, a pinned post plan, organized highlights and a shot list, so your page makes sense before ads send people. Free quote. Ask for price.`,
   'ai-automation': META['ai-automation'],
 };
 
@@ -228,7 +228,7 @@ export default (cfg = {}) => OFFERS.map((src, i) => {
     title: P ? `${o.name}${isService ? '' : ' · ' + o.price + o.suffix}` : `${o.name}${isService ? '' : ' · ' + k.label}`,
     description: P
       ? o.meta || (META[o.slug] ? META[o.slug](o) : null) || `${o.name}: ${o.tagline} ${isService ? 'Quoted per job.' : o.price + o.suffix + (o.kind === 'plan' ? '' : ', one time') + '.'} ${where}`
-      : (META_PLAIN[o.slug] ? META_PLAIN[o.slug](o) : null) || `${o.name}: ${o.tagline} ${isService ? 'Quoted per job.' : o.run + '. Ask us for pricing.'} ${where}`,
+      : (META_PLAIN[o.slug] ? META_PLAIN[o.slug](o) : null) || `${o.name}: ${o.tagline} ${isService ? 'Quoted per job.' : o.run + '. Free quote. Ask for price.'} ${where}`,
     teaser: o.teaser,
     next,
     jsonld: (ctx, cfg) => ({
@@ -247,9 +247,11 @@ export default (cfg = {}) => OFFERS.map((src, i) => {
       const priced = pricesOn(c.config);
       const priceHtml = `${o.price}${o.suffix ? `<small>${o.suffix}</small>` : ''}`;
       // Prices hidden: the price spot says "Ask us for pricing" (same words as the layout's price tag).
-      const ASK = c.ASK || { label: 'Pricing', short: 'Ask us', line: 'Ask us for pricing', cta: 'Get pricing' };
-      const askHtml = `${ASK.short}<small>for pricing</small>`;
+      const ASK = c.ASK || { label: 'Pricing', short: 'Free quote', sub: 'ask for price', line: 'Free quote. Ask for price.', cta: 'Ask for price' };
+      const askHtml = `${ASK.short}<small>${ASK.sub}</small>`;
       const claim = isService || priced ? claimLabel : ASK.cta;
+      // Prices hidden: step 1 is named like the button next to it ("Claim it" becomes ASK.cta).
+      const steps = priced ? o.process : o.process.map((s) => (s.t === 'Claim it' ? { ...s, t: ASK.cta } : s));
       // The store pages show prices, so the Pay online link only shows with prices on.
       const payLink = !!(priced && c.config.showPayLinks && o.store);
 
@@ -329,7 +331,7 @@ export default (cfg = {}) => OFFERS.map((src, i) => {
 <section class="band ${isService ? 'band--paper offer-paper' : 'band--coal'}" aria-labelledby="run-h">
   <div class="wrap">
     <div class="band__head rv"><p class="label">How it runs</p><h2 class="h2" id="run-h">${plain(k.heads.run)}</h2></div>
-    <ol class="steps rv" style="--n:${o.process.length}">${o.process.map((s) => `<li><h3>${s.t}</h3><p>${s.d}</p></li>`).join('')}</ol>
+    <ol class="steps rv" style="--n:${steps.length}">${steps.map((s) => `<li><h3>${s.t}</h3><p>${s.d}</p></li>`).join('')}</ol>
   </div>
 </section>
 
@@ -345,7 +347,7 @@ export default (cfg = {}) => OFFERS.map((src, i) => {
 
 <section class="band band--flush-top offer-bonus" aria-label="Bonus file">
   <div class="wrap wrap--narrow">
-    <p class="offer-bonus__note"><span class="label">Bonus file · ${isService ? 'Before you call' : priced ? 'The price math' : 'Field notes'}</span><span>${isService ? `What to have ready before you call about ${o.name}.` : priced ? `Where the money in ${o.name} goes, worked out line by line.` : `How to get the most out of ${o.name}, line by line.`}<span class="offer-bonus__how"> It opens at Clearance 2: ${LEVELS[2].name}, which you earn by reading the site. No sign-up.</span></span></p>
+    <p class="offer-bonus__note"><span class="label">Bonus file · ${isService ? 'Before you call' : priced ? 'The price math' : 'Field notes'}</span><span>${isService ? `What to have ready before you call about ${o.name}.` : priced ? `Where the money in ${o.name} goes, worked out line by line.` : `The short version of ${o.name}, line by line.`}<span class="offer-bonus__how"> It opens at Clearance 2: ${LEVELS[2].name}, which you earn by reading the site. No sign-up.</span></span></p>
     ${c.classified({ id: 'math-' + o.slug, level: 2, bypass: true, title: isService ? `Bonus file: before you call about ${o.name}` : priced ? `Bonus file: the math behind ${o.name}` : `Bonus file: field notes on ${o.name}`, body: `<ul>${((isService || priced ? MATH : NOTES)[o.slug] || (() => []))(o).map((m) => `<li>${m}</li>`).join('')}</ul>` })}
   </div>
 </section>
@@ -366,7 +368,7 @@ export default (cfg = {}) => OFFERS.map((src, i) => {
     <div class="claim rv">
       <div class="claim__main">
         <p class="label">${o.file} · ${o.name}</p>
-        <h2 class="h2" id="claim-h">${isService ? 'Get the quote.' : 'Claim the file.'}</h2>
+        <h2 class="h2" id="claim-h">${isService ? 'Get the quote.' : priced ? 'Claim the file.' : 'Get the price.'}</h2>
         <p class="lede">${isService ? 'Tell us what you need. You get a written price before any work starts.' : priced ? `Send the form and we’ll reach out to confirm the details and how you’d like to pay. ${claimNext}` : `Send the form and we’ll reach out with pricing, the details and how you’d like to pay. ${claimNext}`}</p>
         <div class="ctas">${c.btn(claim + ' ' + c.arrow, claimHref, 'lg')}${payLink ? c.btn('Pay online now', o.store, 'ghost lg') : ''}</div>
         <p class="small muted claim__line">Or call <a href="${BIZ.phoneHref}">${BIZ.phone}</a>, or <a href="${BIZ.sms}">send a text</a>.</p>
@@ -490,10 +492,10 @@ a.ladder:hover{border-color:var(--gold)}
 .ladder--list a:hover .arw{transform:translateX(4px)}
 `;
 
-// Prices hidden: the price spots read "ASK US" in the price face with a small typed "for pricing" under it.
+// Prices hidden: the price spots read "ASK US" in the price face (site.css .price--ask, same as the file cards),
+// with the small typed "for pricing" stacked under it here.
 const ASK_CSS = `
-.price--ask{text-transform:uppercase}
-.price--ask small{display:block;margin:10px 0 0;font-family:var(--f-type);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ash)}
+.price--ask small{display:block;margin:10px 0 0;color:var(--ash)}
 .offer-card__price.price--ask{font-size:clamp(40px,4.4vw,56px)}
 .claim__price.price--ask{font-size:clamp(52px,6.4vw,84px)}
 `;

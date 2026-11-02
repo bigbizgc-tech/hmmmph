@@ -334,6 +334,9 @@ main > header .btn--ghost:not(:hover) { --bg: color-mix(in srgb, var(--void) 55%
 .file--flag::after { content: "Flagship"; position: absolute; top: -26px; right: -1px; height: 26px; display: flex; align-items: center; background: var(--gold); color: var(--void); font-family: var(--f-type); font-weight: 700; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; padding: 0 10px; }
 .price { font-family: var(--f-display); font-weight: 800; font-size: 42px; line-height: .9; color: var(--gold); font-variant-numeric: tabular-nums; letter-spacing: .01em; }
 .price small { font-family: var(--f-body); font-weight: 400; font-size: 15px; color: var(--ash); margin-left: 3px; letter-spacing: 0; }
+/* showPrices false: every price spot reads "ASK US" in the price face with a small typed "FOR PRICING" (c.priceTag) */
+.price--ask { text-transform: uppercase; }
+.price--ask small { font-family: var(--f-type); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
 .drawer-label { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; margin-bottom: 12px; border-bottom: 1px solid var(--smoke); }
 .drawer-label .h3 { color: var(--paper); }
 

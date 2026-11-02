@@ -15,6 +15,7 @@ const css = `
 .lc-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:start}
 @media (max-width:860px){.lc-grid{grid-template-columns:1fr}}
 .lc-note{font-size:15px;color:var(--ash)}
+.lc-tel{white-space:nowrap}
 ` + BOOKING_CSS;
 
 export default {
@@ -54,7 +55,7 @@ export default {
       <ul class="ticks">
         <li>${K.price} a ${K.per}, ${K.length.toLowerCase()}</li>
         <li>Class times are announced on our socials</li>
-        <li>Book a time below, or call or text <a href="${BIZ.phoneHref}">${BIZ.phone}</a></li>
+        <li><span>Book a time below, or call or text <a class="lc-tel" href="${BIZ.phoneHref}">${BIZ.phone}</a></span></li>
       </ul>
       <p class="lc-note">An independent class run by Blackout Syndicate. Not affiliated with or endorsed by Anthropic, the company that makes Claude.</p>
     </aside>

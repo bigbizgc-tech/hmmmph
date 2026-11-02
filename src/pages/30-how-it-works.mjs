@@ -18,6 +18,8 @@ const BOOST_STEPS = [
   BP[2],
   BP[3],
 ];
+// config.showPrices false: step 1 is named like the "Get pricing" buttons around it (c.ASK.cta). ctx is the helper context.
+const boostSteps = (ctx) => (ctx.priced ? BOOST_STEPS : BOOST_STEPS.map((s) => (s.t === 'Claim it' ? { ...s, t: ctx.ASK.cta } : s)));
 const PLAN_STEPS = PLANS[0].process; // Intake call, First month built, It runs every month, Monthly recap
 
 const NEED = [
@@ -377,7 +379,7 @@ export default {
     name: 'How a Blackout Syndicate boost works',
     description: 'A one-time paid push on one platform, from claim to recap.',
     url: config.siteUrl + '/how-it-works.html',
-    step: BOOST_STEPS.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.t, text: s.d })),
+    step: boostSteps(ctx).map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.t, text: s.d })),
   }),
   body: (c) => {
     const step = (s, i, extra = '') => `<li${extra}><span class="track__n" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span><div class="track__body"><h4><span class="sr">Step ${i + 1}: </span>${s.t}</h4><p>${s.d}</p></div></li>`;
@@ -387,7 +389,7 @@ export default {
     const launch = PLANS.filter((o) => o.regular).map((o) => o.name);
     // config.showPrices false: the price spots say "Ask us for pricing" (c.ASK), and nothing else changes shape.
     const P = c.priced;
-    const ask = `<span><b>${c.ASK.short}</b> for pricing</span>`;
+    const ask = `<span><b>${c.ASK.short}</b> · ${c.ASK.sub}</span>`;
     return `
 <header class="pagehead">
   <div class="wrap pagehead__in hw-head__grid">
@@ -430,7 +432,7 @@ export default {
           <p class="path__meta"><span>${nameLinks(BOOSTS)}</span>${P ? `<span>From <b>${BOOSTS[0].price}</b></span>` : ask}<span>${orList(boostDays)} days</span></p>
         </header>
         <ol class="track" data-track>
-          ${BOOST_STEPS.map((s, i) => step(s, i)).join('')}
+          ${boostSteps(c).map((s, i) => step(s, i)).join('')}
         </ol>
         <p class="path__end"><span class="path__stop" aria-hidden="true"></span><span><b>Run ends.</b> Recap in hand, you decide: go again, go bigger, or stop. Nothing renews on its own.</span>${c.mark('m2')}</p>
       </article>

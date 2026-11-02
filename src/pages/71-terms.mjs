@@ -125,8 +125,8 @@ ${c.priced ? `<div class="lg-tablewrap">
     body: c.priced ? `
 <p>Prices are in US dollars. You pay the price listed on this site when you buy. For quoted work, you pay the price in your written quote.</p>
 <p>We can change the prices on the site. A change never touches something you’ve already paid for, and a launch price on a monthly plan stays locked for as long as you stay on that plan.</p>` : `
-<p>Prices are in US dollars. ${c.ASK.line} on any package and you have the price before you buy. You pay the price we confirmed with you. For quoted work, you pay the price in your written quote.</p>
-<p>We can change our prices. A change never touches something you’ve already paid for.</p>`,
+<p>Prices are in US dollars. ${c.ASK.line} on any package. For quoted work, you pay the price in your written quote.</p>
+<p>We can change our prices. A change never touches something you’ve already paid for, and a launch price on a monthly plan stays locked for as long as you stay on that plan.</p>`,
   },
   {
     id: 'paying', t: 'Paying',

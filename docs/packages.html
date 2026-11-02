@@ -6,13 +6,13 @@
 
 <title>Packages · Blackout Syndicate</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Every Blackout Syndicate package side by side: one-time boosts, monthly plans, add-ons and quoted builds. Find yours in 3 questions, then ask for pricing.">
+<meta name="description" content="Every Blackout Syndicate package side by side: one-time boosts, monthly plans, add-ons and quoted builds. Find yours in 3 questions, then ask for a free quote.">
 <link rel="canonical" href="https://www.blackoutsyn.com/packages.html">
 <meta name="theme-color" content="#070708">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Blackout Syndicate">
 <meta property="og:title" content="Packages · Blackout Syndicate">
-<meta property="og:description" content="Every Blackout Syndicate package side by side: one-time boosts, monthly plans, add-ons and quoted builds. Find yours in 3 questions, then ask for pricing.">
+<meta property="og:description" content="Every Blackout Syndicate package side by side: one-time boosts, monthly plans, add-ons and quoted builds. Find yours in 3 questions, then ask for a free quote.">
 <meta property="og:url" content="https://www.blackoutsyn.com/packages.html">
 <meta property="og:image" content="https://www.blackoutsyn.com/assets/img/og.png">
 <meta property="og:image:width" content="1200">
@@ -21,7 +21,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@BzTheG">
 <meta name="twitter:title" content="Packages · Blackout Syndicate">
-<meta name="twitter:description" content="Every Blackout Syndicate package side by side: one-time boosts, monthly plans, add-ons and quoted builds. Find yours in 3 questions, then ask for pricing.">
+<meta name="twitter:description" content="Every Blackout Syndicate package side by side: one-time boosts, monthly plans, add-ons and quoted builds. Find yours in 3 questions, then ask for a free quote.">
 <meta name="twitter:image" content="https://www.blackoutsyn.com/assets/img/og.png">
 <meta name="twitter:image:alt" content="Blackout Syndicate: Get seen. Real ads. Real people. No bots. South Bend, Mishawaka, Elkhart.">
 
@@ -31,7 +31,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=Big+Shoulders+Display:wght@800;900&family=Bodoni+Moda:ital,opsz,wght@1,48,500;1,48,700&family=Courier+Prime:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/css/site.css?v=1h3uvki">
+<link rel="stylesheet" href="assets/css/site.css?v=yfp9vq">
 <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js')</script>
 <script src="assets/js/config.js"></script>
 <script>
@@ -131,6 +131,8 @@ twq('config','rhx35');
 .pk-result__price .price{color:var(--ink);font-size:clamp(40px,4.4vw,54px)}
 .pk-result__price .price small{color:var(--ink-mute)}
 .pk-result__cad{font-family:var(--f-type);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
+/* prices hidden: the run time gets its own line under "ASK US FOR PRICING", so the typed words don't run together */
+.price--ask+.pk-result__cad{flex-basis:100%}
 .pk-result .stamp{flex:none;width:118px;font-size:20px;margin-top:6px;color:var(--ink);box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
 .pk-result .stamp small{max-width:8em}
 .pk-result__why{font-family:var(--f-type);font-size:16.5px;line-height:1.65;max-width:58ch}
@@ -389,7 +391,7 @@ twq('config','rhx35');
           <div class="pk-result__id">
             <p class="label" data-r="kicker">Match found</p>
             <h3 class="pk-result__name" id="pk-r-name" data-r="name">Your file</h3>
-            <div class="pk-result__price"><span class="price price--ask" data-r="price">Ask us <small>for pricing</small></span><span class="pk-result__cad" data-r="cadence"></span></div>
+            <div class="pk-result__price"><span class="price price--ask" data-r="price">Free quote <small>ask for price</small></span><span class="pk-result__cad" data-r="cadence"></span></div>
           </div>
           <span class="stamp" data-r="stamp" aria-hidden="true">Match<small>Cleared for you</small></span>
         </div>
@@ -403,7 +405,7 @@ twq('config','rhx35');
         <div class="pk-result__foot">
           <div class="ctas">
             <a class="btn btn--paper" data-r="open" href="packages.html">Open the file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
-            <a class="btn btn--paper btn--ghost" data-r="claim" href="contact.html#intake">Get pricing</a>
+            <a class="btn btn--paper btn--ghost" data-r="claim" href="contact.html#intake">Ask for price</a>
           </div>
           <button class="pk-result__again" type="button" data-restart hidden>Start over</button>
         </div>
@@ -420,7 +422,7 @@ twq('config','rhx35');
       </ul>
     </div>
   </div>
-  <script type="application/json" id="pk-data">{"spark":{"name":"Spark","file":"File 01","price":"","suffix":"","cadence":"One-time","run":"3-day run","oneMonth":"","ad":null,"ladder":"Liked what Spark did? Boost puts 2.5 times the ad money behind you.","href":"packages/spark.html","claim":"contact.html?pkg=spark#intake"},"boost":{"name":"Boost","file":"File 02","price":"","suffix":"","cadence":"One-time","run":"5-day run","oneMonth":"","ad":null,"ladder":"Need it bigger? Blitz doubles the ad money and runs a full week.","href":"packages/boost.html","claim":"contact.html?pkg=boost#intake"},"blitz":{"name":"Blitz","file":"File 03","price":"","suffix":"","cadence":"One-time","run":"7-day run","oneMonth":"","ad":null,"ladder":"Need a push every month? Surge keeps it running and never restarts from zero.","href":"packages/blitz.html","claim":"contact.html?pkg=blitz#intake"},"surge":{"name":"Surge","file":"File 04","price":"","suffix":"","cadence":"Monthly","run":"Runs every month","oneMonth":"","ad":null,"ladder":"Want the posting handled too? Overdrive adds automatic posting and AI tools.","href":"packages/surge.html","claim":"contact.html?pkg=surge#intake"},"overdrive":{"name":"Overdrive","file":"File 05","price":"","suffix":"","cadence":"Monthly","run":"Runs every month","oneMonth":"","ad":null,"ladder":"Want the whole operation handled? Total Blackout is the full setup.","href":"packages/overdrive.html","claim":"contact.html?pkg=overdrive#intake"},"total-blackout":{"name":"Total Blackout","file":"File 06","price":"","suffix":"","cadence":"Monthly","run":"Runs every month","oneMonth":"","ad":null,"ladder":"Not ready for the full plan? Start with the 30-Day Post Kit and build up.","href":"packages/total-blackout.html","claim":"contact.html?pkg=total-blackout#intake"},"post-kit":{"name":"30-Day Post Kit","file":"File 07","price":"","suffix":"","cadence":"One-time","run":"Delivered in 2 business days","oneMonth":"","ad":null,"ladder":"Page looks rough? Profile Fix cleans it up before people show up.","href":"packages/post-kit.html","claim":"contact.html?pkg=post-kit#intake"},"profile-fix":{"name":"Profile Fix","file":"File 08","price":"","suffix":"","cadence":"One-time","run":"One-time cleanup","oneMonth":"","ad":null,"ladder":"Page fixed? Now put a Spark behind it.","href":"packages/profile-fix.html","claim":"contact.html?pkg=profile-fix#intake"}}</script>
+  <script type="application/json" id="pk-data">{"spark":{"name":"Spark","file":"File 01","price":"","suffix":"","cadence":"One-time","run":"3-day run","oneMonth":"","ad":null,"ladder":"Liked what Spark did? Boost puts more ad money behind you and runs longer.","href":"packages/spark.html","claim":"contact.html?pkg=spark#intake"},"boost":{"name":"Boost","file":"File 02","price":"","suffix":"","cadence":"One-time","run":"5-day run","oneMonth":"","ad":null,"ladder":"Need it bigger? Blitz puts more ad money behind you and runs a full week.","href":"packages/boost.html","claim":"contact.html?pkg=boost#intake"},"blitz":{"name":"Blitz","file":"File 03","price":"","suffix":"","cadence":"One-time","run":"7-day run","oneMonth":"","ad":null,"ladder":"Need a push every month? Surge keeps it running and never restarts from zero.","href":"packages/blitz.html","claim":"contact.html?pkg=blitz#intake"},"surge":{"name":"Surge","file":"File 04","price":"","suffix":"","cadence":"Monthly","run":"Runs every month","oneMonth":"","ad":null,"ladder":"Want the posting handled too? Overdrive adds automatic posting and AI tools.","href":"packages/surge.html","claim":"contact.html?pkg=surge#intake"},"overdrive":{"name":"Overdrive","file":"File 05","price":"","suffix":"","cadence":"Monthly","run":"Runs every month","oneMonth":"","ad":null,"ladder":"Want the whole operation handled? Total Blackout is the full setup.","href":"packages/overdrive.html","claim":"contact.html?pkg=overdrive#intake"},"total-blackout":{"name":"Total Blackout","file":"File 06","price":"","suffix":"","cadence":"Monthly","run":"Runs every month","oneMonth":"","ad":null,"ladder":"Not ready for the full plan? Start with the 30-Day Post Kit and build up.","href":"packages/total-blackout.html","claim":"contact.html?pkg=total-blackout#intake"},"post-kit":{"name":"30-Day Post Kit","file":"File 07","price":"","suffix":"","cadence":"One-time","run":"Delivered in 2 business days","oneMonth":"","ad":null,"ladder":"Page looks rough? Profile Fix cleans it up before people show up.","href":"packages/post-kit.html","claim":"contact.html?pkg=post-kit#intake"},"profile-fix":{"name":"Profile Fix","file":"File 08","price":"","suffix":"","cadence":"One-time","run":"One-time cleanup","oneMonth":"","ad":null,"ladder":"Page fixed? Now put a Spark behind it.","href":"packages/profile-fix.html","claim":"contact.html?pkg=profile-fix#intake"}}</script>
 </section>
 
 <section class="band" id="boosts" aria-labelledby="boosts-h">
@@ -440,7 +442,7 @@ twq('config','rhx35');
   <span class="file__name">Spark</span>
   <span class="file__tag">The first light. A small, real paid push to test the water.</span>
   <span class="file__foot">
-    <span class="price price--ask">Ask us <small>for pricing</small></span>
+    <span class="price price--ask">Free quote <small>ask for price</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -451,7 +453,7 @@ twq('config','rhx35');
   <span class="file__name">Boost</span>
   <span class="file__tag">More fuel, longer run. Built for a launch, a drop or a stream night.</span>
   <span class="file__foot">
-    <span class="price price--ask">Ask us <small>for pricing</small></span>
+    <span class="price price--ask">Free quote <small>ask for price</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -462,7 +464,7 @@ twq('config','rhx35');
   <span class="file__name">Blitz</span>
   <span class="file__tag">The biggest single push. For openings, events and big announcements.</span>
   <span class="file__foot">
-    <span class="price price--ask">Ask us <small>for pricing</small></span>
+    <span class="price price--ask">Free quote <small>ask for price</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -484,7 +486,7 @@ twq('config','rhx35');
           </tbody>
         </table>
       </div>
-      <p class="pk-policy"><b>Refunds</b>Cancel before your ad is set up and you get a full refund. Ad money the platform has already spent can’t be returned. If we don’t deliver the run, you get back the setup part and any ad money the platform didn’t spend.</p><p class="pk-policy"><b>Pricing</b>Ask us. <a href="contact.html#intake">Get pricing</a>, or call or text <a href="tel:+15742139097">(574) 213-9097</a>.</p>
+      <p class="pk-policy"><b>Refunds</b>Cancel before your ad is set up and you get a full refund. Ad money the platform has already spent can’t be returned. If we don’t deliver the run, you get back the setup part and any ad money the platform didn’t spend.</p><p class="pk-policy"><b>Pricing</b>Free quote. <a href="contact.html#intake">Ask for price</a>, or call or text <a href="tel:+15742139097">(574) 213-9097</a>.</p>
       <div class="pk-compare__foot">
         
         <a class="textlink" href="packages/spark.html">Start with File 01: Spark <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
@@ -510,7 +512,7 @@ twq('config','rhx35');
   <span class="file__name">Surge</span>
   <span class="file__tag">Ads every month. No restarting from zero.</span>
   <span class="file__foot">
-    <span class="price price--ask">Ask us <small>for pricing</small></span>
+    <span class="price price--ask">Free quote <small>ask for price</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -521,7 +523,7 @@ twq('config','rhx35');
   <span class="file__name">Overdrive</span>
   <span class="file__tag">Everything in Surge, plus your posting on autopilot.</span>
   <span class="file__foot">
-    <span class="price price--ask">Ask us <small>for pricing</small></span>
+    <span class="price price--ask">Free quote <small>ask for price</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -532,7 +534,7 @@ twq('config','rhx35');
   <span class="file__name">Total Blackout</span>
   <span class="file__tag">The full Blackout Syndicate marketing plan, done for you.</span>
   <span class="file__foot">
-    <span class="price price--ask">Ask us <small>for pricing</small></span>
+    <span class="price price--ask">Free quote <small>ask for price</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -556,7 +558,7 @@ twq('config','rhx35');
           </tbody>
         </table>
       </div>
-      <p class="pk-policy"><b>Billing</b>Monthly plans run month to month. Cancel any time before your next billing date and you won’t be charged again. A month that has already started isn’t refunded.</p><p class="pk-policy"><b>Pricing</b>Ask us. <a href="contact.html#intake">Get pricing</a>, or call or text <a href="tel:+15742139097">(574) 213-9097</a>.</p>
+      <p class="pk-policy"><b>Billing</b>Monthly plans run month to month. Cancel any time before your next billing date and you won’t be charged again. A month that has already started isn’t refunded.</p><p class="pk-policy"><b>Pricing</b>Free quote. <a href="contact.html#intake">Ask for price</a>, or call or text <a href="tel:+15742139097">(574) 213-9097</a>.</p>
       <div class="pk-compare__foot">
         <p>Start on any plan and move up any month.</p>
         <a class="textlink" href="packages/total-blackout.html">Open the flagship: Total Blackout <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
@@ -579,7 +581,7 @@ twq('config','rhx35');
   <span class="file__name">30-Day Post Kit</span>
   <span class="file__tag">A month of posts, planned and written. You just hit publish.</span>
   <span class="file__foot">
-    <span class="price price--ask">Ask us <small>for pricing</small></span>
+    <span class="price price--ask">Free quote <small>ask for price</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -590,7 +592,7 @@ twq('config','rhx35');
   <span class="file__name">Profile Fix</span>
   <span class="file__tag">Clean up your page before the ads send people to it.</span>
   <span class="file__foot">
-    <span class="price price--ask">Ask us <small>for pricing</small></span>
+    <span class="price price--ask">Free quote <small>ask for price</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -598,7 +600,7 @@ twq('config','rhx35');
     <div class="pk-pair rv">
       <p><strong>Pairs with any boost.</strong> The 30-Day Post Kit already comes free with every Spark. Profile Fix is best done before your first ad runs, and you publish the changes yourself, so nobody needs your login.</p>
     </div>
-    <p class="pk-policy rv"><b>Refunds</b>If we haven’t started the work, you get a full refund. One round of edits is included once it’s delivered.</p><p class="pk-policy rv"><b>Pricing</b>Ask us. <a href="contact.html#intake">Get pricing</a>, or call or text <a href="tel:+15742139097">(574) 213-9097</a>.</p>
+    <p class="pk-policy rv"><b>Refunds</b>If we haven’t started the work, you get a full refund. One round of edits is included once it’s delivered.</p><p class="pk-policy rv"><b>Pricing</b>Free quote. <a href="contact.html#intake">Ask for price</a>, or call or text <a href="tel:+15742139097">(574) 213-9097</a>.</p>
   </div>
 </section>
 

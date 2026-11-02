@@ -6,7 +6,7 @@ import { LOCKUP, CELL, snapbrim } from './data/logo.mjs';
 import { OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, CLASSES, offerPath } from './data/offers.mjs';
 
 // What a price spot says when config.showPrices is false. One wording for the whole site.
-export const ASK = { label: 'Pricing', short: 'Ask us', line: 'Ask us for pricing', cta: 'Get pricing' };
+export const ASK = { label: 'Pricing', short: 'Free quote', sub: 'ask for price', line: 'Free quote. Ask for price.', cta: 'Ask for price' };
 
 // Biz's Washington trip (owner's budget note). washington.html is only built when config.donateUrl is set.
 export const TRIP = {
@@ -58,7 +58,7 @@ export function makeCtx(page, all, config = {}) {
   // The price spot: the offer's price, or "Ask us for pricing" in the same place and size.
   const priceTag = (o, cls = 'price') => priced
     ? `<span class="${cls}">${o.price}${o.suffix ? `<small>${o.suffix}</small>` : ''}</span>`
-    : `<span class="${cls} price--ask">${ASK.short} <small>for pricing</small></span>`;
+    : `<span class="${cls} price--ask">${ASK.short} <small>${ASK.sub}</small></span>`;
   // Where "Claim it" goes; with prices hidden the same link is labelled ASK.cta ("Get pricing").
   const pricingHref = (o) => link('contact.html?pkg=' + o.slug + '#intake');
 

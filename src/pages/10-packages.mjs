@@ -314,6 +314,8 @@ const css = `
 .pk-result__price .price{color:var(--ink);font-size:clamp(40px,4.4vw,54px)}
 .pk-result__price .price small{color:var(--ink-mute)}
 .pk-result__cad{font-family:var(--f-type);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
+/* prices hidden: the run time gets its own line under "ASK US FOR PRICING", so the typed words don't run together */
+.price--ask+.pk-result__cad{flex-basis:100%}
 .pk-result .stamp{flex:none;width:118px;font-size:20px;margin-top:6px;color:var(--ink);box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
 .pk-result .stamp small{max-width:8em}
 .pk-result__why{font-family:var(--f-type);font-size:16.5px;line-height:1.65;max-width:58ch}
@@ -581,7 +583,7 @@ const PAGE = {
           <div class="pk-result__id">
             <p class="label" data-r="kicker">Match found</p>
             <h3 class="pk-result__name" id="pk-r-name" data-r="name">Your file</h3>
-            <div class="pk-result__price">${P ? '<span class="price" data-r="price"></span>' : `<span class="price price--ask" data-r="price">${c.ASK.short} <small>for pricing</small></span>`}<span class="pk-result__cad" data-r="cadence"></span></div>
+            <div class="pk-result__price">${P ? '<span class="price" data-r="price"></span>' : `<span class="price price--ask" data-r="price">${c.ASK.short} <small>${c.ASK.sub}</small></span>`}<span class="pk-result__cad" data-r="cadence"></span></div>
           </div>
           <span class="stamp" data-r="stamp" aria-hidden="true">Match<small>Cleared for you</small></span>
         </div>
@@ -770,5 +772,5 @@ const PAGE = {
 };
 
 // Prices hidden (config.showPrices: false): the same page with a description that names no price.
-const DESC_ASK = 'Every Blackout Syndicate package side by side: one-time boosts, monthly plans, add-ons and quoted builds. Find yours in 3 questions, then ask for pricing.';
+const DESC_ASK = 'Every Blackout Syndicate package side by side: one-time boosts, monthly plans, add-ons and quoted builds. Find yours in 3 questions, then ask for a free quote.';
 export default (config = {}) => (config.showPrices === false ? { ...PAGE, description: DESC_ASK } : PAGE);

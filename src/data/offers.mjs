@@ -68,6 +68,7 @@ export const OFFERS = [
         { q: 'Will I get followers?', a: 'Maybe. Spark puts you in front of real people. Whether they follow depends on your content, your audience and the platform.' },
       ],
       teaser: 'The smallest way to find out what real reach feels like.',
+      ladder: { to: 'boost', text: 'Liked what Spark did? Boost puts more ad money behind you and runs longer.' },
     },
   },
   {
@@ -105,6 +106,7 @@ export const OFFERS = [
         'Aimed at your area or the people you name',
         'A recap: spend, reach, clicks or views, and follows',
       ],
+      ladder: { to: 'blitz', text: 'Need it bigger? Blitz puts more ad money behind you and runs a full week.' },
     },
   },
   {

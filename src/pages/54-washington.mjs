@@ -94,7 +94,7 @@ const page = (config) => {
     <h2 id="wt-final-h">Send him<br>to D.C.</h2>
     <p>Give what you want. It goes toward the pass, the travel and the hotel.</p>
     ${donate('wt-donate')}
-    <p class="wt-fine">The button opens ${where} in a new tab. ${BIZ.name} is a small business, so a donation is a gift toward the trip and isn’t tax-deductible. Questions? Call or text <a href="${BIZ.phoneHref}">${BIZ.phone}</a>.</p>
+    <p class="wt-fine">The button opens ${where} in a new tab. Questions? Call or text <a href="${BIZ.phoneHref}">${BIZ.phone}</a>.</p>
   </div>
 </section>`,
   };
