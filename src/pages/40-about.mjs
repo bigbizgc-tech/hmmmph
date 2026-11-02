@@ -1,4 +1,4 @@
-// File 15: About. Who runs the Syndicate: the founder, the name, the rules, the ground, the crew.
+// File 06B: About (it follows The Reel on the reading path). Who runs the Syndicate: the founder, the name, the rules, the ground, the crew.
 // Facts only from src/data. The Level 4 reward on this page is the first-call prep file: how to get ready
 // to call GC, built from the offers and the policy (the founder's facts stay in the page itself).
 import { BIZ, SOCIALS, PLATFORMS, POLICY } from '../data/business.mjs';
@@ -343,8 +343,8 @@ const js = `
 
 export default {
   path: 'about.html',
-  file: 'File 15',
-  order: 40,
+  file: 'File 06B',
+  order: 18,
   navTitle: 'About',
   section: 'about',
   title: 'About the Syndicate',
@@ -371,7 +371,7 @@ export default {
   <div class="wrap ab-head__in">
     <div class="ab-head__main">
       ${c.crumbs([{ t: 'Home', p: 'index.html' }, { t: 'About' }])}
-      <p class="label">File 15 · Personnel · <span class="ab-nw">${BIZ.city}, ${BIZ.regionLong}</span></p>
+      <p class="label">${c.page.file} · Personnel · <span class="ab-nw">${BIZ.city}, ${BIZ.regionLong}</span></p>
       <h1 class="h1 ab-head__title">Who runs <span class="whisper">the Syndicate.</span></h1>
       <p class="lede"><strong>Gregory Clark. Goes by GC.</strong> A South Bend guy who built things with his hands for ten years. Now he builds reach for creators, streamers, solo businesses and local shops.</p>
       <div class="ctas">

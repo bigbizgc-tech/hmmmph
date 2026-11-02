@@ -1,4 +1,4 @@
-// File 13: How it works. The full play: two paths, what we need, the recap, the hard lines, the feeds.
+// File 03A: How it works (it follows File 03, Blitz, on the reading path). The full play: two paths, what we need, the recap, the hard lines, the feeds.
 import { BIZ, PLATFORMS } from '../data/business.mjs';
 import { BOOSTS, PLANS, offerPath } from '../data/offers.mjs';
 
@@ -359,8 +359,8 @@ const js = `
 
 export default {
   path: 'how-it-works.html',
-  file: 'File 13',
-  order: 30,
+  file: 'File 03A',
+  order: 13,
   navTitle: 'How it works',
   section: 'how',
   title: 'How it works',
@@ -388,7 +388,7 @@ export default {
   <div class="wrap pagehead__in hw-head__grid">
     <div class="hw-head__main">
       ${c.crumbs([{ t: 'Home', p: 'index.html' }, { t: 'How it works' }])}
-      <p class="label">File 13 · The play, in full</p>
+      <p class="label">${c.page.file} · The play, in full</p>
       <h1 class="h1 hw-title">How it<br>works<span class="whisper">Every step, start to finish.</span></h1>
       <p class="lede">Two ways in: a <strong>one-time boost</strong> or a <strong>monthly plan</strong>. Here is every step of both, what we need from you, what you get back, and the lines we never cross.</p>
       <div class="ctas">

@@ -52,7 +52,7 @@ export const LEVELS = [
   { lv: 1, name: 'Lookout', xp: 25, unlock: 'Playbook Rule 01 on the home page', href: 'index.html#cl-rule-01', cl: 'rule-01' },
   { lv: 2, name: 'Associate', xp: 60, unlock: 'The pricing math on every package file', href: 'packages/spark.html#cl-math-spark', cl: 'math-' },
   { lv: 3, name: 'Operative', xp: 110, unlock: 'How a push is actually aimed (How it works)', href: 'how-it-works.html#cl-aim', cl: 'aim' },
-  { lv: 4, name: 'Lieutenant', xp: 200, unlock: 'The founder’s full file (About)', href: 'about.html#cl-founder', cl: 'founder' },
+  { lv: 4, name: 'Lieutenant', xp: 200, unlock: 'Your first-call prep file (About)', href: 'about.html#cl-founder', cl: 'founder' },
   { lv: 5, name: 'Inner Circle', xp: 320, unlock: 'The Vault: the full Syndicate Playbook and your Syndicate ID', href: 'vault.html', cl: 'vault' },
 ];
 

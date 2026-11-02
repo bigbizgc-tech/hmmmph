@@ -13,6 +13,13 @@ const NEXT = {
   'profile-fix': 'faq.html',
   'creator-systems': 'work.html',
 };
+// The clearance drawer lists files by `order`, so it follows the same path. The story pages take the
+// gaps and are numbered after the file they follow: how-it-works 13 (File 03A), work 17 (File 06A),
+// about 18 (File 06B), faq 21 (File 08A), contact 22 (File 08B). Keep those modules in step with this.
+const ORDER = {
+  spark: 10, boost: 11, blitz: 12, surge: 14, overdrive: 15, 'total-blackout': 16, 'post-kit': 19, 'profile-fix': 20,
+  'website-design': 23, 'ai-consulting': 24, 'ai-automation': 25, 'creator-systems': 26,
+};
 
 // Section headings change with the kind of file, so clicking file to file doesn't feel copy-pasted.
 const KIND = {
@@ -81,12 +88,14 @@ const MATH = {
     `Over a ${o.run} that is about <strong>${money(adOf(o) / daysOf(o))} a day</strong> of ad money on one platform.`,
     `Three ${o.name}es cost ${money(3 * num(o.price))}. ${S.surge.name} is ${S.surge.price} a month and never restarts from zero.`,
     'Book it at least a week before your date so the whole run lands before the doors open.',
+    `<strong>Why not hit Promote yourself?</strong> You can. With ${o.name} we set the ad up in the platform’s own ad tools, aim it at your area or the audience you name, and send you a recap of spend, reach, clicks or views, and follows.`,
   ],
   surge: (o) => [
     `${o.price} a month. About <strong>${money(adOf(o))} a month goes into the ads</strong> across up to 2 platforms.`,
     `That works out to roughly <strong>${money(adOf(o) / 30)} a day</strong> of ad money, every day of the month.`,
     `One month only costs ${o.oneMonth}. Staying month to month at ${o.price} costs ${money(num(o.oneMonth) - num(o.price))} a month less.`,
     `Three ${S.blitz.name}es would cost ${money(3 * num(S.blitz.price))} for ${3 * daysOf(S.blitz)} days on one platform. ${o.name} covers the whole month on two.`,
+    `<strong>Why not hit Promote yourself?</strong> You can. With ${o.name} we run the ads on up to 2 platforms, check and adjust the aim every month as the numbers come in, and send you a monthly recap of spend, reach, clicks or views, and follows.`,
   ],
   overdrive: (o) => planMath(o, S.surge, 'buys automatic posting plus AI tools'),
   'total-blackout': (o) => planMath(o, S.overdrive, 'adds the customer-answering AI assistant and a clean web page'),
@@ -142,7 +151,7 @@ export default () => OFFERS.map((o, i) => {
   return {
     path,
     file: o.file,
-    order: 10 + i,
+    order: ORDER[o.slug] ?? 30 + i,
     navTitle: o.name,
     h1: o.name,
     section: 'packages',
@@ -296,8 +305,39 @@ export default () => OFFERS.map((o, i) => {
 </section>`;
     },
     css: OFFER_CSS,
+    js: OFFER_JS,
   };
 });
+
+// Visitors who came from one of our ads find the bonus file already open: no black bars on the page
+// the ad paid to bring them to. Everyone else keeps the redaction game. "From an ad" means the same
+// thing it does to the engine: the address carried twclid or utm_source, and site.js keeps those tags
+// for this tab in sessionStorage 'bs2.src' ({ src: 'twclid=…&utm_source=…', landing }).
+// The engine has no call to open one sheet without writing clearance, so the sheet is opened here and
+// handed back to the page (data-classified removed), and later renders leave it open. No state is
+// written and no toast is shown. A visitor already at Level 2 is left to the engine.
+const OFFER_JS = `
+(() => {
+  const el = document.querySelector('.offer-bonus [data-classified]');
+  if (!el) return;
+  const tagged = (s) => /(^|[?&])(twclid|utm_source)=[^&]/.test(s || '');
+  let saved = '';
+  try { saved = (JSON.parse(sessionStorage.getItem('bs2.src')) || {}).src || ''; } catch (e) { /* storage blocked */ }
+  if (!tagged(saved) && !tagged(location.search)) return;
+  const open = () => {
+    // already open, or a Level 2 visitor's sheet waiting to declassify in view: the engine has it
+    if (el.classList.contains('is-open') || el.dataset.watch) return;
+    el.removeAttribute('data-classified');
+    el.dataset.openedFor = 'ad';
+    el.classList.remove('is-locked', 'is-opening');
+    el.classList.add('is-open');
+    el.querySelectorAll('.classified__body a').forEach((a) => a.removeAttribute('tabindex'));
+    const status = el.querySelector('[data-classified-status]');
+    if (status) { status.textContent = ''; delete status.dataset.sig; }
+  };
+  if (window.BS) open(); else document.addEventListener('bs:ready', open);
+})();
+`;
 
 const OFFER_CSS = `
 .offer-head__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:clamp(28px,5vw,72px);align-items:start}

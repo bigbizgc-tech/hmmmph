@@ -1,4 +1,4 @@
-// File 14: FAQ. Grouped, deep-linkable, searchable. Answers come from offers.mjs and POLICY only.
+// File 08A: FAQ (it follows File 08, Profile Fix, on the reading path). Grouped, deep-linkable, searchable. Answers come from offers.mjs and POLICY only.
 import { BIZ, PLATFORMS, POLICY } from '../data/business.mjs';
 import { BOOSTS, PLANS, SERVICES, bySlug, offerPath } from '../data/offers.mjs';
 
@@ -236,8 +236,8 @@ const js = `
 
 export default {
   path: 'faq.html',
-  file: 'File 14',
-  order: 31,
+  file: 'File 08A',
+  order: 21,
   navTitle: 'FAQ',
   section: 'faq',
   title: 'FAQ',
@@ -255,7 +255,7 @@ export default {
 <header class="pagehead">
   <div class="wrap pagehead__in">
     ${c.crumbs([{ t: 'Home', p: 'index.html' }, { t: 'FAQ' }])}
-    <p class="label">File 14 · Asked and answered</p>
+    <p class="label">${c.page.file} · Asked and answered</p>
     <h1 class="h1 faq-title">FAQ<span class="whisper">Every question people ask before they buy.</span></h1>
     <p class="lede">${TOTAL_Q} straight answers about buying, the ads, results, monthly plans, your accounts and who we work with. Policy wording is quoted word for word.</p>
     <div class="faq-tools" id="faq-index">

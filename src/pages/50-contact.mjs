@@ -1,4 +1,4 @@
-// File 17: Contact. The direct line, the intake form (engine-driven lead form), service area and socials.
+// File 08B: Contact (it follows the FAQ on the reading path). The direct line, the intake form (engine-driven lead form), service area and socials.
 // Field names match the lead form engine in site.js exactly: name, business, email, phone, interest, platform, reach, message, _honey.
 import { BIZ, SOCIALS, PLATFORMS, POLICY, XP } from '../data/business.mjs';
 import { OFFERS, offerPath } from '../data/offers.mjs';
@@ -11,10 +11,16 @@ const GROUPS = [
 ];
 const KIND = { boost: 'One-time boost', plan: 'Monthly plan', addon: 'Add-on', service: 'Built to order' };
 const priceOf = (o) => (o.kind === 'service' ? 'Quoted' : o.price + o.suffix);
+// A plan's price in the same words as its own page (20-offers.mjs, the plan rate block): a launch
+// price is only "locked in" when the offer itself says so (or sets lockIn).
+const lockedIn = (o) => o.lockIn ?? /locked in/i.test([o.spend, ...(o.includes || [])].join(' '));
+const planTerms = (o) => (o.regular
+  ? `Launch price ${o.price}${o.suffix}. ${lockedIn(o) ? `Locked in while you stay. New clients after the launch pay the regular price, ${o.regular}.` : `Month to month. The regular price is ${o.regular}.`}`
+  : `${o.price}${o.suffix}, month to month. ${o.spend}`) + (o.oneMonth ? ` One month only: ${o.oneMonth}, no commitment.` : '');
 // One plain line shown under the select once a package is picked.
 const noteFor = (o) => {
   if (o.kind === 'boost') return `${KIND.boost} · ${o.run}. ${o.spend}`;
-  if (o.kind === 'plan') return `${KIND.plan} · ${o.price}${o.suffix}${o.regular ? ` launch price (regular ${o.regular})` : ''}${o.oneMonth ? `, or ${o.oneMonth} for a single month` : ''}.${o.regular ? '' : ` ${o.spend}`}`;
+  if (o.kind === 'plan') return `${KIND.plan} · ${planTerms(o)}`;
   if (o.kind === 'addon') return `${KIND.addon} · ${o.run}. ${o.tagline}`;
   return `${KIND.service} · ${o.spend}`;
 };
@@ -241,8 +247,8 @@ const js = `
 
 export default {
   path: 'contact.html',
-  file: 'File 17',
-  order: 50,
+  file: 'File 08B',
+  order: 22,
   navTitle: 'Contact',
   section: 'contact',
   title: 'Contact',

@@ -1,4 +1,4 @@
-// File 16: The Reel. The crew's own clips as poster cards (they open on YouTube), what the crew makes,
+// File 06A: The Reel (it follows File 06, Total Blackout, on the reading path). The crew's own clips as poster cards (they open on YouTube), what the crew makes,
 // an honest line on client results, the Graveshift crew, and where to follow.
 import { BIZ, SOCIALS, REEL } from '../data/business.mjs';
 import { BOOSTS, bySlug, offerPath } from '../data/offers.mjs';
@@ -218,8 +218,8 @@ const js = `
 
 export default {
   path: 'work.html',
-  file: 'File 16',
-  order: 41,
+  file: 'File 06A',
+  order: 17,
   navTitle: 'The Reel',
   section: 'work',
   title: 'The Reel',
@@ -239,7 +239,7 @@ export default {
   <div class="wrap rl-head__in">
     <div class="rl-head__main">
       ${c.crumbs([{ t: 'Home', p: 'index.html' }, { t: 'The Reel' }])}
-      <p class="label">File 16 · The Reel · Cut by the crew</p>
+      <p class="label">${c.page.file} · The Reel · Cut by the crew</p>
       <h1 class="h1">The Reel. <span class="whisper">Press play.</span></h1>
       <p class="lede"><strong>Ad spots, shorts, gaming highlights and AI tool showdowns.</strong> Everything here was made by the crew. Every clip opens on YouTube.</p>
       <div class="ctas">

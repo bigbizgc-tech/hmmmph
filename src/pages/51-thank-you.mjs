@@ -109,11 +109,21 @@ const js = `
         set('[data-lead-reach]', how);
         set('[data-reach-line]', 'You asked us to reach you ' + how + ', so that’s how we’ll get back to you.');
       }
-      const xp = document.querySelector('[data-xp-line]');
-      if (xp) xp.innerHTML = 'You just earned <b>+' + LEAD_XP + ' clearance</b> for making contact. Spend it on the files below.';
     }
+    // "You just earned" only when the engine pays the lead clearance on this load (a real send from
+    // this tab, about a second after load). A reload or a later visit never earns it again.
+    const xp = document.querySelector('[data-xp-line]');
+    const had = !!window.BS.state().lead;
+    if (xp && had) xp.innerHTML = 'Your <b>+' + LEAD_XP + ' clearance</b> for making contact is already on your file. Spend it on the files below.';
+    let paid = false;
+    document.addEventListener('bs:change', () => {
+      doors();
+      if (xp && !had && !paid && window.BS.state().lead) {
+        paid = true;
+        xp.innerHTML = 'You just earned <b>+' + LEAD_XP + ' clearance</b> for making contact. Spend it on the files below.';
+      }
+    });
     doors();
-    setTimeout(doors, 1700); // the lead award lands about a second after load
   };
   if (window.BS) go(); else document.addEventListener('bs:ready', go);
 })();

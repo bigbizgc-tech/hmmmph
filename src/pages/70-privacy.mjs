@@ -154,15 +154,22 @@ export const legalBody = (label, sections) => `
   </div>
 </section>`;
 
-// Closing: the next file card (global .nextfile styles) plus a row of ways in.
-export const legalClose = (c, { label, title, teaser, href, line, ctas }) => `
+// Closing: the next file card (global .nextfile styles) plus a row of ways in. Wide screens get the
+// same right-hand art as the site's own "Next file" card (nextFile() in layout.mjs): the target's file
+// number, outlined and lit by the searchlight, or redaction bars when the target has no number.
+export const legalClose = (c, { label, title, teaser, href, line, ctas }) => {
+  const no = String((c.all.find((p) => p.path === href) || {}).file || '').replace(/\D/g, '');
+  const bars = '<i></i><i></i><i></i><i></i>';
+  const art = no ? `<span class="nextfile__dark">${no}</span><span class="nextfile__lit">${no}</span>` : `<span class="nextfile__dark">${bars}</span><span class="nextfile__lit">${bars}</span>`;
+  return `
 <section class="band band--tight nextfile" aria-label="Where to next">
   <div class="wrap lg-close">
-    <a class="nextfile__card" href="${c.link(href)}" data-spot>
+    <a class="nextfile__card nextfile__card--art" href="${c.link(href)}" data-spot>
       <span class="label">${label}</span>
       <span class="nextfile__title">${title}</span>
       <span class="nextfile__teaser">${teaser}</span>
       <span class="nextfile__go">Open it ${c.arrow}</span>
+      <span class="nextfile__no${no ? '' : ' nextfile__no--bars'}" data-spot-layer aria-hidden="true">${art}</span>
     </a>
     <div class="lg-close__row rv">
       <p>${line}</p>
@@ -170,6 +177,7 @@ export const legalClose = (c, { label, title, teaser, href, line, ctas }) => `
     </div>
   </div>
 </section>`;
+};
 
 // ── Privacy-only pieces ──────────────────────────────────────────────────────
 const PKG_NAMES = Object.fromEntries(OFFERS.map((o) => [o.slug, o.name]));
@@ -197,6 +205,7 @@ const js = `
   if (!box) return;
   const list = box.querySelector('[data-mine-list]');
   const sess = box.querySelector('[data-mine-session]');
+  const other = box.querySelector('[data-mine-other]');
   const note = box.querySelector('[data-mine-note]');
   const NAMES = ${JSON.stringify(PKG_NAMES)};
   const LEVELS = window.BS_LEVELS || [{ lv: 0, name: 'Outsider', xp: 0 }];
@@ -222,7 +231,12 @@ const js = `
     const pkg = get('sessionStorage', 'bs2.pkg');
     const lead = get('sessionStorage', 'bs2.lead');
     const counted = get('sessionStorage', 'bs2.leadTracked');
-    const sig = JSON.stringify([L, pkg, lead, counted]);
+    const src = get('sessionStorage', 'bs2.src');
+    const reach = get('sessionStorage', 'bs2.reach');
+    const match = get('localStorage', 'bs2.match');
+    const need = get('localStorage', 'bs2.need.v1');
+    const sid = get('localStorage', 'bs2.sid');
+    const sig = JSON.stringify([L, pkg, lead, counted, src, reach, match, need, sid]);
     if (sig === last) return; last = sig;
     if (!L.ok) {
       fill(list, [['Clearance file', 'This browser blocks site storage, so nothing is saved. Clearance resets when you leave.', 'is-off']]);
@@ -242,12 +256,19 @@ const js = `
         ['Seals broken early', String(count(S.broken))],
       ]);
     }
+    const notes = [];
+    if (match.v) notes.push(['Package match answers', 'Saved']);
+    if (count(need.v)) notes.push(['What we need checklist', count(need.v) + ' ticked']);
+    if (sid.v && (sid.v.n || sid.v.b)) notes.push(['Syndicate ID card', [sid.v.n, sid.v.b].filter(Boolean).join(' · ')]);
+    fill(other, notes.length ? notes : [['Other notes', match.ok ? 'None' : 'Blocked by this browser', 'is-off']]);
     const rows = [];
     if (pkg.v) rows.push(['Last package viewed', NAMES[pkg.v] || String(pkg.v)]);
+    if (src.v && src.v.src) rows.push(['Ad link tags', String(src.v.src).split('&').map((p) => p.split('=')[0]).join(', ')]);
+    if (reach.v) rows.push(['How to reach you', String(reach.v)]);
     if (lead.v) rows.push(['Thank-you greeting', [lead.v.name, lead.v.interest].filter(Boolean).join(' · ') || 'Saved']);
     if (counted.v) rows.push(['Thank-you visit counted', 'Yes']);
     fill(sess, rows.length ? rows : [['Tab notes', pkg.ok ? 'None' : 'Blocked by this browser', 'is-off']]);
-    note.textContent = 'Read straight from this browser just now. None of it is sent to us.';
+    note.textContent = 'Read straight from this browser just now. Your clearance file never leaves it. The last package and any ad tags reach us only inside a form you send.';
   }
   draw();
   const soon = () => setTimeout(draw, 80);
@@ -283,7 +304,7 @@ const SECTIONS = (c) => [
   <li>How you’d like us to reach you: call, text or email</li>
   <li>Your message</li>
 </ul>
-<p>The form also notes which page it was sent from. Everything not marked required is up to you. Leave out anything you’d rather not share.</p>
+<p>The form also notes which page it was sent from and the last package page you looked at. If you came to the site from one of our ads, it also sends the tags that were on that ad’s link, like X’s click ID and the campaign name, so we know which ad brought you. Everything not marked required is up to you. Leave out anything you’d rather not share.</p>
 <h3>How it reaches us</h3>
 <p>When you press send, the form goes over an encrypted connection to a third-party form-delivery service, which emails it to our inbox at ${BIZ.email}. Right now that service is <a href="https://formsubmit.co" target="_blank" rel="noopener">FormSubmit</a>. It handles your message under its own terms and privacy policy. If we switch to a different delivery service, we’ll update this page.</p>
 <h3>What we use it for</h3>
@@ -311,6 +332,7 @@ const SECTIONS = (c) => [
   <li>Views of package and service pages, with the name of the package</li>
   <li>Visits to the contact page</li>
   <li>A successful form send and the thank-you page after it, with the package you picked</li>
+  <li>Taps on our call, text and email links, with the page or package they were on</li>
 </ul>
 <div class="lg-pair">
   <div><p class="label">What X can see</p><ul class="ticks">
@@ -335,7 +357,8 @@ const SECTIONS = (c) => [
 <p>Blocking the pixel doesn’t break anything here. Every page still works.</p>`,
   },
   {
-    id: 'clearance', t: 'The clearance game',
+    // not 'clearance': that id belongs to the clearance panel on every page
+    id: 'clearance-data', t: 'The clearance game',
     body: `
 <p>As you read this site, you earn clearance and open classified files. Your progress is saved in your own browser, in a spot called local storage. It stays on your device and never reaches us. It holds:</p>
 <ul>
@@ -345,17 +368,21 @@ const SECTIONS = (c) => [
   <li>Whether you found your package match, sent the form or said the name on the door</li>
   <li>Which classified seals you broke early</li>
 </ul>
+<p>Local storage also keeps three small notes, only if you use the part of the site they belong to: your answers to the <a href="${c.link('packages.html#match')}">package match</a>, the boxes you ticked on the <a href="${c.link('how-it-works.html#need')}">what we need from you</a> checklist, and the name and business you type on your Syndicate ID card.</p>
 <p>A few notes are kept for the current browser tab only, in session storage. They clear when you close the tab:</p>
 <ul>
   <li>The last package page you looked at, so the form can fill it in for you</li>
-  <li>After you send the form, your first name and the package you picked, so the thank-you page can greet you</li>
+  <li>If you came from one of our ads, the tags on that ad’s link, so the form can tell us which ad it was</li>
+  <li>How you’d like us to reach you, and after you send the form, your first name and the package you picked, so the thank-you page can greet you</li>
   <li>A note so a thank-you visit is only counted once</li>
 </ul>
-<p><strong>To wipe it:</strong> open the clearance panel with the LV meter at the top of the page and press Burn my file at the bottom. Clearing this site’s data in your browser does the same thing.</p>
+<p><strong>To wipe it:</strong> open the clearance panel with the LV meter at the top of the page and press Burn my file at the bottom. That clears your clearance and your match answers. Clearing this site’s data in your browser clears everything listed here.</p>
 <div class="lg-mine" data-mine role="group" aria-label="What this browser holds">
-  <div class="lg-mine__head"><p class="label">Live readout · this browser</p><span class="badge badge--gold">Never sent to us</span></div>
+  <div class="lg-mine__head"><p class="label">Live readout · this browser</p><span class="badge badge--gold">Clearance never sent</span></div>
   <p class="lg-mine__key">Local storage · bs2.clearance.v1</p>
   <dl class="ledger" data-mine-list><div><dt>Clearance file</dt><dd class="is-off">None. With JavaScript off, the game doesn’t run and nothing is saved.</dd></div></dl>
+  <p class="lg-mine__key">Local storage · other notes</p>
+  <dl class="ledger" data-mine-other><div><dt>Other notes</dt><dd class="is-off">None</dd></div></dl>
   <p class="lg-mine__key">Session storage · this tab only</p>
   <dl class="ledger" data-mine-session><div><dt>Tab notes</dt><dd class="is-off">None</dd></div></dl>
   <div class="lg-mine__foot">
@@ -463,7 +490,7 @@ ${legalShort({
   cells: [
     { t: 'What you send us', p: 'The contact form, calls, texts and email. We use it to answer you and do the work.', go: 'contact-form', link: 'The contact form' },
     { t: 'What X sees', p: 'The X Pixel counts visits and form sends from our X ads. X handles that under its own policy.', go: 'x-pixel', link: 'The X Pixel' },
-    { t: 'What stays with you', p: 'Your clearance lives in your own browser. Burn it any time.', go: 'clearance', link: 'The clearance game' },
+    { t: 'What stays with you', p: 'Your clearance lives in your own browser. Burn it any time.', go: 'clearance-data', link: 'The clearance game' },
     { t: 'What we never do', p: 'Sell your information. Or rent it, or trade it.', go: 'no-selling', link: 'No selling' },
   ],
   fine: `Many files on this site hold classified blocks that open as your clearance rises. This one is open to everyone, at every level.`,

@@ -308,6 +308,11 @@ const css = `
 .js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status{font-size:0;gap:8px}
 .js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status span{display:none}
 .js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__body{max-height:4.6em}
+/* stacked rules: "How do I get clearance?" sits on the first sealed rule only (no run of ten identical
+   tab stops); every sealed rule keeps its own "Break the seal anyway". The deck shows one rule at a
+   time, so the rule on screen gets both again. */
+.js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status button:first-of-type:not(:last-child){display:none}
+.js .pb--deck .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status button:first-of-type:not(:last-child){display:inline-block}
 .pb__end{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 32px;padding:clamp(22px,3vw,30px);border:1px dashed var(--brass)}
 .pb__end p{color:var(--ash);max-width:56ch}
 .pb__end b{color:var(--paper);font-weight:600}

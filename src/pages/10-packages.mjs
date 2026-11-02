@@ -560,7 +560,7 @@ export default {
           ${q.opts.map((o, oi) => `<button type="button" class="pk-opt" data-a="${o.a}" aria-pressed="false"><span class="pk-opt__key" aria-hidden="true">${keys[oi]}</span><span class="pk-opt__t">${o.t}</span><span class="pk-opt__d">${o.d}</span>${c.arrow}</button>`).join('')}
         </div>
       </div>`).join('')}
-      <div class="pk-result" data-result tabindex="-1" aria-labelledby="pk-r-name" hidden>
+      <div class="pk-result" data-result data-toast-quiet tabindex="-1" aria-labelledby="pk-r-name" hidden>
         <div class="pk-result__head">
           <div class="pk-result__id">
             <p class="label" data-r="kicker">Match found</p>
