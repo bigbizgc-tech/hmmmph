@@ -38,9 +38,9 @@
   /* The city behind every page (src/assets/js/sky.js) shows through the dark surfaces. Each one lays a
      scrim of its own colour over it: light where the sky is, deeper where text sits, so text keeps its
      contrast while the lights stay in view. Paper, gold, panels, cards and fields stay solid. */
-  --glass: color-mix(in srgb, var(--void) 60%, transparent);
-  --glass-coal: color-mix(in srgb, var(--coal) 76%, transparent);
-  --glass-deep: color-mix(in srgb, var(--void) 82%, transparent);
+  --glass: color-mix(in srgb, var(--void) 48%, transparent);
+  --glass-coal: color-mix(in srgb, var(--coal) 62%, transparent);
+  --glass-deep: color-mix(in srgb, var(--void) 74%, transparent);
   /* a dark halo for small type standing straight on the city (page heads), so it reads over a lit
      window or a beam; invisible on plain black */
   --halo: 0 0 1px var(--void), 0 0 3px var(--void), 0 0 6px var(--void), 0 0 10px var(--void), 0 0 16px var(--void), 0 0 26px var(--void);
