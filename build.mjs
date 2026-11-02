@@ -56,7 +56,8 @@ function checkLinks(outFiles) {
   const ids = new Map(outFiles.map((f) => [f.path, new Set([...f.html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]))]));
   for (const f of outFiles) {
     const base = f.path.split('/').slice(0, -1);
-    for (const m of f.html.matchAll(/\shref="([^"]+)"/g)) {
+    const markup = f.html.replace(/<script\b[\s\S]*?<\/script>/gi, '');
+    for (const m of markup.matchAll(/\shref="([^"]+)"/g)) {
       const href = m[1];
       if (/^(https?:|mailto:|tel:|sms:|data:)/.test(href)) continue;
       const [pathPart, hash] = href.split('#');

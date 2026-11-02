@@ -222,7 +222,7 @@ ${page.noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="${FONTS}">
 ${css}
-<script>document.documentElement.classList.replace('no-js','js')</script>
+<script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js')</script>
 ${cfg}
 ${pixel(config)}
 ${page.css ? `<style>${page.css}</style>` : ''}
