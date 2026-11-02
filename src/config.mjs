@@ -13,7 +13,7 @@ export default {
   // Event IDs come from Events Manager → "Add events". They look like "tw-o1a2b-o3c4d".
   // An event left as '' simply doesn't fire.
   xEvents: {
-    lead: '',          // THE conversion: fires once on thank-you.html after a real send from this browser
+    lead: 'tw-rhx35-rid9b',          // THE conversion: fires once on thank-you.html after a real send from this browser
     formSubmit: '',    // secondary: fires the moment the form is sent (same send as lead; don't count both)
     packageView: '',   // fires on every package / service page view
     contactView: '',   // fires when someone opens contact.html
