@@ -380,3 +380,8 @@ export const BOOSTS = OFFERS.filter((o) => o.kind === 'boost');
 export const PLANS = OFFERS.filter((o) => o.kind === 'plan');
 export const ADDONS = OFFERS.filter((o) => o.kind === 'addon');
 export const SERVICES = OFFERS.filter((o) => o.kind === 'service');
+
+// Classes are not packages: kept out of OFFERS so the matcher, package counts and clearance files don't change.
+export const CLASSES = [
+  { slug: 'learn-claude', name: 'Learn Claude With Me', price: '$40', per: 'class', length: 'About an hour', path: 'learn-claude.html' },
+];

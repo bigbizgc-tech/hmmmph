@@ -1,6 +1,7 @@
 // File 08B: Contact (it follows the FAQ on the reading path). The direct line, the intake form (engine-driven lead form), service area and socials.
 // Field names match the lead form engine in site.js exactly: name, business, email, phone, interest, platform, reach, message, _honey.
 import { BIZ, SOCIALS, PLATFORMS, POLICY, XP } from '../data/business.mjs';
+import { bookingBlock, BOOKING_CSS, BOOKING_JS } from '../data/booking.mjs';
 import { OFFERS, offerPath } from '../data/offers.mjs';
 
 const GROUPS = [
@@ -255,7 +256,7 @@ export default {
   description: `Call or text ${BIZ.phone}, email ${BIZ.email}, or send the form. Real paid ads, content and AI setup for ${BIZ.area.slice(0, -1).join(', ')} and ${BIZ.area.slice(-1)}.`,
   teaser: 'Make contact. Real person, real phone.',
   next: 'vault.html',
-  css, js,
+  css: css + BOOKING_CSS, js: js + BOOKING_JS,
   jsonld: (ctx, cfg) => ({
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
@@ -411,6 +412,7 @@ export default {
 
   </div>
 </section>
+${bookingBlock({ id: 'book' })}
 
 <section class="band band--coal" aria-labelledby="ready-h">
   <div class="wrap">

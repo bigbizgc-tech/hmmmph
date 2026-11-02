@@ -30,8 +30,8 @@
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..800;1,100,400&family=Big+Shoulders+Display:wght@600;800;900&family=Bodoni+Moda:ital,opsz,wght@1,6..96,500;1,6..96,700&family=Courier+Prime:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=Big+Shoulders+Display:wght@800;900&family=Bodoni+Moda:ital,opsz,wght@1,48,500;1,48,700&family=Courier+Prime:wght@400;700&display=swap">
+<link rel="stylesheet" href="assets/css/site.css?v=w9ospk">
 <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js')</script>
 <script src="assets/js/config.js"></script>
 <script>
@@ -151,13 +151,13 @@ twq('config','rhx35');
 .need__fine a{color:var(--gold)}
 
 /* ── The recap (paper) ── */
-@media (max-width:600px){.recap-h .whisper{display:block;margin-top:.12em}}
+
 .recap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:start}
 @media (max-width:960px){.recap{grid-template-columns:1fr}}
 .gloss{margin:0;display:grid;border-top:2px solid var(--ink)}
 .gloss>div{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:8px 28px;padding:20px 0;border-bottom:1px solid rgba(23,20,15,.18)}
 .gloss dt{display:grid;gap:8px;align-content:start;font-family:var(--f-display);font-weight:900;font-size:clamp(32px,3vw,42px);line-height:.88;text-transform:uppercase;color:var(--ink)}
-.gloss dt small{font-family:var(--f-type);font-weight:400;font-size:11.5px;letter-spacing:.14em;line-height:1.35;color:var(--brass)}
+.gloss dt small{font-family:var(--f-type);font-weight:400;font-size:11.5px;letter-spacing:.14em;line-height:1.35;color:var(--ink-mute)}
 .gloss dd{margin:0;color:var(--ink);font-size:16.5px;line-height:1.55}
 @media (max-width:560px){.gloss>div{grid-template-columns:1fr}}
 .ri{margin:0;border:1.5px solid var(--ink);padding:clamp(20px,3vw,28px);display:grid;gap:20px;background:var(--paper);box-shadow:10px 10px 0 rgba(23,20,15,.12);position:sticky;top:110px}
@@ -243,6 +243,7 @@ twq('config','rhx35');
 </head>
 <body data-path="how-it-works.html" data-root="">
 <a class="skip" href="#main">Skip to content</a>
+<canvas class="sky" data-sky aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
 
 <header class="topbar" data-topbar>
@@ -252,6 +253,11 @@ twq('config','rhx35');
     <nav class="menu" id="menu" aria-label="Main">
       <ul><li><a href="packages.html">Packages</a></li><li><a href="how-it-works.html" aria-current="page">How it works</a></li><li><a href="work.html">The Reel</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li></ul>
       <a class="btn btn--sm menu__cta" href="contact.html">Make contact</a>
+      <div class="menu__line">
+        <p class="label">Or call or text</p>
+        <a class="menu__num" href="tel:+15742139097">(574) 213-9097</a>
+        <div class="menu__acts"><a class="btn btn--sm" href="tel:+15742139097">Call</a><a class="btn btn--sm btn--ghost" href="sms:+15742139097">Text</a></div>
+      </div>
     </nav>
     <div class="topbar__end">
       <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false">
@@ -270,7 +276,7 @@ twq('config','rhx35');
   <div class="wrap pagehead__in hw-head__grid">
     <div class="hw-head__main">
       <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li aria-current="page">How it works</li></ol></nav>
-      <p class="label">File 13 · The play, in full</p>
+      <p class="label">File 03A · The play, in full</p>
       <h1 class="h1 hw-title">How it<br>works<span class="whisper">Every step, start to finish.</span></h1>
       <p class="lede">Two ways in: a <strong>one-time boost</strong> or a <strong>monthly plan</strong>. Here is every step of both, what we need from you, what you get back, and the lines we never cross.</p>
       <div class="ctas">
@@ -296,7 +302,7 @@ twq('config','rhx35');
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">01 · The two paths</p>
-      <h2 class="h2" id="paths-h">One push, <span class="whisper">or every month.</span></h2>
+      <h2 class="h2" id="paths-h">One push, or every month.</h2>
       <p>A boost is one push with a start and an end. A plan keeps the push running month after month. Same real ads, different rhythm.</p>
     </div>
     <div class="paths">
@@ -349,7 +355,7 @@ twq('config','rhx35');
     <div class="need__side">
       <div class="need__intro rv">
         <p class="label">02 · What we need from you</p>
-        <h2 class="h2" id="need-h">What we need <span class="whisper">from you.</span></h2>
+        <h2 class="h2" id="need-h">What we need from you.</h2>
         <p class="muted">Have these ready and the first conversation takes minutes. Tick them off as you go. Missing one? Ask anyway. Sorting it out is part of the job.</p>
       </div>
       <div class="need__card rv" data-need-card>
@@ -380,7 +386,7 @@ twq('config','rhx35');
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">03 · What you get back</p>
-      <h2 class="h2 recap-h" id="recap-h">The recap, <span class="whisper">in plain English.</span></h2>
+      <h2 class="h2 recap-h" id="recap-h">The recap, in plain English.</h2>
       <p>Every boost ends with a recap. Every plan gets one each month. Here is what each number on it means.</p>
     </div>
     <div class="recap">
@@ -428,7 +434,7 @@ twq('config','rhx35');
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">05 · Where we push</p>
-      <h2 class="h2" id="where-h">5 feeds. <span class="whisper">One honest pick.</span></h2>
+      <h2 class="h2" id="where-h">5 feeds. One honest pick.</h2>
       <p>We put your money where your people already scroll, and tell you straight when a platform is the wrong fit.</p>
     </div>
     <ul class="feeds rv">
@@ -485,11 +491,12 @@ twq('config','rhx35');
 <section class="nextfile band band--tight" aria-label="Next file">
   <div class="wrap">
     <div data-jump hidden></div>
-    <a class="nextfile__card" href="faq.html" data-spot>
-      <span class="label">Next file · File 14</span>
-      <span class="nextfile__title">FAQ</span>
-      <span class="nextfile__teaser">Every question people ask before <span class="rx-word">they</span> <span class="rx-word">buy,</span> <span class="rx-word">answered</span> <span class="rx-word">straight.</span></span>
+    <a class="nextfile__card nextfile__card--art" href="packages/surge.html" data-spot>
+      <span class="label">Next file · File 04</span>
+      <span class="nextfile__title">Surge</span>
+      <span class="nextfile__teaser">The push that never <span class="rx-word">restarts</span> <span class="rx-word">from</span> <span class="rx-word">zero.</span></span>
       <span class="nextfile__go">Open it <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
+      <span class="nextfile__no" data-spot-layer aria-hidden="true"><span class="nextfile__dark">04</span><span class="nextfile__lit">04</span></span>
     </a>
   </div>
 </section>
@@ -503,7 +510,7 @@ twq('config','rhx35');
         <p class="foot__line">Real ads. Real people. No bots.</p>
         
 <div class="lines">
-  <div class="lines__row"><a class="lines__big" href="tel:+15742139097">(574) 213-9097</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></div>
+  <div class="lines__row"><a class="lines__big" href="tel:+15742139097" aria-label="Call (574) 213-9097">(574) 213-9097</a><span class="lines__acts"><a class="copy lines__act" href="tel:+15742139097">Call</a><a class="copy lines__act" href="sms:+15742139097">Text</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></span></div>
   <div class="lines__row"><a class="lines__mail" href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
   <p class="lines__note">Call or text. South Bend, Mishawaka, Elkhart and anywhere online.</p>
 </div>
@@ -539,7 +546,7 @@ twq('config','rhx35');
 </aside>
 <div class="toasts" data-toasts role="status" aria-live="polite"></div>
 <div class="veil" data-veil hidden></div>
-<script src="assets/js/site.js"></script>
+<script src="assets/js/site.js?v=1c4gojg"></script>
 <script>
 /* Tracks fill with light as you read down them */
 (() => {
@@ -639,5 +646,6 @@ twq('config','rhx35');
   if (window.BS) watch(); else document.addEventListener('bs:ready', watch, { once: true });
 })();
 </script>
+<script src="assets/js/sky.js?v=13k6jt5"></script>
 </body>
 </html>

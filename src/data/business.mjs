@@ -8,6 +8,9 @@ export const BIZ = {
   phoneHref: 'tel:+15742139097',
   sms: 'sms:+15742139097',
   email: 'info@blackoutsyn.com',
+  // Biz's Google Calendar booking page (1-hour slots) and its official inline embed.
+  booking: 'https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0Tt-GekG_A-1iOgDPKcKCITFBH1ueDON5a_LyZd_O-g26Yz_-i44LIeKeoKF3qh-zLkCXShW9F',
+  bookingEmbed: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0Tt-GekG_A-1iOgDPKcKCITFBH1ueDON5a_LyZd_O-g26Yz_-i44LIeKeoKF3qh-zLkCXShW9F?gv=true',
   city: 'South Bend',
   region: 'IN',
   regionLong: 'Indiana',

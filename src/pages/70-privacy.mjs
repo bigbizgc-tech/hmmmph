@@ -323,6 +323,12 @@ const SECTIONS = (c) => [
 <p>Those messages travel through phone carriers and email providers, ours and yours, under their own policies.</p>`,
   },
   {
+    id: 'booking', t: 'The booking calendar',
+    body: `
+<p>The booking calendar on some pages is Google Calendar’s booking page, shown inside this site. If you book a time, what you type into it goes to Google and to us, so we can hold the slot and reach you. Google handles it under its own <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">privacy policy</a>.</p>
+<p>Booking is optional. You can always use the form, call or text instead.</p>`,
+  },
+  {
     id: 'x-pixel', t: 'The X Pixel',
     body: `
 <p>This site uses the X Pixel, a small piece of code from X (the platform that used to be Twitter). We run ads on X, and the pixel tells us whether those ads lead to real visits and real inquiries.</p>
@@ -414,7 +420,7 @@ const SECTIONS = (c) => [
     id: 'no-selling', t: 'We don’t sell your information',
     body: `
 <p class="lg-quote">We don’t sell your personal information. We don’t rent it or trade it either.</p>
-<p>The only outside companies that handle it are the ones named on this page: the form-delivery service, our email and phone providers, X for the pixel, Google for the fonts, our web host, and the platforms that run the work you approve. We would also share information if the law required it.</p>`,
+<p>The only outside companies that handle it are the ones named on this page: the form-delivery service, our email and phone providers, X for the pixel, Google for the fonts and the booking calendar, our web host, and the platforms that run the work you approve. We would also share information if the law required it.</p>`,
   },
   {
     id: 'how-long', t: 'How long we keep it',

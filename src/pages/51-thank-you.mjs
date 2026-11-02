@@ -2,6 +2,7 @@
 // The engine in site.js fills [data-lead-name], [data-lead-interest], [data-lead-preview] and awards the lead clearance.
 // This page's script refines the wording, fills the intake slip and lights the "while you wait" doors.
 import { BIZ, LEVELS, POLICY, XP } from '../data/business.mjs';
+import { bookingBlock, BOOKING_CSS, BOOKING_JS } from '../data/booking.mjs';
 
 const css = `
 /* ── Hero: file received ── */
@@ -135,7 +136,7 @@ export default {
   title: 'File received',
   description: 'Your message reached Blackout Syndicate. See what happens next, the direct line if it can’t wait, and where to go deeper on the site while you wait.',
   noindex: true,
-  css, js,
+  css: css + BOOKING_CSS, js: js + BOOKING_JS,
   body: (c) => {
     const fileOf = (p) => (c.all.find((x) => x.path === p) || {}).file || '';
     const reelFile = fileOf('work.html');
@@ -184,6 +185,7 @@ export default {
     </ol>
   </div>
 </section>
+${bookingBlock({ id: 'book', label: 'Optional · Next step', title: 'Want to talk sooner? Pick a time.', lead: 'Your message is already on the desk, so this is optional. If you would rather talk it through, grab a 1-hour slot below.' })}
 
 <section class="band band--tight" aria-labelledby="urgent-h">
   <div class="wrap">

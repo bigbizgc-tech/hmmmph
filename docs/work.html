@@ -30,8 +30,8 @@
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..800;1,100,400&family=Big+Shoulders+Display:wght@600;800;900&family=Bodoni+Moda:ital,opsz,wght@1,6..96,500;1,6..96,700&family=Courier+Prime:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=Big+Shoulders+Display:wght@800;900&family=Bodoni+Moda:ital,opsz,wght@1,48,500;1,48,700&family=Courier+Prime:wght@400;700&display=swap">
+<link rel="stylesheet" href="assets/css/site.css?v=w9ospk">
 <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js')</script>
 <script src="assets/js/config.js"></script>
 <script>
@@ -41,6 +41,55 @@ a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,
 twq('config','rhx35');
 </script>
 <style>
+/* ── Clip posters (shared: home reel + work.html) ── */
+.rl-art{position:absolute;inset:0;z-index:-2;overflow:hidden}
+
+/* art: searchlight on the words */
+.rl-art--beam{background:radial-gradient(110% 60% at 50% 0,rgba(217,178,95,.12),transparent 64%),var(--void)}
+.rl-beam__cone{position:absolute;left:-30%;top:-20%;width:160%;height:140%;background:conic-gradient(from 165deg at 50% 0,transparent 0deg,rgba(243,212,138,.13) 10deg,transparent 22deg);transform-origin:50% 0;animation:rlCone 7s ease-in-out infinite alternate}
+.rl-beam__words{position:absolute;left:9%;right:6%;top:var(--art-top,max(62px,10%));font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:var(--art-words,clamp(84px,9vw,150px));line-height:.82;letter-spacing:-.01em;color:transparent;-webkit-text-stroke:1.5px rgba(242,234,216,.34);background:linear-gradient(100deg,transparent 34%,var(--gold) 44%,var(--gold-hi) 50%,var(--gold) 56%,transparent 66%) 50% 0/260% 100% no-repeat;-webkit-background-clip:text;background-clip:text;animation:rlBeam 5.5s ease-in-out infinite alternate}
+:hover>.rl-art .rl-beam__words{animation-duration:2.2s}
+@keyframes rlBeam{from{background-position:100% 0}to{background-position:0 0}}
+@keyframes rlCone{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
+
+/* art: the reticle (Graveshift) */
+.rl-art--reticle{background:radial-gradient(60% 50% at 50% 40%,rgba(229,72,77,.24),transparent 70%),var(--void);display:grid;place-items:start center;padding-top:var(--ret-top,14%)}
+.rl-ret{width:var(--ret-w,min(92%,340px));height:auto;overflow:visible;fill:none;stroke:var(--signal);stroke-width:1.5;transition:transform .5s var(--ease)}
+.rl-ret__spin{transform-origin:100px 100px;animation:rlSpin 26s linear infinite;opacity:.8}
+.rl-ret__mid{stroke-dasharray:4 7;opacity:.55}
+.rl-ret__cross{stroke:var(--paper);opacity:.5}
+.rl-ret__cup{stroke:var(--gold-hi);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(243,212,138,.7))}
+:hover>.rl-art .rl-ret{transform:scale(.9)}
+:hover>.rl-art .rl-ret__spin{animation-duration:4s}
+@keyframes rlSpin{to{transform:rotate(360deg)}}
+
+/* art: the showdown */
+.rl-art--vs{background:var(--void)}
+.rl-vs{position:absolute;inset:0;display:flex;transition:transform .5s var(--ease)}
+.rl-vs span{position:absolute;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:var(--vs-size,clamp(50px,4.8vw,74px));line-height:.85;letter-spacing:-.005em}
+.rl-vs--a{clip-path:polygon(0 0,60% 0,40% 100%,0 100%);background:radial-gradient(80% 90% at 10% 20%,rgba(217,178,95,.2),transparent 70%),var(--vault)}
+.rl-vs--a span{left:6%;top:var(--vs-a,60px);color:var(--gold-hi)}
+.rl-vs--b{clip-path:polygon(60% 0,100% 0,100% 100%,40% 100%);background:radial-gradient(80% 90% at 90% 30%,rgba(242,234,216,.1),transparent 70%),var(--coal)}
+.rl-vs--b span{right:6%;top:var(--vs-b,124px);color:transparent;-webkit-text-stroke:1.5px var(--paper)}
+.rl-vs__slash{position:absolute;left:50%;top:-10%;bottom:-10%;width:2px;background:var(--gold);transform:rotate(11.3deg);box-shadow:0 0 18px rgba(243,212,138,.8)}
+.rl-vs__x{position:absolute;left:50%;top:var(--vs-x,120px);width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;background:var(--gold);color:var(--void);display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:26px;letter-spacing:.02em;box-shadow:0 0 0 6px var(--void);transition:transform .4s var(--ease)}
+:hover>.rl-art .rl-vs--a{transform:translateX(-8px)}
+:hover>.rl-art .rl-vs--b{transform:translateX(8px)}
+:hover>.rl-art .rl-vs__x{transform:scale(1.15) rotate(-8deg)}
+
+/* art: the film strip (channel) */
+.rl-art--strip{background:radial-gradient(90% 70% at 50% 40%,rgba(170,163,150,.12),transparent 70%),var(--void)}
+.rl-strip{position:absolute;left:-10%;right:-10%;top:16%;height:46%;transform:rotate(-7deg);background:#0b0a0c;border-block:1px solid var(--smoke);overflow:hidden;padding:22px 0}
+.rl-strip::before,.rl-strip::after{content:"";position:absolute;left:0;right:0;height:10px;background:repeating-linear-gradient(90deg,var(--smoke) 0 12px,transparent 12px 26px)}
+.rl-strip::before{top:6px}.rl-strip::after{bottom:6px}
+.rl-strip__run{display:flex;gap:10px;height:100%;width:max-content;animation:rlRun 22s linear infinite}
+.rl-fr{display:block;height:100%;aspect-ratio:4/3;border:1px solid var(--smoke)}
+.rl-fr--g{background:radial-gradient(60% 70% at 30% 35%,rgba(243,212,138,.45),transparent 70%),var(--vault)}
+.rl-fr--r{background:radial-gradient(60% 70% at 65% 60%,rgba(229,72,77,.4),transparent 70%),var(--vault)}
+.rl-fr--s{background:linear-gradient(160deg,rgba(242,234,216,.16),transparent 60%),var(--coal)}
+:hover>.rl-art .rl-strip__run{animation-duration:6s}
+@keyframes rlRun{to{transform:translateX(-50%)}}
+
 /* ── Opening: the countdown leader ── */
 .rl-head__in{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,72px);align-items:center}
 @media (max-width:900px){.rl-head__in{grid-template-columns:minmax(0,1fr)}}
@@ -83,7 +132,6 @@ twq('config','rhx35');
 .rl-card--red{--tone:var(--signal)}.rl-card--smoke{--tone:var(--ash)}
 .rl-card:hover,.rl-card:focus-visible{border-color:var(--tone);transform:translateY(-4px);box-shadow:0 30px 60px -34px color-mix(in srgb,var(--tone) 55%,transparent)}
 .rl-card::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(7,7,8,.55) 0,transparent 22%,transparent 46%,rgba(7,7,8,.96) 86%),repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 2px,transparent 2px 4px)}
-.rl-art{position:absolute;inset:0;z-index:-2;overflow:hidden}
 .rl-card__top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:14px}
 .rl-card__badge,.rl-card__no{font-family:var(--f-type);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;background:var(--void);border:1px solid var(--smoke);padding:4px 8px;white-space:nowrap}
 .rl-card__no{color:var(--tone);border-color:color-mix(in srgb,var(--tone) 45%,var(--smoke))}
@@ -100,54 +148,10 @@ twq('config','rhx35');
 .rl-card:hover .rl-ext{transform:translate(3px,-3px)}
 .rl-card:hover .rl-card__go{opacity:1}
 
-/* art: searchlight on the words */
-.rl-art--beam{background:radial-gradient(110% 60% at 50% 0,rgba(217,178,95,.12),transparent 64%),var(--void)}
-.rl-beam__cone{position:absolute;left:-30%;top:-20%;width:160%;height:140%;background:conic-gradient(from 165deg at 50% 0,transparent 0deg,rgba(243,212,138,.13) 10deg,transparent 22deg);transform-origin:50% 0;animation:rlCone 7s ease-in-out infinite alternate}
-.rl-beam__words{position:absolute;left:9%;right:6%;top:max(62px,10%);font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(84px,9vw,150px);line-height:.82;letter-spacing:-.01em;color:transparent;-webkit-text-stroke:1.5px rgba(242,234,216,.34);background:linear-gradient(100deg,transparent 34%,var(--gold) 44%,var(--gold-hi) 50%,var(--gold) 56%,transparent 66%) 50% 0/260% 100% no-repeat;-webkit-background-clip:text;background-clip:text;animation:rlBeam 5.5s ease-in-out infinite alternate}
-.rl-card:hover .rl-beam__words{animation-duration:2.2s}
+/* the posters themselves live in src/data/clipart.mjs (shared with the home reel) */
 .is-tall .rl-card--beam .rl-card__play{align-self:end;margin-bottom:6%}
-@keyframes rlBeam{from{background-position:100% 0}to{background-position:0 0}}
-@keyframes rlCone{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
-
-/* art: the reticle (Graveshift) */
-.rl-art--reticle{background:radial-gradient(60% 50% at 50% 40%,rgba(229,72,77,.24),transparent 70%),var(--void);display:grid;place-items:start center;padding-top:14%}
-.rl-ret{width:min(92%,340px);height:auto;overflow:visible;fill:none;stroke:var(--signal);stroke-width:1.5;transition:transform .5s var(--ease)}
-.rl-ret__spin{transform-origin:100px 100px;animation:rlSpin 26s linear infinite;opacity:.8}
-.rl-ret__mid{stroke-dasharray:4 7;opacity:.55}
-.rl-ret__cross{stroke:var(--paper);opacity:.5}
-.rl-ret__cup{stroke:var(--gold-hi);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(243,212,138,.7))}
-.rl-card:hover .rl-ret{transform:scale(.9)}
-.rl-card:hover .rl-ret__spin{animation-duration:4s}
-@keyframes rlSpin{to{transform:rotate(360deg)}}
-@media (max-width:600px){.rl-ret{width:min(78%,340px)}}
-
-/* art: the showdown */
-.rl-art--vs{background:var(--void)}
-.rl-vs{position:absolute;inset:0;display:flex;transition:transform .5s var(--ease)}
-.rl-vs span{position:absolute;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(50px,4.8vw,74px);line-height:.85;letter-spacing:-.005em}
-.rl-vs--a{clip-path:polygon(0 0,60% 0,40% 100%,0 100%);background:radial-gradient(80% 90% at 10% 20%,rgba(217,178,95,.2),transparent 70%),var(--vault)}
-.rl-vs--a span{left:6%;top:60px;color:var(--gold-hi)}
-.rl-vs--b{clip-path:polygon(60% 0,100% 0,100% 100%,40% 100%);background:radial-gradient(80% 90% at 90% 30%,rgba(242,234,216,.1),transparent 70%),var(--coal)}
-.rl-vs--b span{right:6%;top:124px;color:transparent;-webkit-text-stroke:1.5px var(--paper)}
-.rl-vs__slash{position:absolute;left:50%;top:-10%;bottom:-10%;width:2px;background:var(--gold);transform:rotate(11.3deg);box-shadow:0 0 18px rgba(243,212,138,.8)}
-.rl-vs__x{position:absolute;left:50%;top:120px;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;background:var(--gold);color:var(--void);display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:26px;letter-spacing:.02em;box-shadow:0 0 0 6px var(--void);transition:transform .4s var(--ease)}
 .rl-card--vs .rl-card__play{display:none}
-.rl-card:hover .rl-vs--a{transform:translateX(-8px)}
-.rl-card:hover .rl-vs--b{transform:translateX(8px)}
-.rl-card:hover .rl-vs__x{transform:scale(1.15) rotate(-8deg)}
-
-/* art: the film strip (channel) */
-.rl-art--strip{background:radial-gradient(90% 70% at 50% 40%,rgba(170,163,150,.12),transparent 70%),var(--void)}
-.rl-strip{position:absolute;left:-10%;right:-10%;top:16%;height:46%;transform:rotate(-7deg);background:#0b0a0c;border-block:1px solid var(--smoke);overflow:hidden;padding:22px 0}
-.rl-strip::before,.rl-strip::after{content:"";position:absolute;left:0;right:0;height:10px;background:repeating-linear-gradient(90deg,var(--smoke) 0 12px,transparent 12px 26px)}
-.rl-strip::before{top:6px}.rl-strip::after{bottom:6px}
-.rl-strip__run{display:flex;gap:10px;height:100%;width:max-content;animation:rlRun 22s linear infinite}
-.rl-fr{display:block;height:100%;aspect-ratio:4/3;border:1px solid var(--smoke)}
-.rl-fr--g{background:radial-gradient(60% 70% at 30% 35%,rgba(243,212,138,.45),transparent 70%),var(--vault)}
-.rl-fr--r{background:radial-gradient(60% 70% at 65% 60%,rgba(229,72,77,.4),transparent 70%),var(--vault)}
-.rl-fr--s{background:linear-gradient(160deg,rgba(242,234,216,.16),transparent 60%),var(--coal)}
-.rl-card:hover .rl-strip__run{animation-duration:6s}
-@keyframes rlRun{to{transform:translateX(-50%)}}
+@media (max-width:600px){.rl-grid{--ret-w:min(78%,340px)}}
 
 /* theater mode: the house lights go down on everything but the reel */
 .rl-house{position:fixed;inset:0;z-index:55;background:rgba(3,3,4,.9);opacity:0;visibility:hidden;transition:opacity .6s var(--ease),visibility 0s .6s}
@@ -216,6 +220,7 @@ twq('config','rhx35');
 </head>
 <body data-path="work.html" data-root="">
 <a class="skip" href="#main">Skip to content</a>
+<canvas class="sky" data-sky aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
 
 <header class="topbar" data-topbar>
@@ -225,6 +230,11 @@ twq('config','rhx35');
     <nav class="menu" id="menu" aria-label="Main">
       <ul><li><a href="packages.html">Packages</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="work.html" aria-current="page">The Reel</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li></ul>
       <a class="btn btn--sm menu__cta" href="contact.html">Make contact</a>
+      <div class="menu__line">
+        <p class="label">Or call or text</p>
+        <a class="menu__num" href="tel:+15742139097">(574) 213-9097</a>
+        <div class="menu__acts"><a class="btn btn--sm" href="tel:+15742139097">Call</a><a class="btn btn--sm btn--ghost" href="sms:+15742139097">Text</a></div>
+      </div>
     </nav>
     <div class="topbar__end">
       <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false">
@@ -243,7 +253,7 @@ twq('config','rhx35');
   <div class="wrap rl-head__in">
     <div class="rl-head__main">
       <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li aria-current="page">The Reel</li></ol></nav>
-      <p class="label">File 16 · The Reel · Cut by the crew</p>
+      <p class="label">File 06A · The Reel · Cut by the crew</p>
       <h1 class="h1">The Reel. <span class="whisper">Press play.</span></h1>
       <p class="lede"><strong>Ad spots, shorts, gaming highlights and AI tool showdowns.</strong> Everything here was made by the crew. Every clip opens on YouTube.</p>
       <div class="ctas">
@@ -269,7 +279,7 @@ twq('config','rhx35');
 <section class="band rl-clips" id="clips" aria-labelledby="clips-h">
   <div class="wrap">
     <div class="band__head band__head--row rl-clips__head rv">
-      <div><p class="label">Now showing</p><h2 class="h2" id="clips-h">The clips. <span class="whisper">Lights down.</span></h2><p>The crew’s own work, cut for the feeds. Each card opens the clip on YouTube in a new tab.</p></div>
+      <div><p class="label">Now showing</p><h2 class="h2" id="clips-h">The clips. Lights down.</h2><p>The crew’s own work, cut for the feeds. Each card opens the clip on YouTube in a new tab.</p></div>
       <div class="ctas"><button class="btn btn--ghost btn--sm rl-dim" type="button" data-dim aria-pressed="false"><span data-dim-t>Dim the house lights</span></button></div>
     </div>
     <ul class="rl-grid rv"><li class="is-tall">
@@ -317,7 +327,7 @@ twq('config','rhx35');
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">What the crew makes</p>
-      <h2 class="h2" id="make-h">Four kinds <span class="whisper">of cut.</span></h2>
+      <h2 class="h2" id="make-h">Four kinds of cut.</h2>
       <p>Everything on the reel falls into one of these. Each one has a clip you can watch right now.</p>
     </div>
     <ul class="rl-make rv">
@@ -359,7 +369,7 @@ twq('config','rhx35');
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">Follow the work</p>
-      <h2 class="h2" id="follow-h">The crew <span class="whisper">and the channel.</span></h2>
+      <h2 class="h2" id="follow-h">The crew and the channel.</h2>
     </div>
     <div class="rl-follow rv">
       <div class="rl-panel rl-panel--gs">
@@ -396,11 +406,12 @@ twq('config','rhx35');
 <section class="nextfile band band--tight" aria-label="Next file">
   <div class="wrap">
     <div data-jump hidden></div>
-    <a class="nextfile__card" href="contact.html" data-spot>
-      <span class="label">Next file · File 17</span>
-      <span class="nextfile__title">Contact</span>
-      <span class="nextfile__teaser">Make contact. Real <span class="rx-word">person,</span> <span class="rx-word">real</span> <span class="rx-word">phone.</span></span>
+    <a class="nextfile__card nextfile__card--art" href="about.html" data-spot>
+      <span class="label">Next file · File 06B</span>
+      <span class="nextfile__title">About</span>
+      <span class="nextfile__teaser">The man behind the Syndicate, the rules <span class="rx-word">he</span> <span class="rx-word">runs</span> <span class="rx-word">by,</span> <span class="rx-word">and</span> <span class="rx-word">the</span> <span class="rx-word">ground</span> <span class="rx-word">he</span> <span class="rx-word">covers.</span></span>
       <span class="nextfile__go">Open it <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
+      <span class="nextfile__no" data-spot-layer aria-hidden="true"><span class="nextfile__dark">06</span><span class="nextfile__lit">06</span></span>
     </a>
   </div>
 </section>
@@ -414,7 +425,7 @@ twq('config','rhx35');
         <p class="foot__line">Real ads. Real people. No bots.</p>
         
 <div class="lines">
-  <div class="lines__row"><a class="lines__big" href="tel:+15742139097">(574) 213-9097</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></div>
+  <div class="lines__row"><a class="lines__big" href="tel:+15742139097" aria-label="Call (574) 213-9097">(574) 213-9097</a><span class="lines__acts"><a class="copy lines__act" href="tel:+15742139097">Call</a><a class="copy lines__act" href="sms:+15742139097">Text</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></span></div>
   <div class="lines__row"><a class="lines__mail" href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
   <p class="lines__note">Call or text. South Bend, Mishawaka, Elkhart and anywhere online.</p>
 </div>
@@ -450,7 +461,7 @@ twq('config','rhx35');
 </aside>
 <div class="toasts" data-toasts role="status" aria-live="polite"></div>
 <div class="veil" data-veil hidden></div>
-<script src="assets/js/site.js"></script>
+<script src="assets/js/site.js?v=1c4gojg"></script>
 <script>
 /* Countdown leader: 3, 2, 1, roll. Loops while it's on screen. */
 (() => {
@@ -488,5 +499,6 @@ twq('config','rhx35');
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && on) set(false); });
 })();
 </script>
+<script src="assets/js/sky.js?v=13k6jt5"></script>
 </body>
 </html>

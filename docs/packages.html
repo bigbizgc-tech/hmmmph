@@ -30,8 +30,8 @@
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..800;1,100,400&family=Big+Shoulders+Display:wght@600;800;900&family=Bodoni+Moda:ital,opsz,wght@1,6..96,500;1,6..96,700&family=Courier+Prime:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=Big+Shoulders+Display:wght@800;900&family=Bodoni+Moda:ital,opsz,wght@1,48,500;1,48,700&family=Courier+Prime:wght@400;700&display=swap">
+<link rel="stylesheet" href="assets/css/site.css?v=w9ospk">
 <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js')</script>
 <script src="assets/js/config.js"></script>
 <script>
@@ -131,7 +131,7 @@ twq('config','rhx35');
 .pk-result__price .price{color:var(--ink);font-size:clamp(40px,4.4vw,54px)}
 .pk-result__price .price small{color:var(--ink-mute)}
 .pk-result__cad{font-family:var(--f-type);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
-.pk-result .stamp{flex:none;width:118px;font-size:20px;margin-top:6px;box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
+.pk-result .stamp{flex:none;width:118px;font-size:20px;margin-top:6px;color:var(--ink);box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
 .pk-result .stamp small{max-width:8em}
 .pk-result__why{font-family:var(--f-type);font-size:16.5px;line-height:1.65;max-width:58ch}
 .pk-result__addon{display:grid;gap:6px;padding:14px 16px;border:1px dashed var(--brass);background:rgba(138,109,52,.06)}
@@ -150,7 +150,16 @@ twq('config','rhx35');
 .pk-result__again{background:none;border:0;padding:0 0 2px;border-bottom:1px solid var(--brass);font-family:var(--f-type);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);cursor:pointer}
 .pk-result__again:hover{color:var(--brass)}
 .pk-result__again[hidden]{display:none}
-@media (max-width:520px){.pk-result .stamp{width:88px;font-size:15px;padding:10px}.pk-result .stamp small{font-size:7.5px}.pk-result__head{padding-right:12px}}
+/* phones: the name gets the full card width (whole words only), the stamp drops beside the price */
+@media (max-width:520px){
+  .pk-result__head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px 14px;padding-right:0}
+  .pk-result__id{display:contents}
+  .pk-result__id>.label{grid-column:1/-1;padding-right:36px}
+  .pk-result__name{grid-column:1/-1;font-size:clamp(38px,13.5vw,60px);overflow-wrap:break-word}
+  .pk-result__price{grid-column:1}
+  .pk-result .stamp{grid-column:2;width:84px;font-size:14px;padding:10px;margin-top:0}
+  .pk-result .stamp small{font-size:7.5px}
+}
 
 /* no-JS guide */
 .pk-guide{display:grid;gap:16px;min-width:0}
@@ -166,7 +175,6 @@ twq('config','rhx35');
 @media (max-width:560px){.pk-guide li{grid-template-columns:1fr}.pk-guide__pick{justify-items:start;text-align:left}}
 
 /* ── Groups ── */
-.pk-h2 .whisper{display:block;margin-top:.12em}
 .pk-grid{margin-top:8px}
 .pk-policy{margin-top:clamp(18px,2.4vw,26px);font-size:14px;color:var(--ash);max-width:80ch}
 .pk-policy b{font-family:var(--f-type);font-weight:400;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-right:8px}
@@ -245,7 +253,7 @@ twq('config','rhx35');
 .pk-rules h3{font-family:var(--f-display);font-weight:900;font-size:clamp(26px,2.6vw,32px);line-height:.95;text-transform:uppercase}
 .pk-rules p{color:var(--ink-mute);font-size:15.5px;max-width:58ch;margin-top:6px}
 .pk-record{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px 22px;align-items:center;margin-top:clamp(28px,4vw,44px);padding-top:clamp(22px,3vw,30px);border-top:2px solid var(--ink)}
-.pk-record .stamp{width:112px;font-size:17px;box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
+.pk-record .stamp{width:112px;font-size:17px;color:var(--ink);box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
 .pk-record p{font-family:var(--f-type);font-size:17px;line-height:1.6;max-width:62ch}
 @media (max-width:520px){.pk-record{grid-template-columns:1fr}.pk-rules li{grid-template-columns:1fr;padding:22px 18px}.pk-rules li::before{grid-row:auto;font-size:46px}}
 
@@ -268,6 +276,7 @@ twq('config','rhx35');
 </head>
 <body data-path="packages.html" data-root="">
 <a class="skip" href="#main">Skip to content</a>
+<canvas class="sky" data-sky aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
 
 <header class="topbar" data-topbar>
@@ -277,6 +286,11 @@ twq('config','rhx35');
     <nav class="menu" id="menu" aria-label="Main">
       <ul><li><a href="packages.html" aria-current="page">Packages</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="work.html">The Reel</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li></ul>
       <a class="btn btn--sm menu__cta" href="contact.html">Make contact</a>
+      <div class="menu__line">
+        <p class="label">Or call or text</p>
+        <a class="menu__num" href="tel:+15742139097">(574) 213-9097</a>
+        <div class="menu__acts"><a class="btn btn--sm" href="tel:+15742139097">Call</a><a class="btn btn--sm btn--ghost" href="sms:+15742139097">Text</a></div>
+      </div>
     </nav>
     <div class="topbar__end">
       <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false">
@@ -328,7 +342,7 @@ twq('config','rhx35');
         <li>No email needed to see it</li>
       </ul>
       <p class="pk-match__xp">First match: +30 clearance</p>
-      <p class="pk-match__call">Rather talk it through? Call or text <a href="tel:+15742139097">(574) 213-9097</a>.</p>
+      <p class="pk-match__call">Rather talk it through? Call <a href="tel:+15742139097">(574) 213-9097</a>, or <a href="sms:+15742139097">send a text</a>.</p>
     </div>
 
     <div class="pk-quiz rv" style="--d:.08s" data-quiz>
@@ -364,7 +378,7 @@ twq('config','rhx35');
           <button type="button" class="pk-opt" data-a="ads" aria-pressed="false"><span class="pk-opt__key" aria-hidden="true">A</span><span class="pk-opt__t">Just the ads</span><span class="pk-opt__d">You keep doing your own posting</span><svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></button><button type="button" class="pk-opt" data-a="posting" aria-pressed="false"><span class="pk-opt__key" aria-hidden="true">B</span><span class="pk-opt__t">Ads plus posting</span><span class="pk-opt__d">Your page stays active without you</span><svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></button><button type="button" class="pk-opt" data-a="all" aria-pressed="false"><span class="pk-opt__key" aria-hidden="true">C</span><span class="pk-opt__t">Everything</span><span class="pk-opt__d">Ads, posts, an AI assistant that answers customers and a web page</span><svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></button>
         </div>
       </div>
-      <div class="pk-result" data-result tabindex="-1" aria-labelledby="pk-r-name" hidden>
+      <div class="pk-result" data-result data-toast-quiet tabindex="-1" aria-labelledby="pk-r-name" hidden>
         <div class="pk-result__head">
           <div class="pk-result__id">
             <p class="label" data-r="kicker">Match found</p>
@@ -383,7 +397,7 @@ twq('config','rhx35');
         <div class="pk-result__foot">
           <div class="ctas">
             <a class="btn btn--paper" data-r="open" href="packages.html">Open the file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
-            <a class="btn btn--paper btn--ghost" data-r="claim" href="contact.html">Claim it</a>
+            <a class="btn btn--paper btn--ghost" data-r="claim" href="contact.html#intake">Claim it</a>
           </div>
           <button class="pk-result__again" type="button" data-restart hidden>Start over</button>
         </div>
@@ -399,15 +413,15 @@ twq('config','rhx35');
       </ul>
     </div>
   </div>
-  <script type="application/json" id="pk-data">{"spark":{"name":"Spark","file":"File 01","price":"$19.99","suffix":"","cadence":"One-time","run":"3-day run","oneMonth":"","ad":10,"ladder":"Liked what Spark did? Boost puts 2.5 times the ad money behind you.","href":"packages/spark.html","claim":"contact.html?pkg=spark"},"boost":{"name":"Boost","file":"File 02","price":"$49.99","suffix":"","cadence":"One-time","run":"5-day run","oneMonth":"","ad":25,"ladder":"Need it bigger? Blitz doubles the ad money and runs a full week.","href":"packages/boost.html","claim":"contact.html?pkg=boost"},"blitz":{"name":"Blitz","file":"File 03","price":"$99.99","suffix":"","cadence":"One-time","run":"7-day run","oneMonth":"","ad":50,"ladder":"Three Blitzes in? Surge is the better deal and it never restarts from zero.","href":"packages/blitz.html","claim":"contact.html?pkg=blitz"},"surge":{"name":"Surge","file":"File 04","price":"$300","suffix":"/mo","cadence":"Monthly","run":"Runs every month","oneMonth":"$450","ad":150,"ladder":"Want the posting handled too? Overdrive adds automatic posting and AI tools.","href":"packages/surge.html","claim":"contact.html?pkg=surge"},"overdrive":{"name":"Overdrive","file":"File 05","price":"$400","suffix":"/mo","cadence":"Monthly","run":"Runs every month","oneMonth":"$550","ad":null,"ladder":"Want the whole operation handled? Total Blackout is the full setup.","href":"packages/overdrive.html","claim":"contact.html?pkg=overdrive"},"total-blackout":{"name":"Total Blackout","file":"File 06","price":"$500","suffix":"/mo","cadence":"Monthly","run":"Runs every month","oneMonth":"$650","ad":null,"ladder":"Not ready for the full plan? Start with the 30-Day Post Kit and build up.","href":"packages/total-blackout.html","claim":"contact.html?pkg=total-blackout"},"post-kit":{"name":"30-Day Post Kit","file":"File 07","price":"$19.99","suffix":"","cadence":"One-time","run":"Delivered in 2 business days","oneMonth":"","ad":null,"ladder":"Page looks rough? Profile Fix cleans it up before people show up.","href":"packages/post-kit.html","claim":"contact.html?pkg=post-kit"},"profile-fix":{"name":"Profile Fix","file":"File 08","price":"$49.99","suffix":"","cadence":"One-time","run":"One-time cleanup","oneMonth":"","ad":null,"ladder":"Page fixed? Now put a Spark behind it.","href":"packages/profile-fix.html","claim":"contact.html?pkg=profile-fix"}}</script>
+  <script type="application/json" id="pk-data">{"spark":{"name":"Spark","file":"File 01","price":"$19.99","suffix":"","cadence":"One-time","run":"3-day run","oneMonth":"","ad":10,"ladder":"Liked what Spark did? Boost puts 2.5 times the ad money behind you.","href":"packages/spark.html","claim":"contact.html?pkg=spark#intake"},"boost":{"name":"Boost","file":"File 02","price":"$49.99","suffix":"","cadence":"One-time","run":"5-day run","oneMonth":"","ad":25,"ladder":"Need it bigger? Blitz doubles the ad money and runs a full week.","href":"packages/boost.html","claim":"contact.html?pkg=boost#intake"},"blitz":{"name":"Blitz","file":"File 03","price":"$99.99","suffix":"","cadence":"One-time","run":"7-day run","oneMonth":"","ad":50,"ladder":"Three Blitzes in? Surge is the better deal and it never restarts from zero.","href":"packages/blitz.html","claim":"contact.html?pkg=blitz#intake"},"surge":{"name":"Surge","file":"File 04","price":"$300","suffix":"/mo","cadence":"Monthly","run":"Runs every month","oneMonth":"$450","ad":150,"ladder":"Want the posting handled too? Overdrive adds automatic posting and AI tools.","href":"packages/surge.html","claim":"contact.html?pkg=surge#intake"},"overdrive":{"name":"Overdrive","file":"File 05","price":"$400","suffix":"/mo","cadence":"Monthly","run":"Runs every month","oneMonth":"$550","ad":null,"ladder":"Want the whole operation handled? Total Blackout is the full setup.","href":"packages/overdrive.html","claim":"contact.html?pkg=overdrive#intake"},"total-blackout":{"name":"Total Blackout","file":"File 06","price":"$500","suffix":"/mo","cadence":"Monthly","run":"Runs every month","oneMonth":"$650","ad":null,"ladder":"Not ready for the full plan? Start with the 30-Day Post Kit and build up.","href":"packages/total-blackout.html","claim":"contact.html?pkg=total-blackout#intake"},"post-kit":{"name":"30-Day Post Kit","file":"File 07","price":"$19.99","suffix":"","cadence":"One-time","run":"Delivered in 2 business days","oneMonth":"","ad":null,"ladder":"Page looks rough? Profile Fix cleans it up before people show up.","href":"packages/post-kit.html","claim":"contact.html?pkg=post-kit#intake"},"profile-fix":{"name":"Profile Fix","file":"File 08","price":"$49.99","suffix":"","cadence":"One-time","run":"One-time cleanup","oneMonth":"","ad":null,"ladder":"Page fixed? Now put a Spark behind it.","href":"packages/profile-fix.html","claim":"contact.html?pkg=profile-fix#intake"}}</script>
 </section>
 
 <section class="band" id="boosts" aria-labelledby="boosts-h">
   <div class="wrap">
     <div class="band__head band__head--row rv">
       <div>
-        <p class="label">Drawer 01 · 3 files</p>
-        <h2 class="h2 pk-h2" id="boosts-h">One-time boosts. <span class="whisper">No contract.</span></h2>
+        <p class="label">Drawer 01 · 3 files · No contract</p>
+        <h2 class="h2 pk-h2" id="boosts-h">One-time boosts</h2>
         <p>One push for one moment. Pick the size, point it at your post, page, channel or site, and we run a real paid placement on one platform through its own ad tools. Our target is live within 24 hours of payment. Platform ad review can take longer.</p>
       </div>
       <a class="textlink" href="#compare-boosts">Compare the three <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
@@ -477,8 +491,8 @@ twq('config','rhx35');
   <div class="wrap">
     <div class="band__head band__head--row rv">
       <div>
-        <p class="label">Drawer 02 · 3 files</p>
-        <h2 class="h2 pk-h2" id="plans-h">Monthly plans. <span class="whisper">Stay or walk.</span></h2>
+        <p class="label">Drawer 02 · 3 files · Month to month</p>
+        <h2 class="h2 pk-h2" id="plans-h">Monthly plans</h2>
         <p>The push keeps running every month, so you never start cold. Every plan starts with a twenty-minute intake call and ends each month with a recap in plain English. Want to try one first? Every plan comes as one month only, with no commitment.</p>
       </div>
       <a class="textlink" href="#compare-plans">Compare the three <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
@@ -550,8 +564,8 @@ twq('config','rhx35');
 <section class="band" id="addons" aria-labelledby="addons-h">
   <div class="wrap">
     <div class="band__head rv">
-      <p class="label">Drawer 03 · 2 files</p>
-      <h2 class="h2 pk-h2" id="addons-h">Add-ons. <span class="whisper">Get the page ready.</span></h2>
+      <p class="label">Drawer 03 · 2 files · Get the page ready</p>
+      <h2 class="h2 pk-h2" id="addons-h">Add-ons</h2>
       <p>Small one-time jobs that make every push work harder. A clear page and a month of posts mean the people an ad sends you have a reason to stay.</p>
     </div>
     <div class="grid grid--2 pk-grid rv">
@@ -588,11 +602,11 @@ twq('config','rhx35');
   <div class="wrap">
     <div class="band__head band__head--row rv">
       <div>
-        <p class="label">Drawer 04 · 4 files</p>
-        <h2 class="h2 pk-h2" id="built-h">Built to order. <span class="whisper">Quoted per job.</span></h2>
+        <p class="label">Drawer 04 · 4 files · Quoted per job</p>
+        <h2 class="h2 pk-h2" id="built-h">Built to order</h2>
         <p>Bigger jobs that don’t fit one price: websites, AI setup and creator systems. Every one starts with a short call, and you get the price in writing before work starts.</p>
       </div>
-      <a class="btn btn--ghost" href="contact.html">Ask for a quote <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
+      <a class="btn btn--ghost" href="contact.html#intake">Ask for a quote <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
     </div>
     <ul class="pk-built rv">
       <li><a href="services/website-design.html">
@@ -625,8 +639,8 @@ twq('config','rhx35');
   <div class="wrap">
     <div class="pk-choose">
       <div class="pk-choose__head rv">
-        <p class="label">Rules of thumb</p>
-        <h2 class="h2" id="choose-h">How to choose. <span class="whisper">Four rules.</span></h2>
+        <p class="label">Four rules of thumb</p>
+        <h2 class="h2" id="choose-h">How to choose</h2>
         <p>If the questions didn’t settle it, these will. They are the same rules we use when someone calls and asks which file to buy.</p>
         <a class="btn btn--paper" href="#match">Take the 3 questions</a>
       </div>
@@ -661,11 +675,12 @@ twq('config','rhx35');
 <section class="nextfile band band--tight" aria-label="Next file">
   <div class="wrap">
     <div data-jump hidden></div>
-    <a class="nextfile__card" href="packages/spark.html" data-spot>
+    <a class="nextfile__card nextfile__card--art" href="packages/spark.html" data-spot>
       <span class="label">Next file · File 01</span>
       <span class="nextfile__title">Spark</span>
       <span class="nextfile__teaser">The cheapest way to find <span class="rx-word">out</span> <span class="rx-word">what</span> <span class="rx-word">real</span> <span class="rx-word">reach</span> <span class="rx-word">feels</span> <span class="rx-word">like.</span></span>
       <span class="nextfile__go">Open it <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
+      <span class="nextfile__no" data-spot-layer aria-hidden="true"><span class="nextfile__dark">01</span><span class="nextfile__lit">01</span></span>
     </a>
   </div>
 </section>
@@ -679,7 +694,7 @@ twq('config','rhx35');
         <p class="foot__line">Real ads. Real people. No bots.</p>
         
 <div class="lines">
-  <div class="lines__row"><a class="lines__big" href="tel:+15742139097">(574) 213-9097</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></div>
+  <div class="lines__row"><a class="lines__big" href="tel:+15742139097" aria-label="Call (574) 213-9097">(574) 213-9097</a><span class="lines__acts"><a class="copy lines__act" href="tel:+15742139097">Call</a><a class="copy lines__act" href="sms:+15742139097">Text</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></span></div>
   <div class="lines__row"><a class="lines__mail" href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
   <p class="lines__note">Call or text. South Bend, Mishawaka, Elkhart and anywhere online.</p>
 </div>
@@ -715,7 +730,7 @@ twq('config','rhx35');
 </aside>
 <div class="toasts" data-toasts role="status" aria-live="polite"></div>
 <div class="veil" data-veil hidden></div>
-<script src="assets/js/site.js"></script>
+<script src="assets/js/site.js?v=1c4gojg"></script>
 <script>
 (function matcher() {
   const root = document.querySelector('[data-quiz]');
@@ -759,7 +774,7 @@ twq('config','rhx35');
   function why(slug, a) {
     const o = D[slug];
     switch (slug) {
-      case 'total-blackout': return 'You want the whole thing handled. ' + o.name + ' covers the ads, the posts, an AI assistant that answers your customers and a clean web page.' + (a[1] !== 'monthly' && o.oneMonth ? ' Only need one month? It’s ' + o.oneMonth + ', no commitment.' : '');
+      case 'total-blackout': return 'You want the whole thing handled. ' + o.name + ' covers the ads, the posts, an AI assistant that answers ' + (a[0] === 'channel' ? 'the people who message you' : 'your customers') + ' and a clean web page.' + (a[1] !== 'monthly' && o.oneMonth ? ' Only need one month? It’s ' + o.oneMonth + ', no commitment.' : '');
       case 'overdrive': return 'You want ads every month and the posting off your plate. Overdrive is everything in Surge, plus automatic posting and AI tools for the repeat work.';
       case 'surge': return 'You want ' + THING[a[0]] + ' in front of people every month without starting cold. Surge keeps real paid ads running on up to 2 platforms, with about $' + o.ad + ' a month in the ads.';
       case 'blitz': return a[0] === 'event'
@@ -772,9 +787,10 @@ twq('config','rhx35');
       default: return '';
     }
   }
+  // the add-on line speaks to whoever answered: a channel gets "your channel", everyone else "your business"
   const ADDON_WHY = {
-    'profile-fix': 'Fix the page first. We rewrite your bio and plan your pinned posts and highlights, so people from the ads get what you do in three seconds.',
-    'post-kit': 'A 30-day posting calendar and 12 captions written for your business. You hit publish while the ad brings people in.',
+    'profile-fix': () => 'Fix the page first. We rewrite your bio and plan your pinned posts and highlights, so people from the ads get what you do in three seconds.',
+    'post-kit': (a) => 'A 30-day posting calendar and 12 captions written for ' + (a[0] === 'channel' ? 'your channel' : 'your business') + '. You hit publish while the ad brings people in.',
   };
 
   function setPrice(el, o) {
@@ -802,7 +818,7 @@ twq('config','rhx35');
       const link = $('[data-r="addon-link"]');
       link.href = x.href; link.textContent = x.name;
       $('[data-r="addon-price"]').textContent = x.price;
-      $('[data-r="addon-why"]').textContent = ADDON_WHY[r.addon] || '';
+      $('[data-r="addon-why"]').textContent = ADDON_WHY[r.addon] ? ADDON_WHY[r.addon](A) : '';
     } else ad.hidden = true;
     const later = $('[data-r="later"]');
     if (o.ladder && r.main !== 'total-blackout') { later.hidden = false; $('[data-r="later-text"]').textContent = o.ladder; }
@@ -869,5 +885,6 @@ document.querySelectorAll('.pk-cab a, .pk-opt').forEach(function (el) {
   cmps.forEach(function (c) { io.observe(c); });
 })();
 </script>
+<script src="assets/js/sky.js?v=13k6jt5"></script>
 </body>
 </html>

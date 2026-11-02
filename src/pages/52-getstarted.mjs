@@ -1,6 +1,7 @@
 // /getstarted — the address printed on flyers, cards and posts. One job: get the visitor to the right door fast.
 import { BIZ } from '../data/business.mjs';
-import { bySlug, offerPath } from '../data/offers.mjs';
+import { bySlug, offerPath, CLASSES } from '../data/offers.mjs';
+import { bookingBlock, BOOKING_CSS, BOOKING_JS } from '../data/booking.mjs';
 
 const css = `
 .gs{position:relative;overflow:hidden;isolation:isolate;border-bottom:1px solid var(--smoke)}
@@ -32,7 +33,7 @@ export default {
   description: 'Get seen in South Bend, Mishawaka and Elkhart. Pick a package, take the 3-question match, or call or text (574) 213-9097. Real ads, real people, no bots.',
   teaser: 'Three doors. Pick one and we take it from there.',
   next: 'packages.html',
-  css,
+  css: css + BOOKING_CSS, js: BOOKING_JS,
   body: (c) => {
     const picks = ['spark', 'surge', 'total-blackout'].map((s) => bySlug[s]);
     return `
@@ -78,6 +79,7 @@ export default {
     <p class="small muted" style="margin-top:22px">${BIZ.resultsNote}</p>
   </div>
 </section>
+${bookingBlock({ id: 'book', title: 'Rather talk first? Book a call or a class.', lead: `Pick a 1-hour slot to talk about getting seen, or to book ${CLASSES[0].name} (${CLASSES[0].price} a ${CLASSES[0].per}). <a href="${c.link(CLASSES[0].path)}">What the class covers</a>.` })}
 
 <section class="band band--gold" aria-labelledby="gs-final">
   <div class="wrap" style="display:grid;gap:22px;justify-items:start">

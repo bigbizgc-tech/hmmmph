@@ -30,8 +30,8 @@
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..800;1,100,400&family=Big+Shoulders+Display:wght@600;800;900&family=Bodoni+Moda:ital,opsz,wght@1,6..96,500;1,6..96,700&family=Courier+Prime:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=Big+Shoulders+Display:wght@800;900&family=Bodoni+Moda:ital,opsz,wght@1,48,500;1,48,700&family=Courier+Prime:wght@400;700&display=swap">
+<link rel="stylesheet" href="assets/css/site.css?v=w9ospk">
 <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js')</script>
 <script src="assets/js/config.js"></script>
 <script>
@@ -52,10 +52,10 @@ twq('config','rhx35');
 .vt-hero.is-open .vt-hero__door::before{opacity:1;transition:opacity 2.2s var(--ease) 2.9s}
 @media (max-width:900px){.vt-hero__in{grid-template-columns:minmax(0,1fr);grid-template-areas:"head" "door" "body"}.vt-hero__door{max-width:440px;justify-self:center}}
 .vt-title{margin:0;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(76px,31cqi,200px);line-height:.8;letter-spacing:-.012em}
-.vt-stack{display:grid;--x:30%;--y:50%}
+.vt-stack{display:grid;--x:30%;--y:50%;filter:drop-shadow(0 0 26px rgba(243,212,138,.34))}
 .vt-stack>span{grid-area:1/1}
 .vt-dark{color:transparent;-webkit-text-stroke:2px rgba(242,234,216,.5)}
-.vt-lit{color:var(--gold-hi);text-shadow:0 0 42px rgba(243,212,138,.38);-webkit-mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%);mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%)}
+.vt-lit{color:var(--gold-hi);-webkit-mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%);mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%)}
 .no-js .vt-lit{-webkit-mask-image:none;mask-image:none}
 .vt-whisper{display:block;font-family:var(--f-serif);font-style:italic;font-weight:500;text-transform:none;font-size:clamp(28px,3.4vw,46px);letter-spacing:0;color:var(--gold);line-height:1;margin-top:.32em}
 .vt-hero .lede{max-width:50ch}
@@ -144,7 +144,7 @@ twq('config','rhx35');
 .tumblers .pin{position:absolute;left:34%;right:34%;top:0;bottom:0;background:linear-gradient(var(--gold),var(--brass));opacity:.55;transform:translateY(calc(86% - var(--p,0%) * .86));transition:transform 1s var(--ease),opacity .4s}
 .tumblers li.is-set .pin{opacity:1;background:linear-gradient(var(--gold-hi),var(--brass));box-shadow:0 0 14px rgba(243,212,138,.55)}
 .tumblers small{display:grid;gap:2px;font-family:var(--f-type);font-size:10px;letter-spacing:0;line-height:1.15;text-transform:uppercase;color:var(--ash);word-break:keep-all}
-.tumblers small b{font-weight:700;color:var(--brass)}
+.tumblers small b{font-weight:700;color:var(--paper)}
 .tumblers li.is-set small,.tumblers li.is-set small b{color:var(--gold)}
 @media (max-width:480px){.tumblers small{font-size:8.5px}}
 .ways{list-style:none;display:grid;border-top:1px solid var(--smoke)}
@@ -194,12 +194,48 @@ twq('config','rhx35');
 .pb__count b{font-family:var(--f-display);font-weight:900;font-size:64px;line-height:.8;letter-spacing:0;color:var(--gold)}
 .no-js .pb__count{display:none}
 .pb__rules{display:grid;gap:clamp(26px,3.6vw,40px);min-width:0}
+.pb__deck{display:grid;gap:clamp(26px,3.6vw,40px);min-width:0}
+/* wide screens: one rule at a time, picked from the index or with previous / next, on a little pile of sheets */
+.pb__bar{display:flex;justify-content:space-between;align-items:center;gap:12px 20px;flex-wrap:wrap}
+.pb__bar[hidden]{display:none}
+.pb__pos{font-family:var(--f-type);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--ash)}
+.pb__pos b{font-family:var(--f-display);font-weight:900;font-size:34px;letter-spacing:0;color:var(--gold);margin-right:6px;vertical-align:-4px}
+.pb__step{display:flex;gap:8px}
+.pb__step .btn:disabled{opacity:.35;cursor:default;transform:none}
+.pb--deck .pb__deck{position:relative;isolation:isolate;padding:0 22px 22px 0}
+.pb--deck .pb__deck::before,.pb--deck .pb__deck::after{content:"";position:absolute;inset:0 22px 22px 0;z-index:-1;background:var(--paper-2);box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+.pb--deck .pb__deck::before{transform:translate(22px,22px) rotate(1.4deg);opacity:.28}
+.pb--deck .pb__deck::after{transform:translate(11px,11px) rotate(.7deg);opacity:.5}
+.pb--deck .pb__deck .classified__sheet{animation:pbIn .5s var(--ease)}
+@keyframes pbIn{from{opacity:0;transform:translate(-14px,8px) rotate(-.8deg)}to{opacity:1;transform:none}}
+.pb__nav a[aria-current]{color:var(--paper)}
+.pb__nav a[aria-current]>span:nth-child(2){color:var(--gold-hi)}
+.pb__nav a[aria-current]::before{content:"";position:absolute;left:-14px;top:50%;width:6px;height:6px;margin-top:-3px;background:var(--gold);transform:rotate(45deg)}
+.pb__nav li{position:relative}
+.js .pb--deck .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status{font-size:13.5px;gap:12px}
+.js .pb--deck .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status span{display:inline}
+.js .pb--deck .pb__rules .classified.is-locked ~ .classified.is-locked .classified__body{max-height:9.4em}
+/* phones: a quick row of rule numbers to jump around, and room to read */
+.pb__jump{display:none}
+@media (max-width:980px){
+  .pb__jump{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:4px;scrollbar-width:none}
+  .pb__jump::-webkit-scrollbar{display:none}
+  .pb__jump a{flex:none;display:grid;place-items:center;min-width:44px;height:44px;border:1px solid var(--smoke);font-family:var(--f-display);font-weight:900;font-size:20px;color:var(--brass);text-decoration:none}
+  .pb__jump a.is-open{color:var(--gold);border-color:var(--brass)}
+  .pb__rules .classified{scroll-margin-top:84px}
+}
+@media (max-width:560px){.pb__rules .classified__sheet{padding:22px 18px}.pb__rules .classified__body{font-size:15.5px;line-height:1.65}}
 .pb__rules .classified__body a{color:var(--ink);text-decoration-color:var(--brass);text-underline-offset:3px;font-weight:700}
 .js .pb__rules .classified.is-locked .classified__body a{text-decoration:none}
 .js .pb__rules .classified.is-locked .classified__body{max-height:9.4em;overflow:hidden;-webkit-mask-image:linear-gradient(#000 40%,transparent);mask-image:linear-gradient(#000 40%,transparent)}
 .js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status{font-size:0;gap:8px}
 .js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status span{display:none}
 .js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__body{max-height:4.6em}
+/* stacked rules: "How do I get clearance?" sits on the first sealed rule only (no run of ten identical
+   tab stops); every sealed rule keeps its own "Break the seal anyway". The deck shows one rule at a
+   time, so the rule on screen gets both again. */
+.js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status button:first-of-type:not(:last-child){display:none}
+.js .pb--deck .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status button:first-of-type:not(:last-child){display:inline-block}
 .pb__end{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 32px;padding:clamp(22px,3vw,30px);border:1px dashed var(--brass)}
 .pb__end p{color:var(--ash);max-width:56ch}
 .pb__end b{color:var(--paper);font-weight:600}
@@ -218,6 +254,12 @@ twq('config','rhx35');
 .sid__msg{font-size:14.5px;color:var(--gold-hi);line-height:1.5}
 .sid__msg:empty{display:none}
 .sid__fine{font-size:13.5px;color:var(--ash);line-height:1.5}
+.sid__n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1.5px solid currentColor;font-size:15px;line-height:1;margin-right:2px}
+.sid__steps{display:grid;gap:12px}
+.sid__steps .ctas{gap:10px}
+.sid__earned{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.sid__earned li{font-family:var(--f-type);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ash);border:1px dashed var(--smoke);padding:5px 9px}
+.sid__earned li.is-on{color:var(--void);background:var(--gold);border:1px solid var(--gold)}
 .sid__tag{margin-top:clamp(24px,3vw,36px);font-family:var(--f-serif);font-style:italic;font-size:clamp(20px,2vw,24px);color:var(--ash)}
 .sid__tag a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--brass)}
 .no-js .sid,.no-js .sid__tag{display:none}
@@ -237,6 +279,7 @@ twq('config','rhx35');
 </head>
 <body data-path="vault.html" data-root="">
 <a class="skip" href="#main">Skip to content</a>
+<canvas class="sky" data-sky aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
 
 <header class="topbar" data-topbar>
@@ -246,6 +289,11 @@ twq('config','rhx35');
     <nav class="menu" id="menu" aria-label="Main">
       <ul><li><a href="packages.html">Packages</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="work.html">The Reel</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li></ul>
       <a class="btn btn--sm menu__cta" href="contact.html">Make contact</a>
+      <div class="menu__line">
+        <p class="label">Or call or text</p>
+        <a class="menu__num" href="tel:+15742139097">(574) 213-9097</a>
+        <div class="menu__acts"><a class="btn btn--sm" href="tel:+15742139097">Call</a><a class="btn btn--sm btn--ghost" href="sms:+15742139097">Text</a></div>
+      </div>
     </nav>
     <div class="topbar__end">
       <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false">
@@ -322,7 +370,7 @@ twq('config','rhx35');
       <p class="vd__cap label label--dim" aria-hidden="true"><b data-vd-cap>Locked</b><span>·</span><span data-vd-hint>Try the door</span></p>
     </div>
     <div class="vt-hero__body">
-      <p class="lede">Behind this door: <strong>the full Syndicate Playbook</strong>, ten rules we run every push on, and <strong>a Syndicate ID</strong> with your name on it. <span data-vt-lock-note>Level 5 opens it.</span></p>
+      <p class="lede">Behind this door: <strong>the full Syndicate Playbook</strong>, ten plain rules for getting seen, and <strong>a Syndicate ID</strong> with your name on it. <span data-vt-lock-note>Level 5 opens it.</span></p>
       <p class="vt-state" id="vd-state" data-vd-state aria-live="polite"><span><b>Locked.</b> Clearance 5 required.</span></p>
       <div class="ctas">
         <a class="btn btn--lg" href="#get-in" data-vt-cta data-open="Read the playbook|#playbook">How to get in <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
@@ -336,19 +384,19 @@ twq('config','rhx35');
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">How to get in</p>
-      <h2 class="h2" id="in-h">Earn your <span class="whisper">clearance.</span></h2>
-      <p data-vt-intro>Level 5 takes 240 clearance. Here is every way to earn it. Your clearance lives in this browser only.</p>
+      <h2 class="h2" id="in-h">Earn your clearance.</h2>
+      <p data-vt-intro>Level 5 takes 320 clearance. Here is every way to earn it. Your clearance lives in this browser only.</p>
     </div>
     <div class="vt-in">
       <section class="vt-card rv" data-visitor aria-label="Your clearance">
         <div class="vt-card__head"><span class="label">Your clearance</span><span class="badge badge--red" data-v="status">Uncleared</span></div>
-        <div class="vt-card__lv"><b data-v="lv">0</b><span><span class="vt-card__name" data-v="name">Outsider</span><span class="vt-card__xp"><span data-v="xp">0</span> <span data-vt-of>of 240 clearance</span></span></span></div>
+        <div class="vt-card__lv"><b data-v="lv">0</b><span><span class="vt-card__name" data-v="name">Outsider</span><span class="vt-card__xp"><span data-v="xp">0</span> <span data-vt-of>of 320 clearance</span></span></span></div>
         <ol class="tumblers" aria-hidden="true"><li data-tumbler="1"><span class="slot"><span class="pin"></span></span><small><b>LV 1</b>Lookout</small></li><li data-tumbler="2"><span class="slot"><span class="pin"></span></span><small><b>LV 2</b>Associate</small></li><li data-tumbler="3"><span class="slot"><span class="pin"></span></span><small><b>LV 3</b>Operative</small></li><li data-tumbler="4"><span class="slot"><span class="pin"></span></span><small><b>LV 4</b>Lieutenant</small></li><li data-tumbler="5"><span class="slot"><span class="pin"></span></span><small><b>LV 5</b>Inner Circle</small></li></ol>
         <dl class="ledger">
           <div><dt>Files opened</dt><dd data-v="opened">0 / 19</dd></div>
           <div><dt>Marks found</dt><dd data-v="marks">0 / 3</dd></div>
         </dl>
-        <p class="vt-card__gap" data-vt-gap>Level 5 takes 240 clearance.</p>
+        <p class="vt-card__gap" data-vt-gap>Level 5 takes 320 clearance.</p>
         <p class="vt-card__gap"><span class="label label--dim">Next unlock</span><br><span data-v="next">Playbook Rule 01 on the home page (Level 1)</span></p>
         <button class="textlink" type="button" data-hud-open>Open your full file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></button>
       </section>
@@ -420,17 +468,23 @@ twq('config','rhx35');
     <div class="band__head band__head--row rv">
       <div>
         <p class="label">Clearance 5 · The Syndicate Playbook</p>
-        <h2 class="h2" id="pb-h">Ten rules for <span class="whisper">getting seen.</span></h2>
-        <p>The rules we run every push on, written for local shops, solo businesses and creators. Use them yourself. They work with or without us.</p>
+        <h2 class="h2" id="pb-h">Ten rules for getting seen.</h2>
+        <p>Ten plain rules for getting seen, written for local shops, solo businesses, creators and streamers. Use them yourself. They work with or without us.</p>
       </div>
       <p class="pb__count"><b data-pb-open>0</b><span>of 10 open</span></p>
     </div>
-    <div class="pb">
+    <div class="pb" data-pb>
       <nav class="pb__nav" aria-label="Playbook rules">
         <p class="label label--dim">The rules</p>
-        <ol><li><a href="#cl-pb-01" data-pb-link="pb-01"><span>01</span><span>Fix the landing first</span><i></i></a></li><li><a href="#cl-pb-02" data-pb-link="pb-02"><span>02</span><span>One ad, one job</span><i></i></a></li><li><a href="#cl-pb-03" data-pb-link="pb-03"><span>03</span><span>Win the first two seconds</span><i></i></a></li><li><a href="#cl-pb-04" data-pb-link="pb-04"><span>04</span><span>Ask for one thing</span><i></i></a></li><li><a href="#cl-pb-05" data-pb-link="pb-05"><span>05</span><span>Go where your buyers scroll</span><i></i></a></li><li><a href="#cl-pb-06" data-pb-link="pb-06"><span>06</span><span>Let customers talk</span><i></i></a></li><li><a href="#cl-pb-07" data-pb-link="pb-07"><span>07</span><span>Show up where your town does</span><i></i></a></li><li><a href="#cl-pb-08" data-pb-link="pb-08"><span>08</span><span>Steady beats loud</span><i></i></a></li><li><a href="#cl-pb-09" data-pb-link="pb-09"><span>09</span><span>Test small first</span><i></i></a></li><li><a href="#cl-pb-10" data-pb-link="pb-10"><span>10</span><span>Read the recap, change one thing</span><i></i></a></li></ol>
+        <ol><li><a href="#cl-pb-01" data-pb-link="pb-01"><span>01</span><span>Fix the landing first</span><i></i></a></li><li><a href="#cl-pb-02" data-pb-link="pb-02"><span>02</span><span>Go where your people scroll</span><i></i></a></li><li><a href="#cl-pb-03" data-pb-link="pb-03"><span>03</span><span>Back what already works</span><i></i></a></li><li><a href="#cl-pb-04" data-pb-link="pb-04"><span>04</span><span>Start before stream night</span><i></i></a></li><li><a href="#cl-pb-05" data-pb-link="pb-05"><span>05</span><span>One stream, a week of clips</span><i></i></a></li><li><a href="#cl-pb-06" data-pb-link="pb-06"><span>06</span><span>Show up where your town does</span><i></i></a></li><li><a href="#cl-pb-07" data-pb-link="pb-07"><span>07</span><span>Let customers talk</span><i></i></a></li><li><a href="#cl-pb-08" data-pb-link="pb-08"><span>08</span><span>Steady beats loud</span><i></i></a></li><li><a href="#cl-pb-09" data-pb-link="pb-09"><span>09</span><span>Answer while they’re looking</span><i></i></a></li><li><a href="#cl-pb-10" data-pb-link="pb-10"><span>10</span><span>Own your list</span><i></i></a></li></ol>
       </nav>
       <div class="pb__rules">
+        <nav class="pb__jump" aria-label="Jump to a rule"><a href="#cl-pb-01" data-pb-link="pb-01" aria-label="Rule 01: Fix the landing first">01</a><a href="#cl-pb-02" data-pb-link="pb-02" aria-label="Rule 02: Go where your people scroll">02</a><a href="#cl-pb-03" data-pb-link="pb-03" aria-label="Rule 03: Back what already works">03</a><a href="#cl-pb-04" data-pb-link="pb-04" aria-label="Rule 04: Start before stream night">04</a><a href="#cl-pb-05" data-pb-link="pb-05" aria-label="Rule 05: One stream, a week of clips">05</a><a href="#cl-pb-06" data-pb-link="pb-06" aria-label="Rule 06: Show up where your town does">06</a><a href="#cl-pb-07" data-pb-link="pb-07" aria-label="Rule 07: Let customers talk">07</a><a href="#cl-pb-08" data-pb-link="pb-08" aria-label="Rule 08: Steady beats loud">08</a><a href="#cl-pb-09" data-pb-link="pb-09" aria-label="Rule 09: Answer while they’re looking">09</a><a href="#cl-pb-10" data-pb-link="pb-10" aria-label="Rule 10: Own your list">10</a></nav>
+        <div class="pb__bar" data-pb-bar hidden>
+          <p class="pb__pos" aria-live="polite"><span class="sr">Rule </span><b data-pb-pos>01</b> of 10</p>
+          <div class="pb__step"><button class="btn btn--ghost btn--sm" type="button" data-pb-prev>Previous rule</button><button class="btn btn--sm" type="button" data-pb-next>Next rule <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></button></div>
+        </div>
+        <div class="pb__deck" data-pb-deck>
         
 <section class="classified" data-classified="pb-01" data-level="5" data-bypass aria-labelledby="cl-pb-01">
   <div class="classified__sheet">
@@ -438,12 +492,9 @@ twq('config','rhx35');
       <span class="classified__stamp">Classified</span>
       <span class="label">Clearance 5 · Inner Circle</span>
     </header>
-    <h3 class="classified__title" id="cl-pb-01">Rule 01: Fix the landing before you buy the traffic</h3>
+    <h3 class="classified__title" id="cl-pb-01">Rule 01: Fix the landing first</h3>
     <div class="classified__body">
-      <p>Before you put a dollar behind a post, open your own profile like a stranger would.</p>
-      <p>In three seconds they should know three things: <strong>what you do, where you are, and what to do next.</strong> Follow, book, buy, show up.</p>
-      <p>If any of those is missing, an ad just sends more people to a page that loses them. Fix the bio. Pin your best post. Put one link in your bio, not five. That is the whole reason <a href="packages/profile-fix.html">Profile Fix</a> exists.</p>
-      <p><strong>Do it today:</strong> hand your phone to someone who doesn’t know your business. Give them three seconds on your profile, then ask what you do.</p></div>
+      <p>You already have this one. It was your Level 1 file: <a href="index.html#cl-rule-01">fix the landing before you buy the traffic</a>. Every rule below assumes your page passes the three-second test.</p></div>
     <p class="classified__status" data-classified-status aria-live="polite"></p>
   </div>
 </section>
@@ -453,11 +504,11 @@ twq('config','rhx35');
       <span class="classified__stamp">Classified</span>
       <span class="label">Clearance 5 · Inner Circle</span>
     </header>
-    <h3 class="classified__title" id="cl-pb-02">Rule 02: One ad, one job</h3>
+    <h3 class="classified__title" id="cl-pb-02">Rule 02: Go where your people already scroll</h3>
     <div class="classified__body">
-      <p>Decide what the ad is for before you make it. New followers. People in the door this weekend. Booked appointments. New faces in chat on stream night.</p>
-      <p>Each of those gets set up differently on the platform and gets judged by a different number. An ad that tries to do all of them at once does none of them well.</p>
-      <p><strong>Do it today:</strong> finish this sentence before you spend anything: “This ad worked if ___ happened.” If you can’t fill in the blank, you aren’t ready to spend.</p></div>
+      <p>You don’t need every platform. You need the one or two your people open without thinking about it.</p>
+      <p>A barbershop, a food truck and a streamer don’t need the same feed. Get good in one place before you spread yourself thin across five.</p>
+      <p><strong>Do it today:</strong> ask your next ten customers which app they open first. Streaming? Ask chat which app they found you on. Put your effort there.</p></div>
     <p class="classified__status" data-classified-status aria-live="polite"></p>
   </div>
 </section>
@@ -467,11 +518,11 @@ twq('config','rhx35');
       <span class="classified__stamp">Classified</span>
       <span class="label">Clearance 5 · Inner Circle</span>
     </header>
-    <h3 class="classified__title" id="cl-pb-03">Rule 03: Win the first two seconds</h3>
+    <h3 class="classified__title" id="cl-pb-03">Rule 03: Put money behind what already works</h3>
     <div class="classified__body">
-      <p>People decide fast whether to keep watching. Open on the best part: the finished cut, the full room, the plate hitting the table, the clutch play, the punchline.</p>
-      <p>Skip the logo intro and the slow hello. Put the point in words on screen too, for anyone scrolling with the sound off.</p>
-      <p><strong>Do it today:</strong> pause your next video on its first frame. If that still picture wouldn’t make you stop scrolling, start the video somewhere else.</p></div>
+      <p>A paid push puts a post in front of more people. It does the most for a post that already gave people a reason to stop: the clip that got shared, the post that brought messages, the moment chat lost it.</p>
+      <p>Look at what pulled on its own before you pay to push anything. If two posts are close, test both small and let the cheap test pick. That is the job of <a href="packages/spark.html">Spark</a>: a small, real push that tells you whether a bigger one makes sense.</p>
+      <p><strong>Do it today:</strong> scroll back through your last month of posts and clips. Find the one that did best with no money behind it. That is your first push.</p></div>
     <p class="classified__status" data-classified-status aria-live="polite"></p>
   </div>
 </section>
@@ -481,11 +532,11 @@ twq('config','rhx35');
       <span class="classified__stamp">Classified</span>
       <span class="label">Clearance 5 · Inner Circle</span>
     </header>
-    <h3 class="classified__title" id="cl-pb-04">Rule 04: Ask for one thing</h3>
+    <h3 class="classified__title" id="cl-pb-04">Rule 04: Start the push before stream night</h3>
     <div class="classified__body">
-      <p>Every post and every ad gets one call to action. Follow. Book. Call. Show up Saturday. Pick the one that matches the job from Rule 02.</p>
-      <p>Two asks split attention. Three asks get ignored. The words on screen, the caption and the button should all point at the same thing.</p>
-      <p><strong>Do it today:</strong> read your last three captions. Count the asks. Cut each one down to a single ask.</p></div>
+      <p>An ad for a stream night has to land before you go live. People need to see it, remember it and come back at the time you said.</p>
+      <p>Time the run so it ends on the night. <a href="packages/boost.html">Boost</a> is a 5-day run, so start it about 5 days out. On TikTok it runs as a one-day burst, so run that the day before. Put the day, the time and your time zone in the ad, and point it at your channel, where the follow button is.</p>
+      <p><strong>Do it today:</strong> pick your next big stream night, count back 5 days, and put “start the push” on that day.</p></div>
     <p class="classified__status" data-classified-status aria-live="polite"></p>
   </div>
 </section>
@@ -495,11 +546,11 @@ twq('config','rhx35');
       <span class="classified__stamp">Classified</span>
       <span class="label">Clearance 5 · Inner Circle</span>
     </header>
-    <h3 class="classified__title" id="cl-pb-05">Rule 05: Go where your buyers already scroll</h3>
+    <h3 class="classified__title" id="cl-pb-05">Rule 05: Turn one stream into a week of clips</h3>
     <div class="classified__body">
-      <p>You don’t need every platform. You need the one or two your customers open without thinking about it.</p>
-      <p>A barbershop, a food truck and a streamer don’t need the same feed. Get good in one place before you spread yourself thin across five.</p>
-      <p><strong>Do it today:</strong> ask your next ten customers which app they open first. Put your effort there.</p></div>
+      <p>One stream holds a week of posts. The clutch play, the funny fail, the moment chat lost it. Each one is a clip that can bring someone to the next stream.</p>
+      <p>Mark the moments while you play, or right after. Cut each one down to the part worth watching, then post one a day until you go live again. A shop can do the same with one busy day filmed in short bits.</p>
+      <p><strong>Do it today:</strong> after your next stream, write down five timestamps worth a clip. That is five days of posts. <a href="services/creator-systems.html">Creator Content Systems</a> sets up the whole workflow if you’d rather not do it by hand.</p></div>
     <p class="classified__status" data-classified-status aria-live="polite"></p>
   </div>
 </section>
@@ -509,12 +560,11 @@ twq('config','rhx35');
       <span class="classified__stamp">Classified</span>
       <span class="label">Clearance 5 · Inner Circle</span>
     </header>
-    <h3 class="classified__title" id="cl-pb-06">Rule 06: Let happy customers do the talking</h3>
+    <h3 class="classified__title" id="cl-pb-06">Rule 06: Show up where your town shows up</h3>
     <div class="classified__body">
-      <p>A post from a happy customer reaches the people who already trust that customer. That kind of word of mouth is easy to ask for and hard to fake.</p>
-      <p>Ask while they’re smiling: right after the haircut, the meal, the stream, the finished job. Make it easy with your handle on the counter, a QR code to your review page, and a repost every time someone tags you.</p>
-      <p>Never buy reviews and never write fake ones. It breaks the platforms’ rules, and people can tell.</p>
-      <p><strong>Do it today:</strong> put your handle and one line, “Tag us and we’ll repost you,” where customers pay or wait.</p></div>
+      <p>Markets, game days, festivals, fundraisers, open mics, tournaments. When the town gathers, people are already in the mood to find something new.</p>
+      <p>Post before so people come, during so the people who missed it feel it, and after to thank everyone who showed up. If you’re putting money behind a date, start the push at least a week out so it lands while people are still making plans. <a href="packages/blitz.html">Blitz</a> is built for exactly that.</p>
+      <p><strong>Do it today:</strong> put the next three local events you could show up at on your calendar, with one post planned for each.</p></div>
     <p class="classified__status" data-classified-status aria-live="polite"></p>
   </div>
 </section>
@@ -524,11 +574,12 @@ twq('config','rhx35');
       <span class="classified__stamp">Classified</span>
       <span class="label">Clearance 5 · Inner Circle</span>
     </header>
-    <h3 class="classified__title" id="cl-pb-07">Rule 07: Show up where your town shows up</h3>
+    <h3 class="classified__title" id="cl-pb-07">Rule 07: Let happy customers do the talking</h3>
     <div class="classified__body">
-      <p>Markets, game days, festivals, fundraisers, open mics, tournaments. When the town gathers, people are already in the mood to find something new.</p>
-      <p>Post before so people come, during so the people who missed it feel it, and after to thank everyone who showed up. If you’re putting money behind a date, start the push at least a week out so it lands while people are still making plans. <a href="packages/blitz.html">Blitz</a> is built for exactly that.</p>
-      <p><strong>Do it today:</strong> put the next three local events you could show up at on your calendar, with one post planned for each.</p></div>
+      <p>A post from a happy customer reaches the people who already trust that customer. That kind of word of mouth is easy to ask for and hard to fake.</p>
+      <p>Ask while they’re smiling: right after the haircut, the meal, the stream, the finished job. Make it easy with your handle on the counter, a QR code to your review page, and a repost every time someone tags you.</p>
+      <p>Never buy reviews and never write fake ones. It breaks the platforms’ rules, and people can tell.</p>
+      <p><strong>Do it today:</strong> put your handle and one line, “Tag us and we’ll repost you,” where customers pay or wait.</p></div>
     <p class="classified__status" data-classified-status aria-live="polite"></p>
   </div>
 </section>
@@ -552,11 +603,11 @@ twq('config','rhx35');
       <span class="classified__stamp">Classified</span>
       <span class="label">Clearance 5 · Inner Circle</span>
     </header>
-    <h3 class="classified__title" id="cl-pb-09">Rule 09: Test small before you go big</h3>
+    <h3 class="classified__title" id="cl-pb-09">Rule 09: Answer while they’re still looking</h3>
     <div class="classified__body">
-      <p>Before real money goes behind anything, run a small push and watch what happens. If you have two versions of a post, test both small.</p>
-      <p>Let the cheap test pick the winner, then put the bigger money behind the one that already worked. That is the whole job of <a href="packages/spark.html">Spark</a>: a small, real push that tells you whether a bigger one makes sense.</p>
-      <p><strong>Do it today:</strong> look back at your last month of posts and find the one that did best on its own. That is your first test.</p></div>
+      <p>A push brings messages, comments and questions. The person asking “are you open Sunday?” is ready right now. By tomorrow they may have moved on.</p>
+      <p>Answer the same day, in plain words, and put the next step in the reply: the booking link, the address, the stream time.</p>
+      <p><strong>Do it today:</strong> write answers to the five questions you get most and keep them in your phone’s notes, ready to paste. <a href="services/ai-automation.html">AI Automation</a> can send those answers for you.</p></div>
     <p class="classified__status" data-classified-status aria-live="polite"></p>
   </div>
 </section>
@@ -566,14 +617,15 @@ twq('config','rhx35');
       <span class="classified__stamp">Classified</span>
       <span class="label">Clearance 5 · Inner Circle</span>
     </header>
-    <h3 class="classified__title" id="cl-pb-10">Rule 10: Read the recap and change one thing</h3>
+    <h3 class="classified__title" id="cl-pb-10">Rule 10: Own a list the app can’t take</h3>
     <div class="classified__body">
-      <p>Every run ends with numbers: what was spent, how many people it reached, and what they did. Read them. That is where the next push gets better.</p>
-      <p>Then change one thing for the next run: the hook, the picture, the audience, the day or the ask. Change everything at once and you’ll never know what worked.</p>
-      <p><strong>Do it today:</strong> start a note on your phone called “What we changed.” One line per run: the date, what you changed, what happened.</p></div>
+      <p>Followers live on someone else’s app. If the app changes its rules or your account gets locked, the way you reach them goes too.</p>
+      <p>Give people one way to stay in touch that belongs to you: an email list, a text list, or a Discord for your community. Ask where they already trust you: at the counter, at the end of a stream, in the follow-up after a sale.</p>
+      <p><strong>Do it today:</strong> pick one list and make signing up a single tap. Mention it once at the counter, or once a stream.</p></div>
     <p class="classified__status" data-classified-status aria-live="polite"></p>
   </div>
 </section>
+        </div>
         <div class="pb__end rv">
           <p><b>That’s the playbook.</b> Ten rules, no secrets. The hard part is doing them every week while you run the business.</p>
           <a class="btn" href="contact.html">Let us run it <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
@@ -588,7 +640,7 @@ twq('config','rhx35');
     <div class="band__head rv">
       <p class="label">Your Syndicate ID</p>
       <h2 class="h2" id="sid-h">Put your name <span class="whisper">on file.</span></h2>
-      <p>Type your name and your business or channel. The card shows your clearance, a member number that belongs to your name, and today’s date. Inner Circle gets the gold seal. Below Level 5 it’s stamped provisional.</p>
+      <p>Type your name and your business or channel. The card shows your clearance, a member number that belongs to your name, and today’s date. Inner Circle gets the gold seal. Below Level 5 it’s stamped provisional. What you’ve done on the site goes on it as stamps.</p>
     </div>
     <div class="sid">
       <figure class="sid__card rv" data-sid-card>
@@ -604,12 +656,24 @@ twq('config','rhx35');
           <input id="sid-biz" name="sid-biz" type="text" autocomplete="organization" maxlength="38" placeholder="Shop, brand or channel name">
         </div>
         <p class="field__hint">The card is drawn right here in your browser. Nothing you type is sent anywhere.</p>
-        <div class="ctas">
-          <button class="btn" type="button" data-sid-save>Save card</button>
-          <a class="btn btn--ghost" data-sid-share href="https://x.com/intent/tweet" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg> Post on X</a>
+        <div class="sid__stamps">
+          <p class="label label--dim">Stamps on your card</p>
+          <ul class="sid__earned" data-sid-earned>
+            <li data-earn="archive">Archive 19/19</li>
+            <li data-earn="marks">3 of 3 marks</li>
+            <li data-earn="blackout">Said the name</li>
+            <li data-earn="lead">Made contact</li>
+          </ul>
         </div>
-        <p class="sid__msg" data-sid-msg aria-live="polite"></p>
-        <p class="sid__fine">If saving doesn’t start, long-press or right-click the card and save the image.</p>
+        <div class="sid__steps">
+          <p class="label">Save the card, then post it</p>
+          <div class="ctas">
+            <button class="btn" type="button" data-sid-save><span class="sid__n" aria-hidden="true">1</span> Save the card</button>
+            <a class="btn btn--ghost" data-sid-share href="https://x.com/intent/tweet" target="_blank" rel="noopener"><span class="sid__n" aria-hidden="true">2</span> <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg> Post it on X</a>
+          </div>
+          <p class="sid__msg" data-sid-msg aria-live="polite"></p>
+          <p class="sid__fine">The card saves as a picture. Attach it to your post on X, TikTok or Instagram. If saving doesn’t start, long-press or right-click the card and save the image.</p>
+        </div>
       </form>
     </div>
     <p class="sid__tag">It’s good for bragging rights. Post it and tag us on X at <a href="https://x.com/BzTheG" target="_blank" rel="noopener">@BzTheG</a>.</p>
@@ -638,7 +702,7 @@ twq('config','rhx35');
         <p class="foot__line">Real ads. Real people. No bots.</p>
         
 <div class="lines">
-  <div class="lines__row"><a class="lines__big" href="tel:+15742139097">(574) 213-9097</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></div>
+  <div class="lines__row"><a class="lines__big" href="tel:+15742139097" aria-label="Call (574) 213-9097">(574) 213-9097</a><span class="lines__acts"><a class="copy lines__act" href="tel:+15742139097">Call</a><a class="copy lines__act" href="sms:+15742139097">Text</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></span></div>
   <div class="lines__row"><a class="lines__mail" href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
   <p class="lines__note">Call or text. South Bend, Mishawaka, Elkhart and anywhere online.</p>
 </div>
@@ -674,12 +738,12 @@ twq('config','rhx35');
 </aside>
 <div class="toasts" data-toasts role="status" aria-live="polite"></div>
 <div class="veil" data-veil hidden></div>
-<script src="assets/js/site.js"></script>
+<script src="assets/js/site.js?v=1c4gojg"></script>
 <script>
 (() => {
   const $ = (s, el) => (el || document).querySelector(s);
   const $$ = (s, el) => [...(el || document).querySelectorAll(s)];
-  const LV = [{"lv":0,"name":"Outsider","xp":0},{"lv":1,"name":"Lookout","xp":25},{"lv":2,"name":"Associate","xp":60},{"lv":3,"name":"Operative","xp":110},{"lv":4,"name":"Lieutenant","xp":170},{"lv":5,"name":"Inner Circle","xp":240}];
+  const LV = [{"lv":0,"name":"Outsider","xp":0},{"lv":1,"name":"Lookout","xp":25},{"lv":2,"name":"Associate","xp":60},{"lv":3,"name":"Operative","xp":110},{"lv":4,"name":"Lieutenant","xp":200},{"lv":5,"name":"Inner Circle","xp":320}];
   const XPV = {"visit":10,"read":15,"quiz":30,"lead":50,"mark":25,"blackout":20};
   const TOP = LV[LV.length - 1];
   const ARW = "<svg class=\"arw\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M4 12h15M13 5l7 7-7 7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\"/></svg>";
@@ -777,8 +841,7 @@ twq('config','rhx35');
       let n = 0;
       $$('[data-classified^="pb-"]').forEach((el) => {
         const open = el.classList.contains('is-open'); if (open) n++;
-        const a = $('[data-pb-link="' + el.dataset.classified + '"]');
-        if (a) { a.classList.toggle('is-open', open); const i = $('i', a); if (i) i.textContent = open ? 'Open' : 'Sealed'; }
+        $$('[data-pb-link="' + el.dataset.classified + '"]').forEach((a) => { a.classList.toggle('is-open', open); const i = $('i', a); if (i) i.textContent = open ? 'Open' : 'Sealed'; });
       });
       $$('[data-pb-open]').forEach((e) => (e.textContent = n));
     }
@@ -808,6 +871,44 @@ twq('config','rhx35');
   if (window.BS) start(); else document.addEventListener('bs:ready', start);
 })();
 
+/* ── The playbook on wide screens: one rule at a time, picked from the index or with previous / next.
+   Every rule stays in the page; phones and no-JS get the full stack. ── */
+(() => {
+  const pb = document.querySelector('[data-pb]');
+  if (!pb) return;
+  const sheets = [...pb.querySelectorAll('[data-pb-deck] > [data-classified]')];
+  const links = [...pb.querySelectorAll('.pb__nav [data-pb-link]')];
+  const bar = pb.querySelector('[data-pb-bar]'), pos = pb.querySelector('[data-pb-pos]');
+  const prev = pb.querySelector('[data-pb-prev]'), next = pb.querySelector('[data-pb-next]');
+  if (!sheets.length || !bar) return;
+  const wide = matchMedia('(min-width: 981px)');
+  let cur = 0;
+  const show = (i, focus) => {
+    cur = Math.max(0, Math.min(sheets.length - 1, i));
+    const deck = wide.matches;
+    pb.classList.toggle('pb--deck', deck);
+    bar.hidden = !deck;
+    sheets.forEach((el, k) => { el.hidden = deck && k !== cur; });
+    links.forEach((a, k) => { if (deck && k === cur) a.setAttribute('aria-current', 'step'); else a.removeAttribute('aria-current'); });
+    pos.textContent = String(cur + 1).padStart(2, '0');
+    prev.disabled = cur === 0; next.disabled = cur === sheets.length - 1;
+    if (focus && deck) {
+      const t = sheets[cur].querySelector('.classified__title');
+      if (t) { t.tabIndex = -1; t.focus({ preventScroll: true }); }
+      const top = bar.getBoundingClientRect().top;
+      if (top < 70 || top > innerHeight * .6) scrollBy({ top: top - 100, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    }
+  };
+  const go = (i) => { show(i, true); try { history.replaceState(null, '', '#cl-' + sheets[cur].dataset.classified); } catch (e) { /* file:// */ } };
+  links.forEach((a, k) => a.addEventListener('click', (e) => { if (!wide.matches) return; e.preventDefault(); go(k); }));
+  prev.addEventListener('click', () => go(cur - 1));
+  next.addEventListener('click', () => go(cur + 1));
+  const fromHash = () => { const k = sheets.findIndex((el) => '#cl-' + el.dataset.classified === location.hash); if (k >= 0) show(k, false); };
+  if (wide.addEventListener) wide.addEventListener('change', () => show(cur, false));
+  show(0, false); fromHash();
+  addEventListener('hashchange', fromHash);
+})();
+
 /* ── Your Syndicate ID: drawn on a canvas, shown as an image so it can be saved ── */
 (() => {
   const fig = document.querySelector('[data-sid-card]');
@@ -815,6 +916,8 @@ twq('config','rhx35');
   const img = fig.querySelector('[data-sid-img]'), tilt = fig.querySelector('.sid__tilt');
   const nameIn = document.getElementById('sid-name'), bizIn = document.getElementById('sid-biz');
   const msg = document.querySelector('[data-sid-msg]'), share = document.querySelector('[data-sid-share]');
+  // the Vault's own public address, from the page's canonical link (built from the config's siteUrl)
+  const SHARE_URL = (document.querySelector('link[rel="canonical"]') || {}).href || location.href.split('#')[0];
   const W = 1200, H = 756, KEY = 'bs2.sid';
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const g = cv.getContext('2d');
@@ -850,6 +953,45 @@ twq('config','rhx35');
   const hash = (s) => { let h = 2166136261; for (const ch of s) { h ^= ch.codePointAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
   const memberNo = (n) => { const k = n.trim().toLowerCase().replace(/\s+/g, ' '); if (!k) return 'BS-0000-0000'; return 'BS-' + String(hash(k) % 10000).padStart(4, '0') + '-' + String(hash(k + '|syndicate') % 10000).padStart(4, '0'); };
   const level = () => (window.BS ? window.BS.level() : { lv: 0, name: 'Outsider' });
+  // What the visitor has earned on the site, read from the engine (never written here).
+  const earned = () => {
+    const B = window.BS;
+    if (!B) return { files: 0, read: 0 };
+    if (B.stamps) return B.stamps();
+    const S = B.state(), F = B.FILES || [], read = F.filter((f) => S.read[f.path]).length;
+    return { files: F.length, read, archive: F.length > 0 && read >= F.length, allMarks: Object.keys(S.marks || {}).length >= 3, blackout: !!S.blackout, lead: !!S.lead };
+  };
+  // The earned stamps, packed from the right edge of the card's upper band. None earned: the band stays clean.
+  function stamps(E) {
+    const items = [];
+    if (E.archive) items.push({ w: 124, draw: (x, y) => {
+      g.save(); g.translate(x + 62, y); g.rotate(-0.14); g.strokeStyle = C.gold; g.fillStyle = C.gold;
+      g.lineWidth = 3.5; g.beginPath(); g.arc(0, 0, 60, 0, Math.PI * 2); g.stroke();
+      g.lineWidth = 1.2; g.beginPath(); g.arc(0, 0, 51, 0, Math.PI * 2); g.stroke(); g.beginPath(); g.arc(0, 0, 31, 0, Math.PI * 2); g.stroke();
+      g.font = '700 12.5px ' + F.type; arc('ARCHIVE', 0, 0, 41, false, 3.5); arc('ALL FILES READ', 0, 0, 41, true, 1.4);
+      g.font = '900 25px ' + F.display; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = C.hi; g.fillText(E.read + '/' + E.files, 0, 1); g.textBaseline = 'alphabetic'; g.textAlign = 'left';
+      g.restore();
+    } });
+    if (E.allMarks) items.push({ w: 166, draw: (x, y) => {
+      for (let k = 0; k < 3; k++) hat(x + k * 56, y - 52, 1.35, C.hi);
+      spaced('3 OF 3 MARKS', x + 83, y + 34, 3.5, '700 14px ' + F.type, C.gold, 'center');
+    } });
+    const box = (text, sub, col, tilt) => {
+      g.font = '900 35px ' + F.display; const tw = g.measureText(text).width, w = Math.ceil(tw + 44);
+      items.push({ w, draw: (x, y) => {
+        g.save(); g.translate(x + w / 2, y); g.rotate(tilt); g.strokeStyle = col; g.fillStyle = col;
+        g.lineWidth = 3.5; rr(-w / 2, -35, w, 70, 6); g.stroke(); g.lineWidth = 1.2; rr(-w / 2 + 7, -28, w - 14, 56, 3); g.stroke();
+        g.font = '900 35px ' + F.display; g.textAlign = 'center'; g.fillText(text, 0, 7);
+        spaced(sub, 0, 23, 2.8, '700 11px ' + F.type, col, 'center');
+        g.restore();
+      } });
+    };
+    if (E.blackout) box('SAID THE NAME', 'BLACKOUT', C.paper, 0.06);
+    if (E.lead) box('MADE CONTACT', 'FILE ON THE DESK', C.gold, -0.07);
+    let x = W - 76;
+    items.forEach((it) => { x -= it.w; it.draw(x, 240); x -= 22; });
+    return items.length;
+  }
   const today = () => new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
 
   function draw() {
@@ -913,15 +1055,19 @@ twq('config','rhx35');
       g.font = '700 13px ' + F.type; g.textAlign = 'left'; spaced('UNTIL LEVEL 5', 0, 27, 3, '700 12px ' + F.type, C.signal, 'center');
       g.restore();
     }
+    const E = earned();
+    stamps(E);
     spaced('GOOD FOR BRAGGING RIGHTS · BLACKOUTSYN.COM', 82, H - 56, 3.5, '400 15px ' + F.type, rgba(C.ash, .85));
     g.restore();
-    return { L, name: rawName || 'Unknown', biz, no: memberNo(rawName) };
+    return { L, E, name: rawName || 'Unknown', biz, no: memberNo(rawName) };
   }
 
   let blob = null, url = '', t = 0, info = null;
   function publish() {
     info = draw();
-    img.alt = 'Syndicate ID card for ' + info.name + ', ' + info.biz + '. Member number ' + info.no + '. Clearance Level ' + info.L.lv + ', ' + info.L.name + (info.L.lv >= 5 ? ', with the Inner Circle seal.' : ', stamped provisional until Level 5.') + ' Issued ' + new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + '.';
+    const E = info.E, got = [E.archive && 'Archive, all ' + E.files + ' files read', E.allMarks && 'all three hidden marks', E.blackout && 'Said the name', E.lead && 'Made contact'].filter(Boolean);
+    img.alt = 'Syndicate ID card for ' + info.name + ', ' + info.biz + '. Member number ' + info.no + '. Clearance Level ' + info.L.lv + ', ' + info.L.name + (info.L.lv >= 5 ? ', with the Inner Circle seal.' : ', stamped provisional until Level 5.') + (got.length ? ' Stamps: ' + got.join(', ') + '.' : '') + ' Issued ' + new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + '.';
+    document.querySelectorAll('[data-earn]').forEach((li) => li.classList.toggle('is-on', !!{ archive: E.archive, marks: E.allMarks, blackout: E.blackout, lead: E.lead }[li.dataset.earn]));
     const show = (u) => { img.src = u; };
     try {
       cv.toBlob((b) => {
@@ -933,7 +1079,7 @@ twq('config','rhx35');
     } catch (e) { swapToCanvas(); }
     if (share) {
       const L = info.L, txt = L.lv >= 5 ? 'Inner Circle at the Blackout Syndicate. The Vault is open. @BzTheG' : 'Level ' + L.lv + ': ' + L.name + ' at the Blackout Syndicate. Working my way into the Vault. @BzTheG';
-      share.href = 'https://x.com/intent/tweet?text=' + encodeURIComponent(txt) + '&url=' + encodeURIComponent('https://www.blackoutsyn.com/vault.html');
+      share.href = 'https://x.com/intent/tweet?text=' + encodeURIComponent(txt) + '&url=' + encodeURIComponent(SHARE_URL);
     }
   }
   function swapToCanvas() { if (cv.isConnected) return; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', img.alt); img.replaceWith(cv); }
@@ -954,7 +1100,7 @@ twq('config','rhx35');
         a.href = u; a.download = 'syndicate-id-' + slug + '.png'; a.rel = 'noopener';
         document.body.appendChild(a); a.click(); a.remove();
         setTimeout(() => URL.revokeObjectURL(u), 4000);
-        say('Your card is on its way to your downloads. If nothing shows up, long-press or right-click the card and save the image.');
+        say('Saved. Your card is on its way to your downloads. Now attach it to your post. If nothing shows up, long-press or right-click the card and save the image.');
       } catch (e) { say(fallback); }
     };
     try { draw(); cv.toBlob((b) => (b ? go(b) : say(fallback)), 'image/png'); } catch (e) { say(fallback); }
@@ -970,11 +1116,14 @@ twq('config','rhx35');
     publish();
     // redraw once the brand fonts are in, and whenever clearance changes
     if (document.fonts && document.fonts.load) Promise.all(['900 64px "Big Shoulders Display"', 'italic 700 40px "Bodoni Moda"', 'italic 500 40px "Bodoni Moda"', '400 20px "Courier Prime"', '700 20px "Courier Prime"'].map((f) => document.fonts.load(f).catch(() => null))).then(publish);
-    const hud = document.querySelector('[data-hud-lv]'); let lv = level().lv;
-    if (hud) new MutationObserver(() => { if (level().lv !== lv) { lv = level().lv; publish(); } }).observe(hud, { childList: true, characterData: true, subtree: true });
+    // redraw when the level or an earned stamp changes
+    const sig = () => { const E = earned(); return [level().lv, E.archive, E.allMarks, E.blackout, E.lead].join(); };
+    let last = sig();
+    document.addEventListener('bs:change', () => { const now = sig(); if (now !== last) { last = now; publish(); } });
   };
   if (window.BS) begin(); else document.addEventListener('bs:ready', begin);
 })();
 </script>
+<script src="assets/js/sky.js?v=13k6jt5"></script>
 </body>
 </html>
