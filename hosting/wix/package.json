@@ -1,0 +1,25 @@
+{
+  "name": "blackout-syndicate-wix-hosting",
+  "private": true,
+  "description": "Wix-managed Astro wrapper that serves ../../docs on Wix Headless hosting with clean-URL and old-URL redirects.",
+  "type": "module",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "release": "node release.mjs",
+    "build": "node scripts/astro.mjs build",
+    "preview": "node scripts/serve.mjs",
+    "test": "node --test test/routing.test.mjs",
+    "sync": "node scripts/sync-site.mjs"
+  },
+  "dependencies": {
+    "@wix/astro": "3.1.0",
+    "@wix/astro-wix-hosting-adapter": "3.0.4",
+    "@wix/essentials": "1.0.15",
+    "astro": "7.4.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  }
+}

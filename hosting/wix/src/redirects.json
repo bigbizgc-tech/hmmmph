@@ -1,0 +1,23 @@
+{
+  "$comment": "Old URLs -> current pages, 301 with the query string kept. Keys are lower-case paths without a trailing slash. 'exact' matches the path itself; 'prefix' matches the path and anything under it (/product-page/x). A real page always wins: /x is only looked up here when neither x.html nor x/index.html exists. Every target must be a file in docs/ (the build fails otherwise).",
+  "exact": {
+    "/product-page/spark-get-seen-boost": "/packages/spark.html",
+    "/product-page/boost-get-seen-boost": "/packages/boost.html",
+    "/product-page/blitz-get-seen-boost": "/packages/blitz.html",
+    "/product-page/30-day-post-kit": "/packages/post-kit.html",
+    "/product-page/profile-fix": "/packages/profile-fix.html",
+    "/shop": "/packages.html",
+    "/services": "/packages.html",
+    "/book-online": "/packages.html",
+    "/plans-pricing": "/packages.html",
+    "/blank": "/getstarted.html",
+    "/contact-us": "/contact.html",
+    "/about-us": "/about.html"
+  },
+  "prefix": {
+    "/product-page": "/packages.html",
+    "/category": "/packages.html",
+    "/service-page": "/packages.html",
+    "/pricing-plans": "/packages.html"
+  }
+}
