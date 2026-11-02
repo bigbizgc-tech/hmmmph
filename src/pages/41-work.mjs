@@ -2,41 +2,18 @@
 // an honest line on client results, the Graveshift crew, and where to follow.
 import { BIZ, SOCIALS, REEL } from '../data/business.mjs';
 import { BOOSTS, bySlug, offerPath } from '../data/offers.mjs';
+import { VS, artFor, clipArt, CLIP_ART_CSS } from '../data/clipart.mjs';
 
 const YT = SOCIALS.find((s) => s.key === 'youtube');
 const DISCORD = SOCIALS.find((s) => s.key === 'discord');
 const pad = (n) => String(n).padStart(2, '0');
-const VS = /\s+vs\.?\s+/i;
-const artFor = (r) => (VS.test(r.title) ? 'vs' : /graveshift/i.test(r.who) ? 'reticle' : r.kind === 'Channel' ? 'strip' : 'beam');
 const EXT = '<svg class="rl-ext" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>';
-
-const RETICLE = `<svg class="rl-ret" viewBox="0 0 200 200" focusable="false">
-  <g class="rl-ret__spin"><circle cx="100" cy="100" r="86"/>${Array.from({ length: 36 }, (_, i) => `<path d="M100 ${i % 3 ? 16 : 10}V22" transform="rotate(${i * 10} 100 100)"/>`).join('')}</g>
-  <circle cx="100" cy="100" r="58" class="rl-ret__mid"/>
-  <path d="M100 130V170M30 100H70M130 100H170" class="rl-ret__cross"/>
-  <g class="rl-ret__cup" transform="translate(100 54) scale(.8) translate(-100 -100)"><path d="M84 80h32v9c0 11-7 18-16 18s-16-7-16-18Z"/><path d="M84 84h-7c0 8 4 12 9 13M116 84h7c0 8-4 12-9 13M100 107v9M89 121h22"/></g>
-</svg>`;
-
-const FRAMES = ['g', 'r', 's', 'g', 's', 'r', 'g', 's'];
-function art(r, k) {
-  if (k === 'vs') {
-    const [a, b] = r.title.split(VS);
-    return `<span class="rl-art rl-art--vs" aria-hidden="true"><span class="rl-vs rl-vs--a"><span>${a}</span></span><span class="rl-vs rl-vs--b"><span>${b}</span></span><span class="rl-vs__slash"></span><span class="rl-vs__x">VS</span></span>`;
-  }
-  if (k === 'reticle') return `<span class="rl-art rl-art--reticle" aria-hidden="true">${RETICLE}</span>`;
-  if (k === 'strip') {
-    const run = FRAMES.map((f) => `<i class="rl-fr rl-fr--${f}"></i>`).join('');
-    return `<span class="rl-art rl-art--strip" aria-hidden="true"><span class="rl-strip"><span class="rl-strip__run">${run}${run}</span></span></span>`;
-  }
-  const words = r.title.split('.')[0].trim().split(/\s+/).slice(0, 3);
-  return `<span class="rl-art rl-art--beam" aria-hidden="true"><span class="rl-beam__cone"></span><span class="rl-beam__words">${words.join('<br>')}.</span></span>`;
-}
 
 const card = (r, i) => {
   const k = artFor(r);
   return `<li class="${r.kind === 'Short' ? 'is-tall' : 'is-wide'}">
   <a class="rl-card rl-card--${r.tone} rl-card--${k}" href="${r.url}" target="_blank" rel="noopener">
-    ${art(r, k)}
+    ${clipArt(r, k)}
     <span class="rl-card__top"><span class="rl-card__badge">${r.kind} · ${r.length}</span><span class="rl-card__no" aria-hidden="true">Reel ${pad(i + 1)}</span></span>
     <span class="rl-card__play" aria-hidden="true"></span>
     <span class="rl-card__meta"><span class="label">${r.who}</span><h3 class="rl-card__title">${r.title}</h3><span class="rl-card__go">${r.kind === 'Channel' ? 'Open the channel' : 'Watch on YouTube'} ${EXT}</span></span>
@@ -73,7 +50,7 @@ const RECAP = [
 ];
 const BOOST = bySlug.boost;
 
-const css = `
+const css = CLIP_ART_CSS + `
 /* ── Opening: the countdown leader ── */
 .rl-head__in{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,72px);align-items:center}
 @media (max-width:900px){.rl-head__in{grid-template-columns:minmax(0,1fr)}}
@@ -116,7 +93,6 @@ const css = `
 .rl-card--red{--tone:var(--signal)}.rl-card--smoke{--tone:var(--ash)}
 .rl-card:hover,.rl-card:focus-visible{border-color:var(--tone);transform:translateY(-4px);box-shadow:0 30px 60px -34px color-mix(in srgb,var(--tone) 55%,transparent)}
 .rl-card::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(7,7,8,.55) 0,transparent 22%,transparent 46%,rgba(7,7,8,.96) 86%),repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 2px,transparent 2px 4px)}
-.rl-art{position:absolute;inset:0;z-index:-2;overflow:hidden}
 .rl-card__top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:14px}
 .rl-card__badge,.rl-card__no{font-family:var(--f-type);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;background:var(--void);border:1px solid var(--smoke);padding:4px 8px;white-space:nowrap}
 .rl-card__no{color:var(--tone);border-color:color-mix(in srgb,var(--tone) 45%,var(--smoke))}
@@ -133,54 +109,10 @@ const css = `
 .rl-card:hover .rl-ext{transform:translate(3px,-3px)}
 .rl-card:hover .rl-card__go{opacity:1}
 
-/* art: searchlight on the words */
-.rl-art--beam{background:radial-gradient(110% 60% at 50% 0,rgba(217,178,95,.12),transparent 64%),var(--void)}
-.rl-beam__cone{position:absolute;left:-30%;top:-20%;width:160%;height:140%;background:conic-gradient(from 165deg at 50% 0,transparent 0deg,rgba(243,212,138,.13) 10deg,transparent 22deg);transform-origin:50% 0;animation:rlCone 7s ease-in-out infinite alternate}
-.rl-beam__words{position:absolute;left:9%;right:6%;top:max(62px,10%);font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(84px,9vw,150px);line-height:.82;letter-spacing:-.01em;color:transparent;-webkit-text-stroke:1.5px rgba(242,234,216,.34);background:linear-gradient(100deg,transparent 34%,var(--gold) 44%,var(--gold-hi) 50%,var(--gold) 56%,transparent 66%) 50% 0/260% 100% no-repeat;-webkit-background-clip:text;background-clip:text;animation:rlBeam 5.5s ease-in-out infinite alternate}
-.rl-card:hover .rl-beam__words{animation-duration:2.2s}
+/* the posters themselves live in src/data/clipart.mjs (shared with the home reel) */
 .is-tall .rl-card--beam .rl-card__play{align-self:end;margin-bottom:6%}
-@keyframes rlBeam{from{background-position:100% 0}to{background-position:0 0}}
-@keyframes rlCone{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
-
-/* art: the reticle (Graveshift) */
-.rl-art--reticle{background:radial-gradient(60% 50% at 50% 40%,rgba(229,72,77,.24),transparent 70%),var(--void);display:grid;place-items:start center;padding-top:14%}
-.rl-ret{width:min(92%,340px);height:auto;overflow:visible;fill:none;stroke:var(--signal);stroke-width:1.5;transition:transform .5s var(--ease)}
-.rl-ret__spin{transform-origin:100px 100px;animation:rlSpin 26s linear infinite;opacity:.8}
-.rl-ret__mid{stroke-dasharray:4 7;opacity:.55}
-.rl-ret__cross{stroke:var(--paper);opacity:.5}
-.rl-ret__cup{stroke:var(--gold-hi);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(243,212,138,.7))}
-.rl-card:hover .rl-ret{transform:scale(.9)}
-.rl-card:hover .rl-ret__spin{animation-duration:4s}
-@keyframes rlSpin{to{transform:rotate(360deg)}}
-@media (max-width:600px){.rl-ret{width:min(78%,340px)}}
-
-/* art: the showdown */
-.rl-art--vs{background:var(--void)}
-.rl-vs{position:absolute;inset:0;display:flex;transition:transform .5s var(--ease)}
-.rl-vs span{position:absolute;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(50px,4.8vw,74px);line-height:.85;letter-spacing:-.005em}
-.rl-vs--a{clip-path:polygon(0 0,60% 0,40% 100%,0 100%);background:radial-gradient(80% 90% at 10% 20%,rgba(217,178,95,.2),transparent 70%),var(--vault)}
-.rl-vs--a span{left:6%;top:60px;color:var(--gold-hi)}
-.rl-vs--b{clip-path:polygon(60% 0,100% 0,100% 100%,40% 100%);background:radial-gradient(80% 90% at 90% 30%,rgba(242,234,216,.1),transparent 70%),var(--coal)}
-.rl-vs--b span{right:6%;top:124px;color:transparent;-webkit-text-stroke:1.5px var(--paper)}
-.rl-vs__slash{position:absolute;left:50%;top:-10%;bottom:-10%;width:2px;background:var(--gold);transform:rotate(11.3deg);box-shadow:0 0 18px rgba(243,212,138,.8)}
-.rl-vs__x{position:absolute;left:50%;top:120px;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;background:var(--gold);color:var(--void);display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:26px;letter-spacing:.02em;box-shadow:0 0 0 6px var(--void);transition:transform .4s var(--ease)}
 .rl-card--vs .rl-card__play{display:none}
-.rl-card:hover .rl-vs--a{transform:translateX(-8px)}
-.rl-card:hover .rl-vs--b{transform:translateX(8px)}
-.rl-card:hover .rl-vs__x{transform:scale(1.15) rotate(-8deg)}
-
-/* art: the film strip (channel) */
-.rl-art--strip{background:radial-gradient(90% 70% at 50% 40%,rgba(170,163,150,.12),transparent 70%),var(--void)}
-.rl-strip{position:absolute;left:-10%;right:-10%;top:16%;height:46%;transform:rotate(-7deg);background:#0b0a0c;border-block:1px solid var(--smoke);overflow:hidden;padding:22px 0}
-.rl-strip::before,.rl-strip::after{content:"";position:absolute;left:0;right:0;height:10px;background:repeating-linear-gradient(90deg,var(--smoke) 0 12px,transparent 12px 26px)}
-.rl-strip::before{top:6px}.rl-strip::after{bottom:6px}
-.rl-strip__run{display:flex;gap:10px;height:100%;width:max-content;animation:rlRun 22s linear infinite}
-.rl-fr{display:block;height:100%;aspect-ratio:4/3;border:1px solid var(--smoke)}
-.rl-fr--g{background:radial-gradient(60% 70% at 30% 35%,rgba(243,212,138,.45),transparent 70%),var(--vault)}
-.rl-fr--r{background:radial-gradient(60% 70% at 65% 60%,rgba(229,72,77,.4),transparent 70%),var(--vault)}
-.rl-fr--s{background:linear-gradient(160deg,rgba(242,234,216,.16),transparent 60%),var(--coal)}
-.rl-card:hover .rl-strip__run{animation-duration:6s}
-@keyframes rlRun{to{transform:translateX(-50%)}}
+@media (max-width:600px){.rl-grid{--ret-w:min(78%,340px)}}
 
 /* theater mode: the house lights go down on everything but the reel */
 .rl-house{position:fixed;inset:0;z-index:55;background:rgba(3,3,4,.9);opacity:0;visibility:hidden;transition:opacity .6s var(--ease),visibility 0s .6s}
@@ -333,7 +265,7 @@ export default {
 <section class="band rl-clips" id="clips" aria-labelledby="clips-h">
   <div class="wrap">
     <div class="band__head band__head--row rl-clips__head rv">
-      <div><p class="label">Now showing</p><h2 class="h2" id="clips-h">The clips. <span class="whisper">Lights down.</span></h2><p>The crew’s own work, cut for the feeds. Each card opens the clip on YouTube in a new tab.</p></div>
+      <div><p class="label">Now showing</p><h2 class="h2" id="clips-h">The clips. Lights down.</h2><p>The crew’s own work, cut for the feeds. Each card opens the clip on YouTube in a new tab.</p></div>
       <div class="ctas"><button class="btn btn--ghost btn--sm rl-dim" type="button" data-dim aria-pressed="false"><span data-dim-t>Dim the house lights</span></button></div>
     </div>
     <ul class="rl-grid rv">${REEL.map(card).join('')}</ul>
@@ -344,7 +276,7 @@ export default {
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">What the crew makes</p>
-      <h2 class="h2" id="make-h">Four kinds <span class="whisper">of cut.</span></h2>
+      <h2 class="h2" id="make-h">Four kinds of cut.</h2>
       <p>Everything on the reel falls into one of these. Each one has a clip you can watch right now.</p>
     </div>
     <ul class="rl-make rv">
@@ -386,7 +318,7 @@ export default {
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">Follow the work</p>
-      <h2 class="h2" id="follow-h">The crew <span class="whisper">and the channel.</span></h2>
+      <h2 class="h2" id="follow-h">The crew and the channel.</h2>
     </div>
     <div class="rl-follow rv">
       <div class="rl-panel rl-panel--gs">

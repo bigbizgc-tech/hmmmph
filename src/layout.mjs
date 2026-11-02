@@ -54,7 +54,7 @@ export function makeCtx(page, all, config = {}) {
 
   const contactLines = () => `
 <div class="lines">
-  <div class="lines__row"><a class="lines__big" href="${BIZ.phoneHref}">${BIZ.phone}</a><button class="copy" type="button" data-copy="${BIZ.phone}">Copy</button></div>
+  <div class="lines__row"><a class="lines__big" href="${BIZ.phoneHref}" aria-label="Call ${BIZ.phone}">${BIZ.phone}</a><span class="lines__acts"><a class="copy lines__act" href="${BIZ.phoneHref}">Call</a><a class="copy lines__act" href="${BIZ.sms}">Text</a><button class="copy" type="button" data-copy="${BIZ.phone}">Copy</button></span></div>
   <div class="lines__row"><a class="lines__mail" href="mailto:${BIZ.email}">${BIZ.email}</a><button class="copy" type="button" data-copy="${BIZ.email}">Copy</button></div>
   <p class="lines__note">Call or text. ${BIZ.area.join(', ')} and anywhere online.</p>
 </div>`;
@@ -84,6 +84,11 @@ function topbar(ctx) {
     <nav class="menu" id="menu" aria-label="Main">
       <ul>${NAV.map((n) => `<li><a href="${link(n.p)}"${page.section === n.key ? ' aria-current="page"' : ''}>${n.t}</a></li>`).join('')}</ul>
       <a class="btn btn--sm menu__cta" href="${link('contact.html')}">Make contact</a>
+      <div class="menu__line">
+        <p class="label">Or call or text</p>
+        <a class="menu__num" href="${BIZ.phoneHref}">${BIZ.phone}</a>
+        <div class="menu__acts"><a class="btn btn--sm" href="${BIZ.phoneHref}">Call</a><a class="btn btn--sm btn--ghost" href="${BIZ.sms}">Text</a></div>
+      </div>
     </nav>
     <div class="topbar__end">
       <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false">
@@ -107,15 +112,21 @@ function nextFile(ctx) {
   const cut = Math.max(2, Math.ceil(words.length * 0.45));
   const shown = words.slice(0, cut).join(' ');
   const hidden = words.slice(cut).map((w) => `<span class="rx-word">${w}</span>`).join(' ');
+  // Wide screens fill the card's right side with the next file's number, outlined and lit by the
+  // searchlight. Files without a number (the Index, the Vault) get redaction bars instead.
+  const no = String(n.file || '').replace(/\D/g, '');
+  const bars = '<i></i><i></i><i></i><i></i>';
+  const art = no ? `<span class="nextfile__dark">${no}</span><span class="nextfile__lit">${no}</span>` : `<span class="nextfile__dark">${bars}</span><span class="nextfile__lit">${bars}</span>`;
   return `
 <section class="nextfile band band--tight" aria-label="Next file">
   <div class="wrap">
     <div data-jump hidden></div>
-    <a class="nextfile__card" href="${link(n.path)}" data-spot>
+    <a class="nextfile__card nextfile__card--art" href="${link(n.path)}" data-spot>
       <span class="label">Next file${n.file ? ' · ' + n.file : ''}</span>
       <span class="nextfile__title">${n.navTitle || n.h1 || n.title}</span>
       <span class="nextfile__teaser">${shown} ${hidden}</span>
       <span class="nextfile__go">Open it ${arrow}</span>
+      <span class="nextfile__no${no ? '' : ' nextfile__no--bars'}" data-spot-layer aria-hidden="true">${art}</span>
     </a>
   </div>
 </section>`;

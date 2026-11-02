@@ -240,6 +240,9 @@
         span.className = 'rx';
         while (t.firstChild) span.appendChild(t.firstChild);
         t.appendChild(span);
+        // a bold lead-in ("Do it today:") stays typewritten once the sheet is open
+        const lead = [...span.childNodes].find((n) => n.nodeType !== 3 || n.textContent.trim());
+        if (lead && lead.nodeName === 'STRONG') lead.classList.add('cl-lead');
       });
     });
   }
