@@ -18,7 +18,8 @@ export default {
   title: 'FAQ',                // <title> becomes "FAQ · Blackout Syndicate"
   description: '…',            // meta description, 140–160 chars, plain and specific
   teaser: '…',                 // one line shown (half redacted) on the previous page's "Next file" card
-  next: 'about.html',          // which page the "Next file" card at the bottom points to
+  next: 'about.html',          // which page the "Next file" card at the bottom points to (wide screens show
+                               // that file's number huge on the right; files without a number get redaction bars)
   css: `…`,                    // optional page-only CSS (inlined in <head>)
   js: `…`,                     // optional page-only script (runs after site.js; window.BS is ready)
   jsonld: (ctx, config) => ({…}), // optional structured data
@@ -40,7 +41,7 @@ Pages without `file` (thank-you, vault, privacy, terms, 404) give no clearance f
 | `c.mark('m1')` | One of the 3 hidden marks (+25 clearance). Ids `m1` (about), `m2` (how-it-works), `m3` (faq). Hide it somewhere discoverable but not obvious: inside a heading, next to a rule, at the end of a paragraph. |
 | `c.offerCard(offer)` | The package "file" card. |
 | `c.crumbs([{t,p},…,{t}])` | Breadcrumbs. Last item has no `p`. |
-| `c.contactLines()` | Big phone number + email with copy buttons. |
+| `c.contactLines()` | Big phone number (tap to call) with Call, Text (`sms:`) and Copy, then the email with Copy. The footer and the phone menu also carry Call and Text. |
 | `c.socialRow()` | Social links with icons. |
 | `c.icon('x')` | Brand icon SVG: x, tiktok, instagram, facebook, youtube, discord. |
 | `c.config` | The merged build config (`src/config.mjs` plus any `BS_CONFIG_OVERRIDE`). Read switches such as `c.config.showPayLinks` from here, never by importing `config.mjs`. |
@@ -52,6 +53,10 @@ Tokens: `--void --coal --vault --smoke --ash --paper --ink --ink-mute --gold --g
 fonts `--f-display` (Big Shoulders Display, uppercase headlines), `--f-body` (Archivo),
 `--f-serif` (Bodoni Moda italic, the "whisper" accent), `--f-type` (Courier Prime, dossier labels).
 Never introduce new colors or fonts. Use the tokens.
+Only these cuts are loaded (`FONTS` in `src/layout.mjs`): Archivo 400 to 700 upright, Big Shoulders Display 800 and 900,
+Bodoni Moda italic 500 and 700, Courier Prime 400 and 700. Ask for another weight or style and the browser fakes it, so stay
+inside those. The stacks start with metric-matched fallbacks (`BSD Fallback`, `Archivo Fallback` in `site.css`) so the late
+font swap doesn't move the layout; keep them first after the web font.
 
 **Structure**
 - `<section class="band">` → `<div class="wrap">`. Variants: `band--coal` (raised dark), `band--paper` (light dossier page, use 1 per page at most), `band--gold` (loud closing CTA, at most 1 per page), `band--tight`, `band--flush-top`.
@@ -73,17 +78,21 @@ Never introduce new colors or fonts. Use the tokens.
 - Forms: `.form`, `.form__row`, `.field` (label + input/select/textarea + `<p class="field__err" data-err-for="name"></p>`), `.chips/.chip`, `.form__alert`, `.hp` honeypot.
 - Focus rings switch to ink on `band--paper` and `.classified`, and to void on `band--gold`. Anything else on a light or gold surface needs its own `:focus-visible { outline-color: … }`.
 - A locked `.classified` body is clipped to about 11em and fades out, so long files don't become screens of black bars. Links inside a locked body leave the tab order.
+- `.ctas` stack into one column of equal full-width buttons on phones (560px and below); a `.textlink` in the row keeps its own width.
 - Add `class="rv"` to section-level blocks for a reveal on scroll (only fires for things below the fold). Optional `style="--d:.1s"` delay.
 - `data-spot` on any element makes a gold searchlight follow the pointer (`--x/--y` set in px). Use for one hero-ish moment per page at most.
 
 ## Engine API (window.BS, available in page `js`)
 
 - `BS.award(kind, id, amount, label)` — kind is `seen|read|mark|quiz|lead|blackout`. Use `BS.award('quiz', '', BS.XP.quiz, 'Package match found')`.
-- `BS.track(name, params)` — X pixel event by config key (`lead`, `formSubmit`, `packageView`, `contactView`).
-- `BS.toast(main, sub, big, tone, href, note)`, `BS.state()`, `BS.level()`, `BS.open()` (opens clearance drawer), `BS.reduce` (reduced motion). Toasts never block taps; a toast with `href` is a link (`'#clearance'` opens the drawer).
+- `BS.track(name, params)` — X pixel event by config key (`lead`, `formSubmit`, `packageView`, `contactView`, `call`). An event whose ID is `''` in config does nothing. `call` is sent by the engine for every tap on a `tel:`, `sms:` or `mailto:` link (one listener for the whole page), so new phone, text or email links are tracked with no extra code.
+- `BS.toast(main, sub, big, tone, href, note)`: feedback for the visitor. `tone` `'level'` is the gold one; with `href` the toast gets a small link label (`'#clearance'` opens the drawer). Toasts never take a tap or click meant for the page: the toast ignores the pointer and only its small link label can be tapped. On phones one toast shows at a time, compact, pinned under the top bar, for about 3 seconds, and a scroll sends it away; on desktop at most two show, top right under the clearance meter. Toasts wait (and anything on screen clears) while a lead form or an element marked `data-toast-quiet` (a page's big reveal, such as a quiz result) is on screen or any field has focus, while a classified sheet is declassifying, while the drawer or phone menu is open and while the lights are out; once the way is clear, level-ups and links show and small stale ones are dropped. One `BS.award()` makes one toast: a level-up, the third hidden mark or the Archive seal folds the clearance it paid into the same toast. Use toasts sparingly and never as the only place something is said.
+- `BS.state()` (raw clearance record, read only), `BS.stamps()` (what the visitor has earned, for badges such as the Vault ID card: `{ level, xp, files, opened, read, archive, marks, allMarks, quiz, blackout, lead }`; listen for `bs:change` to redraw), `BS.level()`, `BS.open()` (opens clearance drawer), `BS.reduce` (reduced motion).
 - Clearance is re-read from storage before every write, so several open tabs never wipe each other. Always change state through `BS.award()`, never by writing to `BS.state()`.
 - Lead form: `<form class="form" data-lead novalidate>` with fields named `name` (required), `business`, `email` (required, type=email), `phone`, `interest` (select; each option `value="spark"` and `data-slug="spark"`), `platform`, `message`, plus honeypot `<input name="_honey" class="hp" tabindex="-1" autocomplete="off">`, `<div class="form__alert" data-form-alert hidden></div>`, and `<button class="btn btn--lg" type="submit">`. The engine handles validation, sending, pixel events and redirect to thank-you.html. `?pkg=slug` preselects.
 - Thank-you: elements `[data-lead-name]`, `[data-lead-interest]`, `[data-lead-preview]` (hidden unless preview) are filled automatically.
+  The `lead` conversion fires there only for a real send from that browser tab (a one-time token the form leaves in the tab must match `?sent=`), once per send, never on a reload or a direct visit.
+- Classified sheets: the body is ruled paper, one rule per line of type and a blank ruled line between paragraphs, so keep bodies to `<p>`, `<ul>`/`<ol>` and `<strong>`. Locked text is typed in Courier; an opened sheet reads in the body face, and a bold lead-in at the very start of a paragraph or list item (`<strong>Do it today:</strong> …`) stays typewritten.
 
 ## Voice (non-negotiable)
 

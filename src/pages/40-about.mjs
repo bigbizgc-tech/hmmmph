@@ -1,28 +1,30 @@
 // File 15: About. Who runs the Syndicate: the founder, the name, the rules, the ground, the crew.
-// Facts only from src/data. The founder file (Level 4) is the same facts, laid out as a dossier.
+// Facts only from src/data. The Level 4 reward on this page is the first-call prep file: how to get ready
+// to call GC, built from the offers and the policy (the founder's facts stay in the page itself).
 import { BIZ, SOCIALS, PLATFORMS, POLICY } from '../data/business.mjs';
-import { bySlug, offerPath } from '../data/offers.mjs';
+import { BOOSTS, PLANS, bySlug, offerPath } from '../data/offers.mjs';
 
 const andList = (a) => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]);
 const AREA = andList(BIZ.area);
 const DISCORD = SOCIALS.find((s) => s.key === 'discord');
-const HANDLES = SOCIALS.filter((s) => ['x', 'tiktok', 'instagram'].includes(s.key));
 
-// The case file (opens at Level 4). Every row is a known fact.
-const FILE_ROWS = [
-  ['Name', BIZ.founder],
-  ['Known as', 'GC, Biz'],
-  ['Base', `${BIZ.city}, ${BIZ.regionLong}`],
-  ['Company', `${BIZ.name}, a ${BIZ.legal} company`],
-  ['Background', 'Ten years building things with his hands'],
-  ['Trade now', 'Paid reach, content and AI setup for creators, streamers, solo businesses and local shops'],
-  ['Also handles', 'Websites, AI assistants and automations'],
-  ['Territory', `${AREA}. All three on the St. Joseph River`],
-  ['Crew', 'Graveshift Gaming, GC’s gaming crew. Find it on Discord'],
-  ['Standing orders', 'Every dollar accounted for. If he can’t help you, he says so'],
-  ['Found on', HANDLES.map((s) => `${s.handle} on ${s.label}`).join(', ')],
-  ['Direct line', BIZ.phone],
-];
+// The first-call prep file (opens at Level 4). Example answers show the shape of an answer;
+// prices, timing and the payment line come from the data.
+const [SPARK, BOOST, BLITZ] = BOOSTS;
+const PREP = (c) => {
+  const f = (o) => `<a href="${c.link(offerPath(o))}">${o.name}</a> (${o.price}${o.suffix})`;
+  return `
+      <p>Calling or texting ${BIZ.phone} for the first time? Have these four answers ready and the call gets to the point fast. Each one has a shop answer and a streamer answer, so you can see the shape.</p>
+      <ol>
+        <li><strong>What are you pushing, and where should people land?</strong><br><span class="ab-ex">Shop: “Saturday brunch. The booking link in our bio.”</span><br><span class="ab-ex">Streamer: “Friday’s stream. My Twitch channel.”</span></li>
+        <li><strong>Who should see it?</strong><br><span class="ab-ex">Shop: “People close enough to drive over.”</span><br><span class="ab-ex">Streamer: “People who watch the games I play.”</span></li>
+        <li><strong>Is there a date?</strong><br><span class="ab-ex">An opening, an event, a stream night. If there is, get in touch at least a week ahead so the whole run lands before it.</span></li>
+        <li><strong>How big do you want to start?</strong><br><span class="ab-ex">A test is ${f(SPARK)}. A launch or a stream night is ${f(BOOST)}. A date you only get once is ${f(BLITZ)}. Every month is a plan, from ${PLANS[0].price}${PLANS[0].suffix}.</span></li>
+      </ol>
+      <p><strong>The one-line brief.</strong> Put the four together and say it in one breath: “I want to push ___, to people who ___, landing on ___, by ___.” Start the call with that line.</p>
+      <p><strong>What GC does with it.</strong> He tells you which file fits, or whether you need one at all. If your page isn’t ready for strangers yet, you hear that first.</p>
+      <p><strong>Right after the call.</strong> ${POLICY.payment} Nothing runs without your OK. For a boost, our target is live within 24 hours of payment.</p>`;
+};
 
 // What GC takes on. Each points at the file that covers it.
 const TRADES = [
@@ -140,15 +142,12 @@ const css = `
 @media (max-width:980px){.ab-trades__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:600px){.ab-trades__grid{grid-template-columns:minmax(0,1fr)}}
 
-/* ── The founder file (Level 4) ── */
+/* ── The first-call prep file (Level 4; its block id stays "founder" for the clearance ladder) ── */
 .ab-file{scroll-margin-top:100px}
-.ab-file [data-classified="founder"] .classified__body ul{list-style:none;padding-left:0;gap:0}
-.ab-file [data-classified="founder"] .classified__body li{padding:8px 0;border-bottom:1px dashed rgba(23,20,15,.22)}
-.ab-file [data-classified="founder"] .classified__body li strong{display:inline-block;min-width:10.5em;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);background:var(--paper);margin-left:-.08em;padding-left:.08em}
-.js .ab-file .classified.is-locked .classified__body li strong{color:var(--ink-mute)}
-.ab-file [data-classified="founder"] .classified__body a{color:var(--ink)}
-.ab-file [data-classified="founder"] .classified__body li strong{margin-right:.7em}
-@media (min-width:700px){.ab-file [data-classified="founder"] .classified__body li{padding-left:184px}.ab-file [data-classified="founder"] .classified__body li strong{margin-left:-184px;min-width:174px;margin-right:0;padding-left:0}}
+.ab-file .classified__body ol{gap:1em}
+.ab-file .classified__body li::marker{font-weight:700}
+.ab-file .ab-ex{color:var(--ink-mute)}
+.ab-file .classified__body a{color:var(--ink);font-weight:700;text-underline-offset:3px;text-decoration-color:var(--brass)}
 
 /* ── The name (paper) ── */
 .ab-name{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(36px,6vw,88px);align-items:start}
@@ -379,7 +378,7 @@ export default {
         ${c.btn('Read his story ' + c.arrow, '#story', 'lg')}
         ${c.btn('Make contact', 'contact.html', 'ghost lg')}
       </div>
-      <p class="ab-head__tease"><span>His full case file is on this page.</span><a href="#file">It opens at Level 4: ${c.LEVELS[4].name}.</a></p>
+      <p class="ab-head__tease"><span>Your first-call prep file is on this page.</span><a href="#file">It opens at Level 4: ${c.LEVELS[4].name}.</a></p>
     </div>
     <div class="ab-lamp" data-lamp aria-hidden="true">
       <span class="ab-lamp__mount"></span>
@@ -423,11 +422,9 @@ export default {
   </div>
 </section>
 
-<section class="band band--flush-top ab-file" id="file" aria-label="Founder case file">
+<section class="band band--flush-top ab-file" id="file" aria-label="First-call prep file">
   <div class="wrap wrap--narrow">
-    ${c.classified({ id: 'founder', level: 4, title: `Case file: ${BIZ.founder}`, body: `
-      <ul>${FILE_ROWS.map(([k, v]) => `<li><strong>${k}</strong> ${v}</li>`).join('')}</ul>
-      <p>End of file. The rest you hear from him. Call or text <a href="${BIZ.phoneHref}">${BIZ.phone}</a>.</p>` })}
+    ${c.classified({ id: 'founder', level: 4, title: 'Your first call with GC: the prep file', body: PREP(c) })}
   </div>
 </section>
 
@@ -435,7 +432,7 @@ export default {
   <div class="wrap ab-name">
     <div class="ab-name__lead rv">
       <p class="label">The name</p>
-      <h2 class="h2" id="name-h">What the Syndicate <span class="whisper">means for you.</span></h2>
+      <h2 class="h2" id="name-h">What the Syndicate means for you.</h2>
       <div class="ab-def">
         <p class="ab-def__word">syn<i>·</i>di<i>·</i>cate</p>
         <p class="ab-def__say">/ˈsin-di-kət/ <i>noun</i></p>
@@ -456,7 +453,7 @@ export default {
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">The code</p>
-      <h2 class="h2" id="rules-h">The rules <span class="whisper">we run by.</span></h2>
+      <h2 class="h2" id="rules-h">The rules we run by.</h2>
       <p>Six lines we hold to on every job, from a ${bySlug.spark.price} ${bySlug.spark.name} to a monthly plan.</p>
     </div>
     <ol class="ab-rules rv">
@@ -470,7 +467,7 @@ export default {
   <div class="wrap ab-turf">
     <div class="ab-turf__text rv">
       <p class="label">The territory</p>
-      <h2 class="h2" id="turf-h">Three towns. <span class="whisper">One river.</span></h2>
+      <h2 class="h2" id="turf-h">Three towns. One river.</h2>
       <p class="lede">${AREA} all sit on the St. Joseph River. That’s our ground.</p>
       <p class="muted">We meet in person around here for AI setup and consulting. Ads and online work reach anywhere you want them aimed.</p>
       <ul class="ab-towns" aria-label="Towns on the map">
@@ -488,7 +485,7 @@ export default {
   <div class="wrap ab-gs">
     <div class="ab-gs__text rv">
       <p class="label label--red">The crew</p>
-      <h2 class="h2" id="gs-h">Graveshift Gaming. <span class="whisper">GC’s crew.</span></h2>
+      <h2 class="h2" id="gs-h">Graveshift Gaming. GC’s crew.</h2>
       <p class="lede"><strong>The gaming crew lives on Discord.</strong> Its clips are on the Reel.</p>
       <p class="muted">The crew’s clips run on the same kind of system we build for streamers. That’s <a class="textlink" href="${c.link(offerPath(bySlug['creator-systems']))}">${bySlug['creator-systems'].name} ${c.arrow}</a></p>
       <div class="ctas">

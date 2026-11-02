@@ -11,7 +11,7 @@ The deployable site is in **`docs/`**: plain HTML, CSS and JS. No framework, no 
 
 | X asked for | Where it lives |
 |---|---|
-| X Pixel on every page, tracking visits and form submissions | Pixel base code is emitted into every page's `<head>` once `xPixelId` is set. Events: `formSubmit` (form sent), `lead` (thank-you page, the conversion), `packageView`, `contactView`. See *Turn on the X Pixel*. |
+| X Pixel on every page, tracking visits and form submissions | Pixel base code is emitted into every page's `<head>` once `xPixelId` is set. Events: `lead` (thank-you page, the conversion), `formSubmit` (form sent, secondary), `packageView`, `contactView`, `call` (a tap on a phone, text or email link). See *Turn on the X Pixel*. |
 | Separate page for each package | `packages/spark.html`, `boost`, `blitz`, `surge`, `overdrive`, `total-blackout`, `post-kit`, `profile-fix`, plus `services/website-design.html`, `ai-consulting`, `ai-automation`, `creator-systems`. Each has a description, what you get, how it runs, fit, FAQ, price and a clear call to action. |
 | Complete content | Every page is written out: home, packages, how it works, FAQ, about, the reel, contact, privacy, terms and refunds. No placeholders. |
 | Dedicated Thank You page | `thank-you.html`. The contact form redirects there after a successful send. It fires the `lead` conversion. |
@@ -24,7 +24,7 @@ The deployable site is in **`docs/`**: plain HTML, CSS and JS. No framework, no 
 
 ```js
 xPixelId: '',          // paste your X Pixel ID
-xEvents: { lead: '', formSubmit: '', packageView: '', contactView: '' },
+xEvents: { lead: '', formSubmit: '', packageView: '', contactView: '', call: '' },
 formEndpoint: 'https://formsubmit.co/ajax/info@blackoutsyn.com',
 showPayLinks: false,   // true = package pages also show "Pay online" store links
 ```
@@ -35,16 +35,32 @@ Then rebuild: `npm run build` (or `node build.mjs`). That rewrites `docs/`.
 
 1. In X Ads Manager go to **Tools → Events Manager → Add event source → X Pixel**. Copy the pixel ID.
 2. Paste it into `xPixelId`.
-3. In Events Manager, **Add events**. Create at least:
-   - **Lead** (the conversion): paste its event ID (looks like `tw-xxxxx-yyyyy`) into `xEvents.lead`. It fires once when someone lands on `thank-you.html` after sending the form.
-   - Optional: **Form submit**, **Content view** (package pages) and **Page view** (contact page) events for `formSubmit`, `packageView`, `contactView`.
+3. In Events Manager, **Add events**. Paste each event ID (looks like `tw-xxxxx-yyyyy`) into `xEvents`:
+   - **Lead** → `xEvents.lead`. This is the conversion. It fires on `thank-you.html` once per real send.
+   - **Call, text or email** → `xEvents.call`. It fires when someone taps a phone number, a Text button or an
+     email address on any page (header menu, footer, contact page, package pages, the failed-send message). It
+     tells X which package page the tap came from. A tap means they opened their phone or mail app, not that the
+     call connected or the message was sent.
+   - Optional: **Form submit** → `formSubmit`, **Content view** → `packageView` (package pages), **Page view** →
+     `contactView` (contact page).
 4. Rebuild and deploy. Check with the **X Pixel Helper** Chrome extension on the live site.
 
-If you'd rather track the conversion by URL, set the Lead event in Events Manager to "page URL contains `thank-you`". The page only loads after a successful form send.
+Any event you leave as `''` doesn't fire, so you can add them one at a time.
 
-How the Lead conversion is counted: after a successful send the form goes to `thank-you.html?sent=<token>`. The page fires
-`lead` once per send (with the token as `conversion_id`, so X can de-duplicate), then drops `?sent=` from the address bar,
-so a reload never counts twice. It still counts when a browser blocks site storage.
+**Count one conversion per lead.** In the campaign, choose **Lead** as the conversion to optimize for and report on.
+`formSubmit` fires for the very same send a moment earlier, on the contact page, so if both are conversions every lead
+counts twice. Keep `formSubmit` as a secondary event (useful for checking that sends happen), or leave its ID empty.
+If you want calls and texts to count too, add **Call, text or email** as a second conversion; it never fires for a form
+send, so nothing is counted twice.
+
+**Use the event, not a URL rule.** Don't set the Lead conversion to "page URL contains `thank-you`". `thank-you.html` is
+a public address: anyone can open it, reload it or share it, and a URL rule would count every one of those visits.
+
+How the Lead event is counted: after a successful send the form leaves a one-time token in that browser tab and goes to
+`thank-you.html?sent=<token>`. The thank-you page fires `lead` only when the token in the address matches the one in the
+tab, then throws the token away and drops `?sent=` from the address bar. So it counts once per send, and a reload, a
+direct visit or a shared link never counts. (If a browser blocks site storage, the page accepts a token minted in the last
+15 minutes instead.) The token is also sent as `conversion_id`, so X can de-duplicate.
 
 The build warns you if `xPixelId` is set but `xEvents.lead` is empty (the conversion would never fire), and it fails if
 `previewMode` is left on for a `docs/` build (the form would not send leads).
@@ -106,16 +122,18 @@ confirmed working.
 | Finish the package matcher | +30 |
 | Find a hidden mark (3 in the site) | +25 each |
 | Send the contact form | +50 |
-| Type the name on the door anywhere on the site | +20 |
+| Type the name on the door anywhere on the site (on a phone: the box in the Vault) | +20 |
 
 | Level | Name | Unlocks |
 |---|---|---|
 | 1 | Lookout (25) | Playbook Rule 01 on the home page |
 | 2 | Associate (60) | The pricing math on every package page |
 | 3 | Operative (110) | How a push is actually aimed (How it works) |
-| 4 | Lieutenant (170) | The founder's full file (About) |
-| 5 | Inner Circle (240) | The Vault: the full Syndicate Playbook and a Syndicate ID card |
+| 4 | Lieutenant (200) | The founder's full file (About) |
+| 5 | Inner Circle (320) | The Vault: the full Syndicate Playbook and a Syndicate ID card |
 
+Each award shows one small toast (a level-up, the third hidden mark and the Archive seal fold into it). Toasts never take a
+tap meant for the page, show one at a time on phones, and wait while the contact form is on screen.
 When a level opens, its reward declassifies only when the visitor scrolls to it, the level-up toast links straight to it,
 and the bottom of every page shows a "Just declassified" card until they have read it. Reading all the files earns the
 Archive seal. Each level's `href` and `cl` in `LEVELS` say where its reward lives; the build checks those links.

@@ -20,7 +20,7 @@ const config = { ...baseConfig, ...(PREVIEW ? { previewMode: true, xPixelId: '' 
 
 // Catch a half-finished setup before it ships.
 if (!PREVIEW && config.xPixelId && !config.xEvents?.lead) {
-  console.warn('⚠ xPixelId is set but xEvents.lead is empty: the X Lead conversion will not fire. Paste the tw-... event ID, or use a URL-based conversion on thank-you.html.');
+  console.warn('⚠ xPixelId is set but xEvents.lead is empty: the X Lead conversion will not fire. Paste the tw-... event ID from Events Manager into xEvents.lead (see README, "Turn on the X Pixel").');
 }
 if (!PREVIEW && !process.env.OUT_DIR && config.previewMode) {
   console.error('✗ previewMode is true in a docs/ build: the form would skip sending and no lead would reach ' + BIZ.email + '. Set previewMode: false in src/config.mjs. Nothing was written.');

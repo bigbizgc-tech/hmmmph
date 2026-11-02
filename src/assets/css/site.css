@@ -205,6 +205,12 @@ main:focus { outline: none; }
 .btn--block { width: 100%; }
 .btn[disabled] { opacity: .6; cursor: progress; transform: none; }
 .ctas { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+/* phones: stacked buttons share one full width; plain text links stay their own size */
+@media (max-width: 560px) {
+  .ctas { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: stretch; }
+  .ctas > .btn { width: 100%; white-space: normal; text-align: center; }
+  .ctas > :not(.btn) { justify-self: start; }
+}
 .textlink { position: relative; color: var(--gold); text-decoration: none; font: inherit; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; width: fit-content; justify-self: start; align-self: start; background: none; border: 0; border-bottom: 1px solid color-mix(in srgb, var(--gold) 40%, transparent); padding: 0 0 2px; cursor: pointer; transition: border-color .2s, gap .2s; }
 .textlink::before { content: ""; position: absolute; inset: -10px -4px; }
 .textlink:hover { border-color: var(--gold); gap: 12px; }

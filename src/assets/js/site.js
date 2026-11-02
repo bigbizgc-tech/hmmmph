@@ -59,18 +59,20 @@
   // the toast ignores the pointer, and only its small link label (when href is given) can be tapped.
   // '#clearance' opens the drawer. Phones show one toast at a time, pinned under the top bar, and a
   // scroll sends it away; desktop shows at most two, top right under the clearance meter.
-  // Toasts wait while a lead form is on screen or any field is in use, while a classified sheet is
-  // declassifying, while the drawer or phone menu is open and while the lights are out. When the way
-  // is clear, the important ones (level-ups, links) show and small stale ones are dropped.
+  // Toasts wait while a lead form or a [data-toast-quiet] element (a page's big reveal) is on screen
+  // or any field is in use, while a classified sheet is declassifying, while the drawer or phone menu
+  // is open and while the lights are out. When the way is clear, the important ones (level-ups,
+  // links) show and small stale ones are dropped.
   // opt (engine only): { go: link label, force: show even while held, transient: drop if held }.
   const toastBox = $('[data-toasts]');
   const narrow = matchMedia('(max-width: 600px)');
-  const leadForms = $$('form[data-lead]');
+  const quietEls = $$('form[data-lead], [data-toast-quiet]');
   let live = [], waiting = [], swapT = 0, swapNext = null, releaseT = 0, formSeen = false, dark = false;
   const priOf = (tone, href) => (tone === 'level' || href ? 2 : 1);
+  const onScreen = (el) => { const r = el.getBoundingClientRect(); return r.height > 0 && r.bottom > 0 && r.top < innerHeight; };
   function held() {
     const a = document.activeElement;
-    return formSeen || dark || drawerOpen || !!(topbar && topbar.hasAttribute('data-open'))
+    return formSeen || quietEls.some(onScreen) || dark || drawerOpen || !!(topbar && topbar.hasAttribute('data-open'))
       || !!(a && a.closest && (a.closest('form[data-lead]') || a.matches('input, textarea, select, [contenteditable="true"]')))
       || !!$('.classified.is-opening');
   }
@@ -148,15 +150,15 @@
       if (!narrow.matches) return;
       live.slice().forEach((t) => { if (Date.now() - t.shown > 700 && Math.abs(scrollY - t.y0) > 48) dropToast(t); });
     }, { passive: true });
-    // a lead form on screen clears the way and holds new toasts until it is gone again
-    if (leadForms.length && 'IntersectionObserver' in window) {
+    // a lead form (or a quiet zone) on screen clears the way and holds new toasts until it is gone again
+    if (quietEls.length && 'IntersectionObserver' in window) {
       const seen = new Set();
       const io = new IntersectionObserver((ens) => {
         ens.forEach((en) => (en.isIntersecting ? seen.add(en.target) : seen.delete(en.target)));
         formSeen = seen.size > 0;
         if (formSeen) clearToasts(); else release();
       });
-      leadForms.forEach((f) => io.observe(f));
+      quietEls.forEach((f) => io.observe(f));
     }
     document.addEventListener('focusin', (e) => { if (e.target.closest && e.target.closest('form[data-lead]')) clearToasts(); });
     document.addEventListener('focusout', release);

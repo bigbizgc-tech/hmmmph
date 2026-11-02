@@ -1,6 +1,11 @@
 import { BIZ, SOCIALS, PLATFORMS, REEL } from '../data/business.mjs';
+import { artFor, clipArt, CLIP_ART_CSS } from '../data/clipart.mjs';
 
-const css = `
+// What each reel clip is, in words a shop owner reads at a glance (keyed by its poster).
+const WHAT = { beam: 'Our own ad spot', reticle: 'Creator clip', vs: 'Creator clip', strip: 'Our YouTube channel' };
+const whatOf = (r, k) => WHAT[k] + (r.who === BIZ.name || r.who === 'YouTube' ? '' : ' · ' + r.who);
+
+const css = CLIP_ART_CSS + `
 /* ── Hero: the searchlight ── */
 .hero{position:relative;overflow:hidden;isolation:isolate;border-bottom:1px solid var(--smoke);--x:30%;--y:45%}
 .hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(clamp(240px,34vw,520px) circle at var(--x) var(--y),rgba(217,178,95,.17),rgba(217,178,95,.05) 45%,transparent 72%)}
@@ -30,7 +35,29 @@ const css = `
 .visitor__next{display:grid;gap:4px;font-size:14.5px}
 .visitor__how{font-size:14px;color:var(--ash);line-height:1.5}
 .no-js [data-hud-open]{display:none}
-@media (max-width:900px){.hero__in{grid-template-columns:1fr;align-items:start}.visitor{max-width:460px}}
+@media (max-width:900px){
+  .hero__in{grid-template-columns:1fr;align-items:start}
+  .hero__title{font-size:clamp(72px,min(18vw,24vh),164px)}
+  .visitor{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px 32px;align-items:start}
+  .visitor__head,.visitor .ledger,.visitor .meter{grid-column:1/-1}
+  .visitor .ledger{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:32px}
+}
+/* phones: the offer comes second, so the visitor file steps aside (the LV chip in the top bar opens it) */
+@media (max-width:600px){.visitor{display:none}}
+
+/* ── Packages and prices, right under the hero (phones and tablets) ── */
+.quick{display:none;border-bottom:1px solid var(--smoke);background:var(--coal);padding-block:22px 26px}
+@media (max-width:900px){.quick{display:block}}
+.quick__head{display:flex;justify-content:space-between;align-items:baseline;gap:8px 16px;flex-wrap:wrap;margin-bottom:10px}
+.quick__h{font-family:var(--f-type);font-weight:400;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.quick__head .textlink{font-size:15px}
+.quick__list{list-style:none;border-top:1px solid var(--smoke)}
+.quick__list a{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name price" "meta price";column-gap:16px;align-items:center;padding:12px 0;border-bottom:1px solid var(--smoke);color:var(--paper);text-decoration:none}
+.quick__list b{grid-area:name;font-family:var(--f-display);font-weight:900;font-size:28px;line-height:.95;text-transform:uppercase;transition:color .2s}
+.quick__list a:hover b{color:var(--gold-hi)}
+.quick__list span:not(.price){grid-area:meta;font-size:14px;color:var(--ash);margin-top:3px}
+.quick__list .price{grid-area:price;font-size:32px;text-align:right}
+.quick__list .price small{font-size:13px}
 
 /* ── The problem ── */
 .truth{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(32px,6vw,90px);align-items:center}
@@ -61,12 +88,14 @@ const css = `
 .svc-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--smoke);border:1px solid var(--smoke)}
 @media (max-width:980px){.svc-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.svc-row{grid-template-columns:1fr}}
-.svc{--x:50%;--y:0%;position:relative;display:grid;gap:10px;align-content:start;padding:22px 20px;background:var(--coal);color:var(--paper);text-decoration:none;isolation:isolate;min-width:0;transition:background .3s}
+.svc{--x:50%;--y:0%;position:relative;display:flex;flex-direction:column;gap:10px;padding:22px 20px;background:var(--coal);color:var(--paper);text-decoration:none;isolation:isolate;min-width:0;transition:background .3s}
 .svc::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;background:radial-gradient(240px circle at var(--x) var(--y),rgba(217,178,95,.16),transparent 70%);transition:opacity .3s}
 .svc:hover::before,.svc:focus-visible::before{opacity:1}
 .svc b{font-family:var(--f-display);font-weight:900;font-size:clamp(28px,2.6vw,34px);line-height:.92;text-transform:uppercase;transition:color .3s}
 .svc:hover b{color:var(--gold-hi)}
 .svc span:not(.label):not(.file__open){color:var(--ash);font-size:15px;line-height:1.45}
+.svc .file__open{margin-top:auto;padding-top:12px}
+.svc:hover .file__open .arw{transform:translateX(5px)}
 .svc-row-old a{font-family:var(--f-display);font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:.03em;padding:10px 18px;border:1px solid var(--brass);color:var(--paper);text-decoration:none;display:inline-flex;gap:10px;align-items:center;transition:background .2s,color .2s}
 .svc-row-old a:hover{background:var(--gold);color:var(--void);border-color:var(--gold)}
 
@@ -90,32 +119,48 @@ const css = `
 @media (max-width:900px){.rules{grid-template-columns:1fr 1fr}}
 @media (max-width:520px){.rules{grid-template-columns:1fr}}
 
-/* ── Reel ── */
+/* ── Reel: each clip shows its own poster (art from src/data/clipart.mjs, sized to the card) ── */
 .reel{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-@media (max-width:1000px){.reel{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){.reel{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:80%;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:6px}.clip{scroll-snap-align:start;aspect-ratio:3/4}}
-.clip{--tone:var(--gold);position:relative;display:grid;align-content:end;aspect-ratio:9/13;max-width:100%;overflow:hidden;text-decoration:none;color:var(--paper);background:var(--coal);border:1px solid var(--smoke);isolation:isolate;transition:border-color .3s}
+@media (max-width:1100px){.reel{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.reel{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:82%;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:6px}.clip{scroll-snap-align:start;aspect-ratio:3/4}}
+.clip{--tone:var(--gold);--art-words:30cqw;--art-top:max(46px,12cqh);--vs-size:15.5cqw;--vs-a:max(52px,14cqh);--vs-b:52cqh;--vs-x:38cqh;--ret-w:min(76cqw,300px);--ret-top:max(44px,11cqh);container-type:size;position:relative;display:grid;align-content:end;aspect-ratio:9/13;max-width:100%;overflow:hidden;text-decoration:none;color:var(--paper);background:var(--void);border:1px solid var(--smoke);isolation:isolate;transition:border-color .3s,transform .45s var(--ease),box-shadow .45s}
 .clip--red{--tone:var(--signal)}.clip--smoke{--tone:var(--ash)}
-.clip::before{content:"";position:absolute;inset:-40%;z-index:-2;background:conic-gradient(from 200deg at 50% 50%,transparent 0 60%,color-mix(in srgb,var(--tone) 30%,transparent) 70%,transparent 80%);animation:sweep 9s linear infinite}
-.clip::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 30%,rgba(7,7,8,.95) 78%),repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 2px,transparent 2px 4px)}
-@keyframes sweep{to{transform:rotate(360deg)}}
-.clip:hover{border-color:var(--tone)}
-.clip__badge{position:absolute;top:12px;left:12px;font-family:var(--f-type);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;background:var(--void);border:1px solid var(--smoke);padding:4px 8px}
-.clip__play{position:absolute;top:42%;left:50%;width:70px;height:70px;margin:-35px 0 0 -35px;border-radius:50%;border:1.5px solid var(--paper);display:grid;place-items:center;transition:transform .3s var(--ease),background .3s,border-color .3s}
-.clip__play::after{content:"";border-left:19px solid var(--paper);border-block:11px solid transparent;margin-left:5px}
-.clip:hover .clip__play{transform:scale(1.12);background:var(--tone);border-color:var(--tone)}
-.clip:hover .clip__play::after{border-left-color:var(--void)}
-.clip__meta{display:grid;gap:6px;padding:18px}
-.clip__meta b{font-family:var(--f-display);font-weight:900;font-size:27px;line-height:.95;text-transform:uppercase}
+.clip::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(7,7,8,.5) 0,transparent 18%,transparent 52%,rgba(7,7,8,.96) 84%),repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 2px,transparent 2px 4px)}
+.clip:hover,.clip:focus-visible{border-color:var(--tone);transform:translateY(-4px);box-shadow:0 30px 60px -34px color-mix(in srgb,var(--tone) 55%,transparent)}
+.clip__badge{position:absolute;top:12px;left:12px;font-family:var(--f-type);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;background:var(--void);border:1px solid var(--smoke);padding:4px 8px;white-space:nowrap}
+.clip__play{position:absolute;top:42%;left:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;border:1.5px solid var(--paper);display:grid;place-items:center;background:rgba(7,7,8,.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);transition:transform .3s var(--ease),background .3s,border-color .3s}
+.clip__play::after{content:"";border-left:18px solid var(--paper);border-block:10.5px solid transparent;margin-left:5px}
+.clip:hover .clip__play,.clip:focus-visible .clip__play{transform:scale(1.12);background:var(--tone);border-color:var(--tone)}
+.clip:hover .clip__play::after,.clip:focus-visible .clip__play::after{border-left-color:var(--void)}
+.clip--beam .clip__play{position:static;margin:0 0 6px;justify-self:center}
+.clip--reticle .clip__play{top:calc(var(--ret-top) + min(38cqw,150px))}
+.clip--strip .clip__play{top:39%}
+.clip--vs .clip__play{display:none}
+.clip__meta{display:grid;gap:6px;padding:16px 18px 18px}
+.clip__meta .label{color:var(--tone)}
+.clip--smoke .clip__meta .label{color:var(--ash)}
+.clip__meta b{font-family:var(--f-display);font-weight:900;font-size:clamp(22px,9.4cqw,30px);line-height:.95;text-transform:uppercase}
+.reel-note{margin-top:18px;font-size:14.5px;color:var(--ash);max-width:70ch}
 
-/* ── Final call ── */
-.final{display:grid;gap:clamp(24px,3vw,36px);justify-items:start}
-.final h2{font-family:var(--f-display);font-weight:900;font-size:clamp(70px,13vw,200px);line-height:.86;text-transform:uppercase}
+/* ── Final call: the pitch on the left, the open line on the right ── */
+.final{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(32px,5vw,80px);align-items:end}
+@media (max-width:860px){.final{grid-template-columns:minmax(0,1fr)}}
+.final__main{display:grid;gap:clamp(24px,3vw,36px);justify-items:start;min-width:0}
+.final h2{font-family:var(--f-display);font-weight:900;font-size:clamp(70px,11vw,176px);line-height:.86;text-transform:uppercase}
 .final p{font-size:var(--t-lede);max-width:52ch}
 .final .btn{--bg:var(--void);--fg:var(--gold);--bd:var(--void)}
 .final .btn--ghost{--bg:transparent;--fg:var(--void);--bd:var(--void)}
 .final .btn--ghost:hover{--bg:var(--void);--fg:var(--gold)}
-.final__phone{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,4vw,48px);color:var(--void);text-decoration:none;line-height:1}
+.final__line{position:relative;display:grid;gap:12px;align-content:start;min-width:0;padding:clamp(26px,3vw,36px) clamp(22px,2.6vw,32px);border:2px solid var(--void)}
+.final__line .label{padding-right:110px}
+.final__stamp.stamp{position:absolute;top:-58px;right:6px;width:136px;font-size:26px;color:var(--void);border-color:var(--void);box-shadow:inset 0 0 0 5px var(--gold),inset 0 0 0 6.5px var(--void)}
+.final__stamp small{font-size:9.5px}
+.final__phone{font-family:var(--f-display);font-weight:900;font-size:clamp(40px,4vw,60px);color:var(--void);text-decoration:none;line-height:.95;font-variant-numeric:tabular-nums;white-space:nowrap}
+.final__phone:hover{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px}
+.final .final__note{font-size:16px;line-height:1.5}
+.final__mail{font-family:var(--f-type);font-size:15px;color:var(--void);overflow-wrap:anywhere;text-underline-offset:3px;border-top:1.5px dashed rgba(7,7,8,.35);padding-top:12px}
+@media (max-width:860px){.final__line{max-width:460px;width:100%;margin-top:40px}}
+@media (max-width:400px){.final__stamp.stamp{width:112px;font-size:21px;top:-48px;right:6px}.final__line .label{padding-right:90px}.final__phone{font-size:clamp(34px,11vw,40px)}}
 `;
 
 const js = `
@@ -177,7 +222,7 @@ const js = `
     return { z, roof: h, parts: P, masts: v === 4 && h > 420 ? [M(w * .1, h + 10, h + 60, 4, 1)] : [] };
   }
   function build(){
-    const r = hero.getBoundingClientRect(), c = card && card.getBoundingClientRect();
+    const r = hero.getBoundingClientRect(), c = card && card.offsetParent ? card.getBoundingClientRect() : null;
     const k = [r.width, r.height, c && c.left - r.left, c && c.top - r.top, devicePixelRatio].join();
     if (k === key) return false; key = k;
     D = Math.min(devicePixelRatio || 1, 2);
@@ -462,6 +507,16 @@ export default {
   </div>
 </header>
 
+<section class="quick" aria-labelledby="quick-h">
+  <div class="wrap">
+    <div class="quick__head"><h2 class="quick__h" id="quick-h">Packages and prices</h2><a class="textlink" href="${c.link('packages.html')}">Compare every package ${c.arrow}</a></div>
+    <ul class="quick__list">
+      ${c.BOOSTS.map((o) => `<li><a href="${c.link(c.offerPath(o))}"><b>${o.name}</b><span>${o.cadence} · ${o.run} · No contract</span><span class="price">${o.price}</span></a></li>`).join('')}
+      <li><a href="${c.link('packages.html#plans')}"><b>Monthly plans</b><span>${c.PLANS.map((o) => o.name).join(', ')}</span><span class="price"><small>from </small>${c.PLANS[0].price}<small>${c.PLANS[0].suffix}</small></span></a></li>
+    </ul>
+  </div>
+</section>
+
 <div class="ticker" aria-hidden="true"><div class="ticker__track">${[0, 1].map(() => ['Creators', 'Streamers', 'Solo businesses', 'Local shops', 'Musicians', 'Events', ...BIZ.area].map((t) => `<span>${t}</span>`).join('')).join('')}</div></div>
 
 <section class="band" aria-labelledby="truth-h">
@@ -488,7 +543,7 @@ export default {
 <section class="band band--coal" aria-labelledby="how-h">
   <div class="wrap">
     <div class="band__head band__head--row rv">
-      <div><p class="label">The play</p><h2 class="h2" id="how-h">Three moves. <span class="whisper">Then you’re seen.</span></h2></div>
+      <div><p class="label">The play</p><h2 class="h2" id="how-h">Three moves. Then you’re seen.</h2></div>
       <a class="textlink" href="${c.link('how-it-works.html')}">The full play, step by step ${c.arrow}</a>
     </div>
     <ol class="steps rv" style="--n:3">
@@ -503,7 +558,7 @@ export default {
   <div class="wrap split">
     <div class="rv" style="display:grid;gap:20px;align-content:start">
       <p class="label">Where we push</p>
-      <h2 class="h2" id="where-h">Every feed <span class="whisper">that matters.</span></h2>
+      <h2 class="h2" id="where-h">Every feed that matters.</h2>
       <p class="muted">Five platforms. We put your money where your people actually scroll, and tell you straight when a platform is the wrong fit.</p>
     </div>
     <ul class="plats rv" style="--d:.1s">${PLATFORMS.map((p) => `<li class="${p.fresh ? 'fresh' : ''}"><b>${p.name}</b><span>${p.note}</span></li>`).join('')}</ul>
@@ -513,7 +568,7 @@ export default {
 <section class="band band--coal" id="files" aria-labelledby="files-h">
   <div class="wrap">
     <div class="band__head band__head--row rv">
-      <div><p class="label">The files</p><h2 class="h2" id="files-h">Start small. <span class="whisper">Or go all in.</span></h2><p>Boosts are one-time buys with no contract. Plans keep the push running month after month. Every file opens to the full details.</p></div>
+      <div><p class="label">The files</p><h2 class="h2" id="files-h">Start small. Or go all in.</h2><p>Boosts are one-time buys with no contract. Plans keep the push running month after month. Every file opens to the full details.</p></div>
       <a class="textlink" href="${c.link('packages.html')}">Compare every package ${c.arrow}</a>
     </div>
     <div class="drawer-label rv"><h3 class="h3">One-time boosts</h3><span class="label label--dim">No contract</span></div>
@@ -562,20 +617,29 @@ export default {
 <section class="band" aria-labelledby="reel-h">
   <div class="wrap">
     <div class="band__head band__head--row rv">
-      <div><p class="label">The reel</p><h2 class="h2" id="reel-h">Watch <span class="whisper">the work.</span></h2><p>Ad spots, gaming highlights and AI tool showdowns made by the crew. Opens on YouTube.</p></div>
+      <div><p class="label">The reel</p><h2 class="h2" id="reel-h">Our own spots and creator work</h2><p>An ad spot we cut for ourselves, plus gaming highlights and AI tool showdowns from the crew’s channel. Every clip opens on YouTube.</p></div>
       <a class="textlink" href="${c.link('work.html')}">The whole reel ${c.arrow}</a>
     </div>
-    <div class="reel rv">${REEL.map((r) => `<a class="clip clip--${r.tone}" href="${r.url}" target="_blank" rel="noopener"><span class="clip__badge">${r.kind} · ${r.length}</span><span class="clip__play" aria-hidden="true"></span><span class="clip__meta"><span class="label">${r.who}</span><b>${r.title}</b></span></a>`).join('')}</div>
+    <div class="reel rv">${REEL.map((r) => { const k = artFor(r); return `<a class="clip clip--${r.tone} clip--${k}" href="${r.url}" target="_blank" rel="noopener">${clipArt(r, k)}<span class="clip__badge">${r.kind} · ${r.length}</span><span class="clip__play" aria-hidden="true"></span><span class="clip__meta"><span class="label">${whatOf(r, k)}</span><b>${r.title}</b></span><span class="sr">(opens YouTube in a new tab)</span></a>`; }).join('')}</div>
+    <p class="reel-note rv">This is the crew’s own work. Client results go up only with the client’s OK.</p>
   </div>
 </section>
 
 <section class="band band--gold" aria-labelledby="final-h">
   <div class="wrap final">
-    <p class="label">Make contact</p>
-    <h2 id="final-h">Step into<br>the light.</h2>
-    <p>Tell us what you’re pushing. We’ll tell you straight which file fits, or whether you need one at all.</p>
-    <div class="ctas">${c.btn('Make contact ' + c.arrow, 'contact.html', 'lg')}${c.btn('See the packages', 'packages.html', 'ghost lg')}</div>
-    <a class="final__phone" href="${BIZ.phoneHref}">${BIZ.phone}</a>
+    <div class="final__main">
+      <p class="label">Make contact</p>
+      <h2 id="final-h">Step into<br>the light.</h2>
+      <p>Tell us what you’re pushing. We’ll tell you straight which file fits, or whether you need one at all.</p>
+      <div class="ctas">${c.btn('Make contact ' + c.arrow, 'contact.html', 'lg')}${c.btn('See the packages', 'packages.html', 'ghost lg')}</div>
+    </div>
+    <div class="final__line">
+      <span class="stamp final__stamp" aria-hidden="true">Open<br>line<small>Call or text</small></span>
+      <p class="label">The direct line</p>
+      <a class="final__phone" href="${BIZ.phoneHref}">${BIZ.phone}</a>
+      <p class="final__note">Call or text. You deal with a person in ${BIZ.city}.</p>
+      <a class="final__mail" href="mailto:${BIZ.email}">${BIZ.email}</a>
+    </div>
   </div>
 </section>`,
 };

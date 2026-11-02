@@ -3,10 +3,14 @@ import { BIZ, PLATFORMS, POLICY } from '../data/business.mjs';
 import { BOOSTS, PLANS, SERVICES, bySlug, offerPath } from '../data/offers.mjs';
 
 const andList = (a) => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]);
+const orList = (a) => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' or ' + a[a.length - 1]);
 const lc = (s) => s.charAt(0).toLowerCase() + s.slice(1);
 const SURGE = PLANS[0];
 const OVERDRIVE = bySlug.overdrive;
 const TOTAL = bySlug['total-blackout'];
+const [SPARK, BOOST] = BOOSTS;
+const CREATOR = bySlug['creator-systems'];
+const POSTKIT = bySlug['post-kit'];
 const tel = `<a href="${BIZ.phoneHref}">${BIZ.phone}</a>`;
 const mail = `<a href="mailto:${BIZ.email}">${BIZ.email}</a>`;
 
@@ -17,6 +21,7 @@ const GROUPS = [
     items: [
       { id: 'how-to-buy', q: 'How do I buy a package?', a: (c) => `<p>Send the form on the <a href="${c.link('contact.html')}">contact page</a>, or call or text ${tel}. Tell us what you’re promoting and which package you want. The Claim button on any package page fills that package in for you.</p><p>${POLICY.payment} For boosts, our target is live within 24 hours of payment.</p>` },
       { id: 'ad-money', q: 'How much of my price goes into the actual ad?', a: (c) => `<p>Here is the ad money in each one:</p><ul>${[...BOOSTS, SURGE].map((o) => `<li><a href="${c.link(offerPath(o))}"><strong>${o.name}</strong></a>: ${lc(o.spend)}</li>`).join('')}</ul><p>The rest covers setup, aiming it and your recap. ${OVERDRIVE.name} includes everything in ${SURGE.name}.</p>` },
+      { id: 'promote-myself', q: 'Why not just hit Promote myself?', a: (c) => `<p>You can. The Promote button in the app puts money behind a post, and sometimes that’s all a post needs. Here is what a package adds on top of the ad money:</p><ul><li>Setup in the platform’s own ad tools, aimed at your area or the audience you name.</li><li>You see it and OK it before anything runs.</li><li>A recap when the run ends: what was spent, how many people it reached, and the clicks or views it got. ${andList(BOOSTS.slice(1).map((o) => o.name))} add follows.</li><li><a href="${c.link(offerPath(SPARK))}">${SPARK.name}</a> comes with the <a href="${c.link(offerPath(POSTKIT))}">${POSTKIT.name}</a>, so new visitors land on a page that’s alive.</li><li>On a monthly plan, the aim is checked and adjusted every month as the numbers come in.</li></ul><p>Rather run it yourself? <a href="${c.link('how-it-works.html#aimed')}">How a push is aimed</a> is written up on How it works. Use it on your own ads.</p>` },
       { id: 'refunds', q: 'What is your refund policy?', a: (c) => `<p>Word for word:</p><ul><li><strong>Boosts:</strong> ${POLICY.boosts}</li><li><strong>Monthly plans:</strong> ${POLICY.plans}</li><li><strong>Add-ons:</strong> ${POLICY.addons}</li><li><strong>Quoted jobs:</strong> ${POLICY.quoted}</li><li><strong>Rejected ads:</strong> ${POLICY.rejected}</li></ul><p>The full terms are on the <a href="${c.link('terms.html')}">terms and refunds page</a>.</p>` },
       { id: 'quoted', q: 'How do you price websites and AI work?', a: (c) => `<p>${andList(SERVICES.map((o) => `<a href="${c.link(offerPath(o))}">${o.name}</a>`))} are quoted per job. After a short call you get a written quote with the price and what’s included, before any work starts.</p><p>${POLICY.quoted}</p>` },
     ],
@@ -27,6 +32,7 @@ const GROUPS = [
       { id: 'real-ads', q: 'Are these real ads? Who sees them?', a: () => `<p>Yes. Every push is a real paid placement, bought through the platform’s own ad tools, the same ones any business uses. No bots, no fake followers, no engagement pods.</p><p>It’s shown to the people you pick: your area, or the audience you name. Local shops usually aim by place. Creators usually aim by the kind of viewer.</p>` },
       { id: 'what-promote', q: 'What can I promote? Do I need to make a new ad?', a: (c) => `<p>Your post, page, channel, website or booking line. A boost puts money behind something you already have, so you don’t need a new video to start.</p><p>If you want content made, the <a href="${c.link('packages/post-kit.html')}">30-Day Post Kit</a> gives you a month of captions, and <a href="${c.link(offerPath(TOTAL))}">${TOTAL.name}</a> includes AI-made posts and promos.</p>` },
       { id: 'platforms', q: 'Which platforms do you run ads on?', a: () => `<p>${andList(PLATFORMS.map((p) => p.name))}. ${PLATFORMS.filter((p) => p.fresh).map((p) => `${p.name} is the newest, and we’re booking it now.`).join(' ')}</p><p>Each boost runs on one platform you pick. ${SURGE.name} and ${OVERDRIVE.name} run on up to 2. If a platform is the wrong fit for you, we’ll tell you straight.</p>` },
+      { id: 'twitch', q: 'Can you send people to my Twitch?', a: (c) => `<p>Yes. The ad runs on ${orList(PLATFORMS.map((p) => p.name))}, and it can point people at your Twitch channel. Send us your channel link and your stream nights when you get in touch.</p><p><a href="${c.link(offerPath(BOOST))}">${BOOST.name}</a> is built for a launch, a drop or a stream night. <a href="${c.link(offerPath(CREATOR))}">${CREATOR.name}</a> sets up a system that turns every stream into a week of posts.</p>` },
       { id: 'how-fast', q: 'How fast does a boost go live?', a: () => `<p>Our target is live within 24 hours of payment. For an event, book at least a week ahead so the whole run lands before the date. Monthly plans start with the intake call.</p>` },
       { id: 'rejected', q: 'What if a platform rejects my ad?', a: () => `<p>Every platform reviews ads before they run. ${POLICY.rejected}</p>` },
     ],
@@ -55,7 +61,7 @@ const GROUPS = [
       { id: 'passwords', q: 'Do I have to give you my passwords?', a: () => `<p>Not for Profile Fix. You publish the changes yourself, so nobody else needs your login.</p><p>For ads and automatic posting, we go over exactly what access your package needs before anything is set up. Your accounts stay yours.</p>` },
       { id: 'your-ok', q: 'Will anything go out under my name without my OK?', a: () => `<p>No. Nothing runs without your OK, and nothing goes out under your name that you haven’t seen. AI replies and automations are written around your business and approved by you before they go live.</p>` },
       { id: 'form', q: 'What happens to what I send in the contact form?', a: (c) => `<p>It’s emailed to us so we can get back to you about what you asked. The <a href="${c.link('privacy.html')}">privacy page</a> covers what we collect and why.</p>` },
-      { id: 'clearance-meter', q: 'What is the clearance meter on this site?', a: (c, ld) => `<p>Every page here is a file. Open one and read it to the end and your clearance goes up. Higher levels open the classified blocks: the pricing math, how a push is aimed, the founder’s file, and at Level 5 the Vault.</p><p>Clearance is saved in your own browser only, and you can burn it from the clearance panel any time. Separately, the site can use the X pixel, a measurement tag from X, to count visits and form sends that come from our ads. The <a href="${c.link('privacy.html')}">privacy page</a> has the details.</p>${ld ? '' : `<p class="qa__secret">There are three hidden marks on this site. One of them is right here. ${c.mark('m3')}</p>`}` },
+      { id: 'clearance-meter', q: 'What is the clearance meter on this site?', a: (c, ld) => `<p>Every page here is a file. Open one and read it to the end and your clearance goes up. Higher levels open the classified blocks: the pricing math, how a push is aimed, the first-call prep file, and at Level 5 the Vault.</p><p>Clearance is saved in your own browser only, and you can burn it from the clearance panel any time. Separately, the site can use the X pixel, a measurement tag from X, to count visits and form sends that come from our ads. The <a href="${c.link('privacy.html')}">privacy page</a> has the details.</p>${ld ? '' : `<p class="qa__secret">There are three hidden marks on this site. One of them is right here. ${c.mark('m3')}</p>`}` },
     ],
   },
   {
@@ -63,7 +69,7 @@ const GROUPS = [
     items: [
       { id: 'where', q: 'Where are you? Do I have to be local?', a: (c) => `<p>We’re in ${BIZ.city}, ${BIZ.regionLong}, and we work with people in ${andList(BIZ.area)}. You don’t have to be local. Ads, posts and setups all work from anywhere online.</p><p><a href="${c.link(offerPath(bySlug['ai-consulting']))}">AI Consulting</a> can be done in person around ${andList(BIZ.area)}, or on a call.</p>` },
       { id: 'who-for', q: 'Who do you work with?', a: () => `<p>Creators, streamers, solo businesses and local shops. Musicians and events too.</p><p>Not sure you fit? Ask. We’ll tell you straight which package makes sense, or whether you need one at all.</p>` },
-      { id: 'who-runs', q: 'Who is behind Blackout Syndicate?', a: (c) => `<p>${BIZ.founder}, known as ${BIZ.founderShort}. A ${BIZ.city} guy who spent ten years building things with his hands before he started building reach. ${BIZ.name} is a ${BIZ.legal} company.</p><p>His file is on the <a href="${c.link('about.html')}">About page</a>. You can also call or text ${tel} or email ${mail} and talk to a real person.</p>` },
+      { id: 'who-runs', q: 'Who is behind Blackout Syndicate?', a: (c) => `<p>${BIZ.founder}, known as ${BIZ.founderShort}. A ${BIZ.city} guy who spent ten years building things with his hands before he started building reach. ${BIZ.name} is a ${BIZ.legal} company.</p><p>His story is on the <a href="${c.link('about.html')}">About page</a>. You can also call or text ${tel} or email ${mail} and talk to a real person.</p>` },
     ],
   },
 ];

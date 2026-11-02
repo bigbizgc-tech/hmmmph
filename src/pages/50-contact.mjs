@@ -19,6 +19,10 @@ const noteFor = (o) => {
   return `${KIND.service} · ${o.spend}`;
 };
 const TEL = BIZ.phoneHref.replace('tel:', '');
+// Twitch is a destination, not a platform we buy ads on: the chip is there so streamers can say where
+// they stream, and the note under the chips says how it works. Brand path from simple-icons (CC0).
+const TWITCH = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>';
+const orList = (a) => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' or ' + a[a.length - 1]);
 
 const css = `
 /* ── Head: make contact + the direct line ── */
@@ -88,7 +92,10 @@ const css = `
 .intake__need{font-size:14.5px;color:var(--ink-mute)}
 .intake__need b{color:var(--signal)}
 .intake__subject{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-family:var(--f-type);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute)}
-.intake__subject span+span{font-size:16px;letter-spacing:.02em;text-transform:none;color:var(--ink);border-bottom:1px solid rgba(23,20,15,.35);min-width:12ch;max-width:100%;overflow-wrap:anywhere;padding-bottom:1px}
+.intake__subject span+span{font-size:16px;letter-spacing:.02em;text-transform:none;color:var(--ink);border-bottom:1px solid rgba(23,20,15,.35);max-width:100%;overflow-wrap:anywhere;padding-bottom:1px}
+.intake__subject.is-empty{visibility:hidden}
+.intake__twitch{margin-top:2px}
+.intake__twitch:empty{display:none}
 .intake__stamp.stamp{position:absolute;top:-6px;right:-8px;width:clamp(100px,10vw,126px);font-size:clamp(17px,1.6vw,20px);padding:10px;--c:var(--ink-mute);color:var(--c);border:2.5px dashed var(--c);box-shadow:none;opacity:.85;transition:color .3s,border-color .3s}
 .intake__stamp small{font-size:9.5px;letter-spacing:.12em}
 .intake__stamp [data-s]{display:none}
@@ -165,7 +172,7 @@ const js = `
   const name = q('[name="name"]'), email = q('[name="email"]'), phone = q('[name="phone"]'), sel = q('[name="interest"]');
   const stamp = q('[data-intake-stamp]'), count = q('[data-intake-count]'), subj = q('[data-intake-subject]');
   const pick = q('[data-pick]'), star = q('[data-phone-star]'), btn = q('[type="submit"]'), alertBox = q('[data-form-alert]');
-  const BLANK = subj ? subj.textContent : '';
+  const subjLine = subj && subj.closest('.intake__subject');
   const EMPTY = pick ? pick.innerHTML : '';
   const emailOk = () => /^\\S+@\\S+\\.\\S+$/.test(email.value.trim());
   const keep = (k, v) => { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage blocked */ } };
@@ -181,7 +188,7 @@ const js = `
     const missing = [name.value.trim(), emailOk(), sel.value, !phone.required || phone.value.trim()].filter((v) => !v).length;
     if (count) count.textContent = missing ? missing + (missing === 1 ? ' detail needed' : ' details needed') : '';
     if (state !== 'sent') setState(missing ? 'draft' : 'ready');
-    if (subj) subj.textContent = name.value.trim() || BLANK;
+    if (subj) { const n = name.value.trim(); subj.textContent = n; subjLine.classList.toggle('is-empty', !n); }
   }
   // the note under the package select
   function showPick(from) {
@@ -214,6 +221,9 @@ const js = `
     keep('bs2.reach', r.value);
     check();
   }));
+  // streamers: say how a push reaches a Twitch channel
+  const twitch = q('[data-twitch-note]');
+  form.querySelectorAll('[name="platform"]').forEach((r) => r.addEventListener('change', () => { if (twitch) twitch.textContent = r.value === 'Twitch' ? twitch.dataset.text : ''; }));
   form.addEventListener('input', check);
   sel.addEventListener('change', () => { showPick(''); check(); });
 
@@ -259,8 +269,8 @@ export default {
   }),
   body: (c) => {
     const options = GROUPS.map((g) => `<optgroup label="${g.t}">${OFFERS.filter((o) => o.kind === g.kind).map((o) => `<option value="${o.slug}" data-slug="${o.slug}" data-name="${c.esc(o.name)}" data-note="${c.esc(noteFor(o))}" data-href="${c.link(offerPath(o))}">${c.esc(o.name)} · ${priceOf(o)}</option>`).join('')}</optgroup>`).join('');
-    const platformChips = [...PLATFORMS.map((p) => ({ v: p.name, icon: p.name.toLowerCase() })), { v: 'Not sure' }]
-      .map((p) => `<label class="chip"><input type="radio" name="platform" value="${p.v}"><span>${p.icon ? c.icon(p.icon) : ''}${p.v}</span></label>`).join('');
+    const platformChips = [...PLATFORMS.map((p) => ({ v: p.name, icon: c.icon(p.name.toLowerCase()) })), { v: 'Twitch', icon: TWITCH }, { v: 'Not sure' }]
+      .map((p) => `<label class="chip"><input type="radio" name="platform" value="${p.v}"><span>${p.icon || ''}${p.v}</span></label>`).join('');
     const reachChips = ['Call', 'Text', 'Email'].map((v) => `<label class="chip"><input type="radio" name="reach" value="${v}"><span>${v}</span></label>`).join('');
     // Plain-POST fallback for when site.js fails to load: same inbox, no AJAX, lands on the thank-you page.
     // When the engine runs it calls preventDefault and sends to formEndpoint instead.
@@ -308,7 +318,7 @@ export default {
           <p class="label">Intake form</p>
           <h2 class="intake__h" id="intake-h">Tell us what you’re <span class="whisper">pushing.</span></h2>
           <p class="intake__need">Fields with a <b>*</b> are needed. The rest helps us aim.</p>
-          <p class="intake__subject" aria-hidden="true"><span>Subject</span><span data-intake-subject>________________</span></p>
+          <p class="intake__subject is-empty" aria-hidden="true"><span>Subject</span><span data-intake-subject></span></p>
           <div class="stamp intake__stamp" data-intake-stamp data-state="draft" aria-hidden="true">
             <span data-s="draft">Intake<small data-intake-count>3 details needed</small></span>
             <span data-s="ready">Ready<small>Send it</small></span>
@@ -334,6 +344,7 @@ export default {
         <fieldset class="field">
           <legend class="field__label">Platform</legend>
           <div class="chips">${platformChips}</div>
+          <p class="field__hint intake__twitch" data-twitch-note data-text="Streaming on Twitch? The ad runs on ${orList(PLATFORMS.map((p) => p.name))} and sends people to your Twitch channel. Put your channel link and stream nights in the message." aria-live="polite"></p>
           <p class="field__err" data-err-for="platform"></p>
         </fieldset>
 
@@ -343,7 +354,7 @@ export default {
           <p class="field__err" data-err-for="reach"></p>
         </fieldset>
 
-        ${field('message', 'What are you pushing?', `<textarea id="f-message" name="message" rows="5" placeholder="What you sell or make, who it’s for, and any date that matters." aria-describedby="err-message"></textarea>`)}
+        ${field('message', 'What are you pushing?', `<textarea id="f-message" name="message" rows="5" placeholder="What you sell or make, who it’s for, and any date that matters. Streaming? Add your channel link and stream nights." aria-describedby="err-message"></textarea>`)}
 
         <label class="hp" aria-hidden="true">Leave this field empty <input name="_honey" tabindex="-1" autocomplete="off"></label>
         ${fallback ? `<input type="hidden" name="_next" value="${c.config.siteUrl}/thank-you.html">` : ''}
@@ -361,7 +372,7 @@ export default {
     <div class="ct-info">
       <section class="ct-block rv" aria-labelledby="next-h">
         <p class="label">After you send it</p>
-        <h2 class="ct-h" id="next-h">What happens <span class="whisper">next.</span></h2>
+        <h2 class="ct-h" id="next-h">What happens next.</h2>
         <ol class="ct-next">
           <li><h3>We read it</h3><p>It comes straight to us and a person reads it. No bots on this end either.</p></li>
           <li><h3>We reach out the way you asked</h3><p>Call, text or email. Pick one on the form and that’s how we get back to you.</p></li>
@@ -371,7 +382,7 @@ export default {
 
       <section class="ct-block rv" aria-labelledby="line-h">
         <p class="label">Direct line</p>
-        <h2 class="ct-h" id="line-h">Call, text <span class="whisper">or write.</span></h2>
+        <h2 class="ct-h" id="line-h">Call, text or write.</h2>
         ${c.contactLines()}
         <p class="label label--dim ct-follow">Follow the Syndicate</p>
         ${c.socialRow()}
@@ -379,7 +390,7 @@ export default {
 
       <section class="ct-block rv" aria-labelledby="area-h">
         <p class="label">Service area</p>
-        <h2 class="ct-h" id="area-h">Where <span class="whisper">we work.</span></h2>
+        <h2 class="ct-h" id="area-h">Where we work.</h2>
         <div class="terr" aria-hidden="true">
           <span class="terr__beam"></span>
           <svg class="terr__river" viewBox="0 0 400 156" preserveAspectRatio="none" focusable="false"><path d="M400 60 C372 64 346 80 320 79 S262 66 222 78 S162 98 128 89 S80 76 48 83 S20 62 14 0"/><path d="M400 60 C372 64 346 80 320 79 S262 66 222 78 S162 98 128 89 S80 76 48 83 S20 62 14 0"/></svg>
@@ -399,7 +410,7 @@ export default {
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">Still deciding</p>
-      <h2 class="h2" id="ready-h">Not ready <span class="whisper">to write?</span></h2>
+      <h2 class="h2" id="ready-h">Not ready to write?</h2>
       <p>Fair. Open a few more files first. Every one you read raises your clearance.</p>
     </div>
     <div class="grid grid--3 ct-doors rv">
