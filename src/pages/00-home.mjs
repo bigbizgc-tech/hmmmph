@@ -106,19 +106,18 @@ const css = `
 
 const js = `
 (() => {
-  /* Chicago from the lakefront, Willis to Hancock, drawn to scale (feet) from plain shapes.
-     Silhouettes, dim windows and the lake sit on a static layer; the gold windows and the
-     backlit edges sit on a second layer that only the searchlight reveals as it drifts. */
+  /* Chicago from the lakefront, Willis to Hancock, drawn to scale (in feet) from plain shapes.
+     The silhouettes, dim windows, haze and lake are painted once to an offscreen layer; each frame
+     adds only what the searchlight touches: gold windows, lit facades and a backlit skyline edge. */
   const hero = document.querySelector('.hero');
   const cv = document.querySelector('[data-sky]');
   const g = cv && cv.getContext && cv.getContext('2d');
   if (!hero || !g || !window.Path2D) return;
   const card = hero.querySelector('[data-visitor]');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const layer = () => { const c = document.createElement('canvas'); return [c, c.getContext('2d')]; };
-  const [st, sg] = layer(), [li, lg] = layer(), [tm, tg] = layer();
+  const st = document.createElement('canvas'), sg = st.getContext('2d');
   const INK = '#040405', GOLD = '243,212,138', PAPER = '242,234,216';
-  let W = 0, H = 0, D = 1, gy = 0, bt = 0, bh = 0, lake = 0, sky = null, skyH = 0, motes = [], tips = [], visible = true, key = '', raf = 0;
+  let W = 0, H = 0, D = 1, gy = 0, bt = 0, lake = 0, wins = new Float32Array(0), glows = [], rim = new Path2D(), motes = [], tips = [], visible = true, key = '', raf = 0, tick = 0;
   const seedRand = (s) => () => (s = (s * 9301 + 49297) % 233280) / 233280;
   // feet: x across the face from the building's centre line, y up from the street
   const R = (x0, x1, y0, y1) => [[x0, y0], [x0, y1], [x1, y1], [x1, y0]];
@@ -131,19 +130,27 @@ const js = `
     const gab = []; for (let i = 0; i < 4; i++) { const h = 60 - 12 * i, y = 770 + 34 * i; gab.push([[-h, y], [-h, y + 34], [0, y + 48], [h, y + 34], [h, y]]); }
     const reg = (h, w) => [[-w, 0], [-w - 7, h * .33], [-w + 4, h * .34], [-w - 7, h * .66], [-w + 4, h * .67], [-w + 2, h], [w - 2, h], [w - 4, h * .67], [w + 7, h * .66], [w - 4, h * .34], [w + 7, h * .33], [w, 0]];
     return [
-      { u: .965, z: 1.0, roof: 1128, beacon: 1, parts: [[[-130, 0], [-80, 1128], [80, 1128], [130, 0]], R(-64, 64, 1128, 1146)], masts: [M(-34, 1146, 1500, 10, 3), M(34, 1146, 1452, 10, 3)],
-        // John Hancock Center: the X-braces read as dark diagonals through the windows
-        on: .85, skip: (x, y) => { const k = Math.min(4, Math.floor(y / 225.6)), t = y / 225.6 - k, n = x / (130 - 50 * y / 1128); return t < .06 || Math.abs(n) > .88 || Math.abs(n - (2 * t - 1)) < .2 || Math.abs(n + (2 * t - 1)) < .2; } },
+      // John Hancock Center: tapered, twin masts; the X-braces read as dark diagonals through the windows
+      { u: .965, z: 1.0, roof: 1128, beacon: 1, on: .85, parts: [[[-130, 0], [-80, 1128], [80, 1128], [130, 0]], R(-64, 64, 1128, 1146)], masts: [M(-34, 1146, 1500, 10, 3), M(34, 1146, 1452, 10, 3)],
+        skip: (x, y) => { const k = Math.min(4, Math.floor(y / 225.6)), t = y / 225.6 - k, n = x / (130 - 50 * y / 1128); return t < .06 || Math.abs(n) > .88 || Math.abs(n - (2 * t - 1)) < .2 || Math.abs(n + (2 * t - 1)) < .2; } },
+      // St. Regis: three stacked, faceted glass towers (left out on narrow screens)
       { u: .86, z: 1.1, roof: 1191, wide: 1, parts: [reg(1191, 40).map(([x, y]) => [x + 4, y]), reg(860, 30).map(([x, y]) => [x - 62, y]), reg(1010, 30).map(([x, y]) => [x + 64, y])] },
+      // Trump International: setbacks at the Wrigley, River Plaza and IBM cornice lines, then the spire
       { u: .585, z: 1.2, roof: 1105, parts: [R(-118, 118, 0, 195), R(-102, 102, 195, 372), R(-86, 86, 372, 640), R(-68, 68, 640, 1105), R(-56, 56, 1105, 1171), R(-30, 30, 1171, 1196)], masts: [M(0, 1196, 1388, 16, 2)] },
+      // Willis Tower: bundled tubes stepping back at the 50th, 66th and 90th floors; mechanical belts; twin antennas
       { u: .245, z: 1.3, roof: 1451, beacon: 1, parts: [R(-154, 154, 0, 670), R(-154, 116, 670, 900), R(-116, 116, 900, 1210), R(-116, 51, 1210, 1451), R(-104, -38, 1451, 1470), R(-22, 34, 1451, 1462)], masts: [M(-70, 1470, 1729, 10, 3), M(0, 1462, 1704, 10, 3)],
-        // Willis Tower: mechanical floors leave dark belts across the face
         skip: (x, y) => y < 40 || [412, 882, 1192, 1428].some((b) => Math.abs(y - b) < 15) },
+      // 311 South Wacker: the lit glass drum with its four turrets
       { u: .17, z: 1.4, roof: 835, parts: [R(-110, 110, 0, 85), R(-78, 78, 0, 700), R(-68, 68, 700, 770), R(-56, 56, 770, 835), R(-56, -40, 835, 880), [[-58, 880], [-48, 910], [-38, 880]], R(40, 56, 835, 880), [[38, 880], [48, 910], [58, 880]], R(-34, 34, 835, 940), dome], crown: [R(-34, 34, 835, 940), dome] },
+      // Aon Center: the plain white slab, fine vertical fins
       { u: .755, z: 1.5, roof: 1136, parts: [R(-97, 97, 0, 1136), R(-90, 90, 1136, 1142)], pc: 3, ww: 1, wh: 3.4 },
+      // Two Prudential Plaza: stacked chevron gables and a needle
       { u: .69, z: 1.6, roof: 770, parts: [R(-68, 68, 0, 770), ...gab, [[-14, 906], [0, 950], [14, 906]]], masts: [M(0, 940, 995, 6, 1.5)] },
+      // Chase Tower: the curved, swooping sides
       { u: .38, z: 1.7, roof: 850, parts: [chase.concat(chase.slice().reverse().map(([x, y]) => [-x, y])), R(-30, 30, 850, 862)] },
+      // Marina City: the corncobs, parking spiral below, petal balconies above
       { u: .5, z: 3, roof: 587, parts: [R(-128, 128, 0, 34), cob(-68), cob(68)], bands: 587 / 61, low: 200, on: .8, pc: 2.4, ww: 1.6 },
+      // Wrigley Building: floodlit white terra cotta, clock tower at the river end
       { u: .628, z: 4, roof: 205, glow: 1, parts: [R(-92, 70, 0, 210), R(80, 172, 0, 186), R(68, 82, 118, 140), R(-62, -8, 210, 302), R(-57, -13, 302, 348), R(-50, -20, 348, 378), [[-48, 378], [-35, 408], [-22, 378]]], masts: [M(-35, 400, 425, 3, 1)], clock: [-35, 325, 12], pc: 6, ww: 1.4 },
     ];
   }
@@ -164,12 +171,14 @@ const js = `
     const cl = c ? (c.left - r.left) * D : W, cr = c ? (c.right - r.left) * D : W, ct = c ? (c.top - r.top) * D : H;
     const side = !!c && cl > W * .45, stacked = !!c && !side && ct > H * .3;
     lake = Math.round(Math.min(Math.max(H * .03, 14 * D), 34 * D));
-    // phones: the visitor file covers the bottom, so the city stands on its top edge instead
+    // stacked layouts: the visitor file covers the bottom, so the city stands on its top edge instead
     gy = stacked ? Math.min(H - lake, Math.round(ct + 4 * D)) : H - lake;
+    // one scale for every building, so heights stay true to life; spacing follows the hero's width
     const s = Math.min(.36 * (stacked ? gy / .85 : H) / 1451, W / 1800), u0 = W / D < 600 ? .12 : 0;
+    // beside the visitor file, the skyline keeps clear of it (or, with room to spare, Hancock steps past it)
     const A = cl - 6 * D, fit = side && W - cr > 520 * s, edge = side && !fit ? A : W;
     const X = (u) => !side ? (u - u0) / (1 - u0) * W : !fit ? u * A : u <= .8 ? u / .8 * A : u <= .93 ? A + (u - .8) / .13 * (cr - A) : cr + (u - .93) / .07 * (W - cr);
-    const span = (b) => { let a = 1e9, z = -1e9; b.parts.forEach((P) => P.forEach(([x]) => { a = Math.min(a, x); z = Math.max(z, x); })); return [a, z]; };
+    const span = (b) => { let a = 1e9, z = -1e9, t = 0; b.parts.forEach((P) => P.forEach(([x, y]) => { a = Math.min(a, x); z = Math.max(z, x); t = Math.max(t, y); })); return [a, z, t]; };
     const L = landmarks().filter((b) => !b.wide || W / D > 700).map((b) => { const [a, z] = span(b); b.cx = Math.min(Math.max(X(b.u), -a * s + 2 * D), edge - z * s - 2 * D); b.x0 = b.cx + a * s; b.x1 = b.cx + z * s; return b; });
     const rnd = seedRand(11), all = L.slice(), lo = Math.min(...L.map((b) => b.x0)), hi = L[0].x1;
     const cap = (x0, x1, h) => { for (const b of L) if (!b.glow && x1 > b.x0 && x0 < b.x1) h = Math.min(h, b.roof * .66); return h; };
@@ -183,23 +192,34 @@ const js = `
       all.push(Object.assign(filler(rnd, 100 + rnd() * 220, w, 2), { cx })); x += w * s * (1 + rnd() * .9);
     }
     all.sort((a, b) => a.z - b.z);
-    bt = Math.max(0, Math.floor(gy - 1760 * s - 12 * D)); bh = Math.min(H, gy + lake) - bt;
-    for (const cc of [st, li, tm]) { cc.width = W; cc.height = bh; }
-    const gb = gy - bt; tips = [];
+    all.forEach((b) => { const [a, z, t] = span(b); b.x0 = b.cx + a * s; b.x1 = b.cx + z * s; b.t = t; });
+    bt = Math.max(0, Math.floor(gy - 1760 * s - 12 * D));
+    const bh = Math.min(H, gy + lake) - bt, gb = gy - bt;
+    st.width = W; st.height = bh;
+    const haze = sg.createLinearGradient(0, gb, 0, 0);
+    haze.addColorStop(0, 'rgba(217,178,95,.06)'); haze.addColorStop(.4, 'rgba(217,178,95,.022)'); haze.addColorStop(1, 'rgba(217,178,95,0)');
+    sg.fillStyle = haze; sg.fillRect(0, 0, W, gb);
+    const top = new Float32Array(W).fill(gb), lit = [];
+    tips = []; glows = [];
+    // a gold window must not shine through a building standing in front of it
+    all.forEach((b, i) => { b.occ = all.slice(i + 1).filter((o) => o.x1 > b.x0 && o.x0 < b.x1); });
+    const covered = (b, x, y) => { for (const o of b.occ) { if (x < o.x0 || x > o.x1 || y < gb - o.t * s) continue; if (o.parts.some((P) => pip(P, (x - o.cx) / s, (gb - y) / s))) return true; } return false; };
     all.forEach((b, i) => {
       const rw = seedRand(97 + i * 31), p = new Path2D(), cx = b.cx;
+      // outline: every polygon wound the same way so overlapping parts fill as one
       const add = (P, path) => { let a = 0; P.forEach((q, j) => { const n = P[(j + 1) % P.length]; a += q[0] * n[1] - n[0] * q[1]; }); (a > 0 ? P.slice().reverse() : P).forEach(([x, y], j) => path[j ? 'lineTo' : 'moveTo'](cx + x * s, gb - y * s)); path.closePath(); };
-      b.parts.forEach((P) => add(P, p)); (b.masts || []).forEach((P) => { add(P, p); if (b.beacon) tips.push([cx + (P[1][0] + P[2][0]) / 2 * s, gy - P[1][1] * s]); });
-      sg.fillStyle = lg.fillStyle = INK; sg.fill(p); lg.fill(p);
-      if (b.glow) { sg.fillStyle = 'rgba(' + PAPER + ',.07)'; sg.fill(p); lg.fillStyle = 'rgba(' + GOLD + ',.3)'; lg.fill(p); }
-      if (b.crown) { const q = new Path2D(); b.crown.forEach((P) => add(P, q)); sg.fillStyle = 'rgba(' + PAPER + ',.07)'; sg.fill(q); lg.fillStyle = 'rgba(' + GOLD + ',.55)'; lg.fill(q);
-        sg.fillStyle = lg.fillStyle = INK; for (let x = -26; x <= 26; x += 13) { sg.fillRect(cx + x * s - D / 2, gb - 938 * s, D, 100 * s); lg.fillRect(cx + x * s - D / 2, gb - 938 * s, D, 100 * s); } }
+      // the skyline's top edge, column by column, for the backlight
+      const trace = (P) => { for (let j = 0; j < P.length; j++) { const p0 = P[j], p1 = P[(j + 1) % P.length]; if (p0[0] === p1[0]) continue; const xa = cx + Math.min(p0[0], p1[0]) * s, xb = cx + Math.max(p0[0], p1[0]) * s; for (let cc = Math.max(0, Math.ceil(xa - .5)); cc <= Math.min(W - 1, Math.floor(xb - .5)); cc++) { const t = ((cc + .5 - cx) / s - p0[0]) / (p1[0] - p0[0]), y = gb - (p0[1] + t * (p1[1] - p0[1])) * s; if (y < top[cc]) top[cc] = y; } } };
+      b.parts.forEach((P) => { add(P, p); trace(P); });
+      (b.masts || []).forEach((P) => { add(P, p); trace(P); const mx = Math.round(cx + (P[1][0] + P[2][0]) / 2 * s - .5), my = gb - P[1][1] * s; if (mx >= 0 && mx < W && my < top[mx]) top[mx] = my; if (b.beacon) tips.push([mx + .5, my + bt]); });
+      sg.fillStyle = INK; sg.fill(p);
+      if (b.glow) { sg.fillStyle = 'rgba(' + PAPER + ',.07)'; sg.fill(p); }
       // windows: a seeded grid per building, kept inside the outline
       const pc = (b.pc || 4) * D, ww = Math.max(1, Math.round((b.ww || 1.7) * D));
       const fl = b.bands ? b.bands * s : 0, pr = fl ? fl * Math.ceil(2.6 * D / fl) : 5.2 * D, wh = Math.max(1, Math.round(fl ? fl * .45 : (b.wh || 2.6) * D));
       const ins = (x, y) => b.parts.some((P) => pip(P, x, y));
       const mx = (ww / 2 + .8 * D) / s, my = (wh / 2 + .8 * D) / s, n = Math.floor((b.x1 - b.x0 + 2) / pc) || 1;
-      const dim = [], late = [], gold = [];
+      const dim = [], late = [];
       for (let yc = gb - (fl ? fl * .55 : pr * .9); yc > gb - b.roof * s; yc -= pr) {
         for (let j = 0; j < n; j++) {
           const xc = cx + (j - (n - 1) / 2) * pc, xf = (xc - cx) / s, yf = (gb - yc) / s;
@@ -208,25 +228,31 @@ const js = `
           const on = rw() < (b.low && yf < b.low ? .12 : b.on || .55), lv = rw(), wx = Math.round(xc - ww / 2), wy = Math.round(yc - wh / 2);
           if (b.glow) { dim.push(wx, wy); continue; }
           if (!on) continue;
-          dim.push(wx, wy); gold.push(wx, wy, .5 + lv * .5); if (lv > .965 && b.z !== 0) late.push(wx, wy);
+          dim.push(wx, wy); if (lv > .965 && b.z !== 0) late.push(wx, wy);
+          if (!covered(b, xc, yc) && !covered(b, wx, wy) && !covered(b, wx + ww, wy) && !covered(b, wx, wy + wh) && !covered(b, wx + ww, wy + wh)) lit.push([wx, wy + bt, ww, wh, .5 + lv * .5]);
         }
       }
       sg.fillStyle = b.glow ? 'rgba(4,4,5,.55)' : 'rgba(' + PAPER + ',.05)'; for (let j = 0; j < dim.length; j += 2) sg.fillRect(dim[j], dim[j + 1], ww, wh);
       sg.fillStyle = 'rgba(' + GOLD + ',.16)'; for (let j = 0; j < late.length; j += 2) sg.fillRect(late[j], late[j + 1], ww, wh);
-      if (b.glow) { lg.fillStyle = 'rgba(4,4,5,.6)'; for (let j = 0; j < dim.length; j += 2) lg.fillRect(dim[j], dim[j + 1], ww, wh); }
-      lg.fillStyle = 'rgb(' + GOLD + ')'; for (let j = 0; j < gold.length; j += 3) { lg.globalAlpha = gold[j + 2]; lg.fillRect(gold[j], gold[j + 1], ww, wh); } lg.globalAlpha = 1;
-      if (b.clock) { const [x, y, rr] = b.clock; for (const [cg, a] of [[sg, .3], [lg, .9]]) { cg.fillStyle = 'rgba(' + GOLD + ',' + a + ')'; cg.beginPath(); cg.arc(cx + x * s, gb - y * s, Math.max(1.2 * D, rr * s), 0, 6.283); cg.fill(); } }
-      b.path = p;
+      const clock = (ctx, a) => { if (!b.clock) return; const [x, y, rr] = b.clock; ctx.fillStyle = 'rgba(' + GOLD + ',' + a + ')'; ctx.beginPath(); ctx.arc(cx + x * s, gb - y * s, Math.max(1.2 * D, rr * s), 0, 6.283); ctx.fill(); };
+      const bars = (ctx) => { ctx.fillStyle = INK; for (let x = -26; x <= 26; x += 13) ctx.fillRect(cx + x * s - D / 2, gb - 938 * s, D, 100 * s); };
+      if (b.glow) { clock(sg, .3); glows.push({ p, x: cx, y: gy - 200 * s, fill: 'rgba(' + GOLD + ',.3)', after: (ctx) => { ctx.fillStyle = 'rgba(4,4,5,.6)'; for (let j = 0; j < dim.length; j += 2) ctx.fillRect(dim[j], dim[j + 1], ww, wh); clock(ctx, .9); } }); }
+      if (b.crown) { const q = new Path2D(); b.crown.forEach((P) => add(P, q)); sg.fillStyle = 'rgba(' + PAPER + ',.07)'; sg.fill(q); bars(sg); glows.push({ p: q, x: cx, y: gy - 900 * s, fill: 'rgba(' + GOLD + ',.55)', after: bars }); }
     });
-    // backlight: a hairline just outside the whole skyline, revealed only near the beam
-    tg.clearRect(0, 0, W, bh); tg.lineWidth = 2.4 * D; tg.lineJoin = 'round'; tg.strokeStyle = 'rgb(' + GOLD + ')';
-    all.forEach((b) => tg.stroke(b.path));
-    tg.globalCompositeOperation = 'destination-out'; all.forEach((b) => tg.fill(b.path)); tg.globalCompositeOperation = 'source-over';
-    tg.clearRect(0, gb, W, bh - gb); lg.globalAlpha = .55; lg.drawImage(tm, 0, 0); sg.globalAlpha = .07; sg.drawImage(tm, 0, 0); lg.globalAlpha = sg.globalAlpha = 1;
-    // the lake: a squashed, broken reflection fading into the dark
+    // the backlit edge: a polyline along the top of the whole skyline
+    rim = new Path2D(); let pen = false;
+    for (let x = 0; x < W; x++) {
+      const y = top[x];
+      if (y >= gb - .5) { pen = false; continue; }
+      if (!pen) { rim.moveTo(x, y); pen = true; } else if (x === W - 1 || y !== top[x - 1] || y !== top[x + 1]) rim.lineTo(x + .5, y);
+    }
+    sg.strokeStyle = 'rgba(' + GOLD + ',.07)'; sg.lineWidth = 1.2 * D; sg.lineJoin = 'round'; sg.stroke(rim);
+    lit.sort((a, b) => a[0] - b[0]); wins = Float32Array.from(lit.flat());
+    // the lake: a squashed, broken reflection of the city, fading into the dark
     if (lake) {
-      tg.clearRect(0, 0, W, bh); tg.drawImage(st, 0, 0);
-      sg.save(); sg.globalAlpha = .5; sg.translate(0, gb); sg.scale(1, -1 / 3); sg.drawImage(tm, 0, gb - lake * 3, W, lake * 3, 0, -lake * 3, W, lake * 3); sg.restore();
+      const cp = document.createElement('canvas'); cp.width = W; cp.height = gb; cp.getContext('2d').drawImage(st, 0, 0);
+      sg.save(); sg.globalAlpha = .5; sg.translate(0, gb); sg.scale(1, -1 / 3); sg.drawImage(cp, 0, gb - lake * 3, W, lake * 3, 0, -lake * 3, W, lake * 3); sg.restore();
+      cp.width = cp.height = 0;
       sg.globalCompositeOperation = 'destination-out';
       for (let y = gb + D; y < gb + lake; y += 2 * D) { sg.fillStyle = 'rgba(0,0,0,' + (.3 + rnd() * .45).toFixed(2) + ')'; sg.fillRect(0, y, W, D); }
       const fade = sg.createLinearGradient(0, gb, 0, gb + lake); fade.addColorStop(0, 'rgba(0,0,0,0)'); fade.addColorStop(1, 'rgba(0,0,0,1)');
@@ -237,9 +263,6 @@ const js = `
       sg.globalCompositeOperation = 'source-over';
       sg.fillStyle = 'rgba(' + PAPER + ',.045)'; sg.fillRect(0, gb, W, Math.max(1, Math.round(D * .75)));
     }
-    skyH = Math.min(gy, H * .62);
-    sky = g.createLinearGradient(0, gy, 0, gy - skyH);
-    sky.addColorStop(0, 'rgba(217,178,95,.06)'); sky.addColorStop(.35, 'rgba(217,178,95,.024)'); sky.addColorStop(1, 'rgba(217,178,95,0)');
     const rm = seedRand(5);
     motes = Array.from({ length: Math.round(W / (16 * D)) }, () => ({ x: rm() * W, y: rm() * H * .85, r: (0.6 + rm() * 1.6) * D, s: 0.1 + rm() * 0.35, p: rm() * 6.28 }));
     return true;
@@ -248,10 +271,8 @@ const js = `
     const cs = hero.style; const px = parseFloat(cs.getPropertyValue('--x')), py = parseFloat(cs.getPropertyValue('--y'));
     return [isNaN(px) ? W * .3 : px * D, isNaN(py) ? H * .45 : py * D];
   }
-  function frame(t){
-    if (!visible) return;
+  function draw(t){
     g.clearRect(0, 0, W, H);
-    g.fillStyle = sky; g.fillRect(0, gy - skyH, W, skyH);
     const [lx, ly] = lightPos(), R = Math.max(W, H) * 0.28, RL = R * 1.25;
     // dust in the beam
     for (const m of motes) {
@@ -260,40 +281,55 @@ const js = `
       if (a <= 0.02) continue;
       g.fillStyle = 'rgba(' + GOLD + ',' + (a * .75).toFixed(3) + ')'; g.beginPath(); g.arc(m.x, m.y, m.r, 0, 6.283); g.fill();
     }
-    // the city in black, then its gold windows and backlit edges wherever the beam reaches
+    // the city in black, then gold windows wherever the beam reaches
     g.drawImage(st, 0, bt);
-    const x0 = Math.max(0, Math.floor(lx - RL)), x1 = Math.min(W, Math.ceil(lx + RL)), y0 = Math.max(bt, Math.floor(ly - RL)), y1 = Math.min(bt + bh, Math.ceil(ly + RL));
-    if (x1 > x0 && y1 > y0) {
-      const w = x1 - x0, h = y1 - y0, gr = tg.createRadialGradient(lx - x0, ly - y0, 0, lx - x0, ly - y0, RL);
-      gr.addColorStop(0, 'rgba(0,0,0,.85)'); gr.addColorStop(.45, 'rgba(0,0,0,.5)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
-      tg.clearRect(0, 0, w, h); tg.drawImage(li, x0, y0 - bt, w, h, 0, 0, w, h);
-      tg.globalCompositeOperation = 'destination-in'; tg.fillStyle = gr; tg.fillRect(0, 0, w, h); tg.globalCompositeOperation = 'source-over';
-      g.drawImage(tm, 0, 0, w, h, x0, y0, w, h);
+    g.fillStyle = 'rgb(' + GOLD + ')';
+    const nw = wins.length / 5; let i = 0, j = nw;
+    while (i < j) { const m = (i + j) >> 1; if (wins[m * 5] < lx - RL) i = m + 1; else j = m; }
+    for (; i < nw; i++) {
+      const o = i * 5, x = wins[o]; if (x > lx + RL) break;
+      const a = wins[o + 4] * .9 * (1 - Math.hypot(x - lx, wins[o + 1] - ly) / RL);
+      if (a < .02) continue;
+      g.globalAlpha = a; g.fillRect(x, wins[o + 1], wins[o + 2], wins[o + 3]);
     }
+    g.globalAlpha = 1;
+    g.save(); g.translate(0, bt);
+    for (const o of glows) { const a = 1 - Math.hypot(o.x - lx, o.y - ly) / RL; if (a <= 0) continue; g.globalAlpha = a * .9; g.fillStyle = o.fill; g.fill(o.p); o.after(g); }
+    g.globalAlpha = 1;
+    const edge = g.createRadialGradient(lx, ly - bt, 0, lx, ly - bt, RL);
+    edge.addColorStop(0, 'rgba(' + GOLD + ',.6)'); edge.addColorStop(.45, 'rgba(' + GOLD + ',.3)'); edge.addColorStop(1, 'rgba(' + GOLD + ',0)');
+    g.strokeStyle = edge; g.lineWidth = 1.2 * D; g.lineJoin = 'round'; g.stroke(rim);
+    g.restore();
     // the beam laid across the water, and the red beacons on the masts
     if (lake) {
       const rows = Math.max(3, Math.round(lake / (3 * D)));
-      for (let i = 0; i < rows; i++) {
-        const y = gy + Math.round((i + .6) * lake / rows), f = 1 - i / rows, sp = R * (.1 + .22 * i / rows);
-        for (let j = -3; j <= 3; j++) {
-          const off = j * sp / 3 + (reduce ? 0 : Math.sin(t / 700 + i * 2.1 + j * 1.7) * 4 * D), a = .17 * f * (1 - Math.abs(j) / 4.2), len = (8 + 10 * f) * D;
+      for (let k = 0; k < rows; k++) {
+        const y = gy + Math.round((k + .6) * lake / rows), f = 1 - k / rows, sp = R * (.1 + .22 * k / rows);
+        for (let q = -3; q <= 3; q++) {
+          const off = q * sp / 3 + (reduce ? 0 : Math.sin(t / 700 + k * 2.1 + q * 1.7) * 4 * D), a = .17 * f * (1 - Math.abs(q) / 4.2), len = (8 + 10 * f) * D;
           g.fillStyle = 'rgba(' + GOLD + ',' + a.toFixed(3) + ')'; g.fillRect(lx + off - len / 2, y, len, Math.max(1, D * .75));
         }
       }
     }
-    tips.forEach(([x, y], i) => { const a = reduce ? .5 : .3 + .3 * Math.sin(t / 1100 + i * 1.9); g.fillStyle = 'rgba(229,72,77,' + a.toFixed(3) + ')'; g.beginPath(); g.arc(x, y, 1.1 * D, 0, 6.283); g.fill(); });
-    if (!reduce) requestAnimationFrame(frame);
+    tips.forEach(([x, y], k) => { const a = reduce ? .5 : .3 + .3 * Math.sin(t / 1100 + k * 1.9); g.fillStyle = 'rgba(229,72,77,' + a.toFixed(3) + ')'; g.beginPath(); g.arc(x, y, 1.1 * D, 0, 6.283); g.fill(); });
   }
-  // a running loop picks up a rebuild by itself; a still frame has to be redrawn
-  const redraw = () => { raf = 0; build(); if (reduce) frame(performance.now()); };
-  const later = () => { if (!raf) raf = requestAnimationFrame(redraw); };
+  function frame(t){
+    tick = 0;
+    if (!visible) return;
+    draw(t);
+    if (!reduce) tick = requestAnimationFrame(frame);
+  }
+  // a rebuild clears the canvas, so repaint in the same frame; with reduced motion the light moving repaints too
+  const redraw = () => { raf = 0; if ((build() || reduce) && visible) draw(performance.now()); };
+  const soon = () => { if (!raf) raf = requestAnimationFrame(redraw); };
+  let wait = 0; const later = () => { clearTimeout(wait); wait = setTimeout(soon, 120); };
   build();
   addEventListener('resize', later);
   if (window.ResizeObserver) new ResizeObserver(later).observe(hero);
   // reduced motion: one still frame, redrawn only when the light is moved
-  if (reduce && window.MutationObserver) new MutationObserver(later).observe(hero, { attributes: true, attributeFilter: ['style'] });
-  new IntersectionObserver(([e]) => { const was = visible; visible = e.isIntersecting; if (visible && !was && !reduce) requestAnimationFrame(frame); }).observe(hero);
-  requestAnimationFrame(frame);
+  if (reduce && window.MutationObserver) new MutationObserver(soon).observe(hero, { attributes: true, attributeFilter: ['style'] });
+  new IntersectionObserver(([e]) => { const was = visible; visible = e.isIntersecting; if (visible && !was) { if (reduce) draw(performance.now()); else if (!tick) tick = requestAnimationFrame(frame); } }).observe(hero);
+  tick = requestAnimationFrame(frame);
 })();
 
 /* who sees it: the feed picks vs you pick (illustration) */
