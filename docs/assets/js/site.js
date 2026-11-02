@@ -323,7 +323,7 @@
       delete data._honey;
       const interestLabel = sel ? sel.options[sel.selectedIndex].text : data.interest;
       const payload = { ...data, interest: interestLabel, page: PATH, _subject: `Blackout Syndicate lead: ${interestLabel}`, _template: 'table', _captcha: 'false' };
-      const summary = Object.entries({ Name: data.name, 'Business / channel': data.business, Email: data.email, Phone: data.phone, 'Interested in': interestLabel, Platform: data.platform, Message: data.message }).filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join('\n');
+      const summary = Object.entries({ Name: data.name, 'Business / channel': data.business, Email: data.email, Phone: data.phone, 'Interested in': interestLabel, Platform: data.platform, 'Best way to reach': data.reach, Message: data.message }).filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join('\n');
       btn.disabled = true; const label = btn.innerHTML; btn.textContent = 'Sending…';
       if (alertBox) alertBox.hidden = true;
       let ok = false;
@@ -385,6 +385,6 @@
 
   $$('[data-year]').forEach((e) => (e.textContent = new Date().getFullYear()));
 
-  window.BS = { award, track, toast, state: () => S, level: () => levelFor(S.xp), progress, open: openDrawer, XP, LEVELS, FILES, reduce, finePointer };
+  window.BS = { award, track, toast, state: () => S, level: () => levelFor(S.xp), progress, open: openDrawer, say: () => setDark(!dark), XP, LEVELS, FILES, reduce, finePointer };
   document.dispatchEvent(new CustomEvent('bs:ready'));
 })();
