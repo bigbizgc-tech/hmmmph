@@ -62,11 +62,13 @@ function checkLinks(outFiles) {
       const [pathPart, hash] = href.split('#');
       let target = f.path;
       if (pathPart) {
-        const parts = [...base];
+        const rooted = pathPart.startsWith('/');
+        const parts = rooted ? [] : [...base];
         for (const seg of pathPart.split('?')[0].split('/')) {
           if (seg === '..') parts.pop(); else if (seg && seg !== '.') parts.push(seg);
         }
-        target = parts.join('/');
+        target = parts.join('/') || 'index.html';
+        if (target.endsWith('/')) target += 'index.html';
       }
       if (target.startsWith('assets/')) continue;
       if (!have.has(target)) problems.push(`${f.path}: broken link → ${href}`);

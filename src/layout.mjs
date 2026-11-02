@@ -192,7 +192,7 @@ export function renderPage(page, all, config, assets) {
   const ld = page.jsonld ? `<script type="application/ld+json">${JSON.stringify(page.jsonld(ctx, config))}</script>` : '';
   const css = assets.inline ? `<style>${assets.css}</style>` : `<link rel="stylesheet" href="${r}assets/css/site.css">`;
   const cfg = assets.inline ? `<script>${assets.configJs}</script>` : `<script src="${r}assets/js/config.js"></script>`;
-  const js = assets.inline ? `<script>${assets.siteJs}</script>` : `<script src="${r}assets/js/site.js" defer></script>`;
+  const js = assets.inline ? `<script>${assets.siteJs}</script>` : `<script src="${r}assets/js/site.js"></script>`;
 
   const head = `<title>${esc(title)}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -205,11 +205,15 @@ export function renderPage(page, all, config, assets) {
 <meta property="og:description" content="${esc(page.description)}">
 <meta property="og:url" content="${canonical}">
 <meta property="og:image" content="${config.siteUrl}/assets/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Blackout Syndicate: Get seen. Real ads. Real people. No bots. South Bend, Mishawaka, Elkhart.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@BzTheG">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(page.description)}">
 <meta name="twitter:image" content="${config.siteUrl}/assets/img/og.png">
+<meta name="twitter:image:alt" content="Blackout Syndicate: Get seen. Real ads. Real people. No bots. South Bend, Mishawaka, Elkhart.">
 ${page.noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="icon" href="${r}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${r}assets/img/apple-touch-icon.png">
@@ -246,6 +250,7 @@ ${page.js ? `<script>${page.js}</script>` : ''}`;
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+${page.base && !assets.inline ? `<base href="${esc(page.base)}">` : ''}
 ${head}
 </head>
 <body ${bodyAttrs}>
