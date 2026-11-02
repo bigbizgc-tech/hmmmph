@@ -17,7 +17,7 @@ const GROUPS = [
     items: [
       { id: 'how-to-buy', q: 'How do I buy a package?', a: (c) => `<p>Send the form on the <a href="${c.link('contact.html')}">contact page</a>, or call or text ${tel}. Tell us what you’re promoting and which package you want. The Claim button on any package page fills that package in for you.</p><p>${POLICY.payment} For boosts, our target is live within 24 hours of payment.</p>` },
       { id: 'ad-money', q: 'How much of my price goes into the actual ad?', a: (c) => `<p>Here is the ad money in each one:</p><ul>${[...BOOSTS, SURGE].map((o) => `<li><a href="${c.link(offerPath(o))}"><strong>${o.name}</strong></a>: ${lc(o.spend)}</li>`).join('')}</ul><p>The rest covers setup, aiming it and your recap. ${OVERDRIVE.name} includes everything in ${SURGE.name}.</p>` },
-      { id: 'refunds', q: 'What is your refund policy?', a: (c) => `<p>Word for word:</p><ul><li><strong>Boosts:</strong> ${POLICY.boosts}</li><li><strong>Monthly plans:</strong> ${POLICY.plans}</li><li><strong>Add-ons:</strong> ${POLICY.addons}</li><li><strong>Quoted jobs:</strong> ${POLICY.quoted}</li></ul><p>The full terms are on the <a href="${c.link('terms.html')}">terms and refunds page</a>.</p>` },
+      { id: 'refunds', q: 'What is your refund policy?', a: (c) => `<p>Word for word:</p><ul><li><strong>Boosts:</strong> ${POLICY.boosts}</li><li><strong>Monthly plans:</strong> ${POLICY.plans}</li><li><strong>Add-ons:</strong> ${POLICY.addons}</li><li><strong>Quoted jobs:</strong> ${POLICY.quoted}</li><li><strong>Rejected ads:</strong> ${POLICY.rejected}</li></ul><p>The full terms are on the <a href="${c.link('terms.html')}">terms and refunds page</a>.</p>` },
       { id: 'quoted', q: 'How do you price websites and AI work?', a: (c) => `<p>${andList(SERVICES.map((o) => `<a href="${c.link(offerPath(o))}">${o.name}</a>`))} are quoted per job. After a short call you get a written quote with the price and what’s included, before any work starts.</p><p>${POLICY.quoted}</p>` },
     ],
   },
@@ -99,6 +99,7 @@ const css = `
 
 /* ── Groups ── */
 .faq-body{padding-top:clamp(48px,7vw,96px)}
+.faq-body.is-empty{padding-top:28px}
 .faq-group{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.4fr);gap:clamp(28px,5vw,80px);align-items:start;padding-block:clamp(48px,6vw,84px);border-top:1px solid var(--smoke)}
 .faq-group:first-of-type{border-top:0;padding-top:0}
 .faq-group[hidden]{display:none}
@@ -142,7 +143,7 @@ mark.hit{background:var(--gold);color:var(--void);padding:0 .08em}
 .ask__phone:hover{color:var(--brass)}
 .ask__mail{font-size:19px;color:var(--ink);overflow-wrap:anywhere;text-underline-offset:4px;text-decoration-color:var(--brass)}
 .ask__note{font-size:15px;color:var(--ink-mute)}
-.ask .stamp{position:absolute;right:-14px;top:-62px;width:128px;font-size:20px;box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
+.ask .stamp{position:absolute;right:0;top:-62px;width:128px;font-size:20px;box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
 @media (max-width:560px){.ask .stamp{width:104px;font-size:17px;top:-48px;right:-4px}}
 `;
 
@@ -205,9 +206,11 @@ const js = `
       groups.forEach((g) => (g.hidden = false));
       document.querySelectorAll('[data-faq-tab]').forEach((a) => a.classList.remove('is-empty'));
       status.textContent = ''; empty.hidden = true;
+      root.closest('.faq-body').classList.remove('is-empty');
       return;
     }
-    const re = new RegExp(words.map(esc).join('|'), 'gi');
+    /* Highlight whole words that start with what was typed, so a link or word isn't chopped mid-way */
+    const re = new RegExp('(?:' + words.map((w) => (/^\\w/.test(w) ? '\\\\b' : '') + esc(w)).join('|') + ')[\\\\w\\u2019\\']*', 'gi');
     let n = 0;
     const hits = [];
     items.forEach((d, i) => { const ok = words.every((w) => texts[i].includes(w)); d.hidden = !ok; if (ok) { n++; hits.push(d); markIn(d, re); } });
@@ -216,7 +219,8 @@ const js = `
     groups.forEach((g) => { const any = g.querySelector('details.qa:not([hidden])'); g.hidden = !any; const tab = document.querySelector('[data-faq-tab="' + g.id + '"]'); if (tab) tab.classList.toggle('is-empty', !any); });
     empty.hidden = n > 0;
     if (emptyQ) emptyQ.textContent = raw;
-    status.innerHTML = n ? '<b>' + n + '</b> answer' + (n === 1 ? '' : 's') + ' on file' : 'Nothing on file for that. Try another word, or ask us below.';
+    status.innerHTML = n ? '<b>' + n + '</b> answer' + (n === 1 ? '' : 's') + ' on file' : '<span class="sr">Nothing on file for that. Ask us below.</span>';
+    root.closest('.faq-body').classList.toggle('is-empty', n === 0);
   };
   input.addEventListener('input', run);
   input.addEventListener('search', run);

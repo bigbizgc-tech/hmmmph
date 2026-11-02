@@ -3,27 +3,108 @@ import { OFFERS, offerPath, bySlug } from '../data/offers.mjs';
 import { BIZ } from '../data/business.mjs';
 import config from '../config.mjs';
 
+// Section headings change with the kind of file, so clicking file to file doesn't feel copy-pasted.
 const KIND = {
-  boost: { label: 'One-time boost', crumb: 'Boosts', stamp: ['One', 'Time'], stampSub: 'No contract' },
-  plan: { label: 'Monthly plan', crumb: 'Plans', stamp: ['Every', 'Month'], stampSub: 'Stay or walk' },
-  addon: { label: 'Add-on', crumb: 'Add-ons', stamp: ['Add', 'On'], stampSub: 'Pairs with any boost' },
-  service: { label: 'Built to order', crumb: 'Built to order', stamp: ['Quoted', 'Per job'], stampSub: 'Price before work' },
+  boost: {
+    label: 'One-time boost', crumb: 'Boosts', stamp: ['One', 'Time'], stampSub: 'No contract',
+    heads: { what: ['One push.', 'One moment.'], run: ['From hello', 'to live.'], fit: ['Is this', 'your push?'] },
+  },
+  plan: {
+    label: 'Monthly plan', crumb: 'Plans', stamp: ['Every', 'Month'], stampSub: 'Stay or walk',
+    heads: { what: ['Every month,', 'handled.'], run: ['Month one', 'and every month after.'], fit: ['Is this', 'your plan?'] },
+  },
+  addon: {
+    label: 'Add-on', crumb: 'Add-ons', stamp: ['Add', 'On'], stampSub: 'Pairs with any boost',
+    heads: { what: ['Small job.', 'Big difference.'], run: ['From order', 'to done.'], fit: ['Do you', 'need it?'] },
+  },
+  service: {
+    label: 'Built to order', crumb: 'Built to order', stamp: ['Price', 'In writing'], stampSub: 'Before work starts',
+    heads: { what: ['What we', 'build.'], run: ['From call', 'to handoff.'], fit: ['Is this', 'your job?'] },
+  },
+};
+const head = (h) => `${h[0]} <span class="whisper">${h[1]}</span>`;
+
+// ── Number helpers: every figure below is computed from offers.mjs, never typed in. ──
+const num = (p) => Number(String(p).replace(/[^0-9.]/g, '')) || 0;
+const money = (n) => '$' + (Math.round(n * 100) % 100 === 0 ? Math.round(n).toLocaleString('en-US') : n.toFixed(2));
+const adOf = (o) => { const m = /About \$(\d+(?:\.\d+)?)/.exec(o.spend || ''); return m ? Number(m[1]) : 0; };
+const daysOf = (o) => { const m = /(\d+)-day/.exec(o.run || ''); return m ? Number(m[1]) : 0; };
+const WORDS = { 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
+const times = (r) => (r === 2 ? 'double' : `${WORDS[r] || +r.toFixed(1)} times`);
+// A launch price is only "locked in" when the offer itself says so (or sets lockIn).
+const lockedIn = (o) => o.lockIn ?? /locked in/i.test([o.spend, ...(o.includes || [])].join(' '));
+
+const S = bySlug;
+const planMath = (o, below, adds) => {
+  const save = num(o.regular) - num(o.price);
+  const single = num(o.oneMonth) - num(o.price);
+  const step = num(o.price) - num(below.price);
+  return [
+    `Launch price ${o.price} a month. Regular price ${money(num(o.regular))} a month.`,
+    lockedIn(o)
+      ? `Staying on the launch price saves <strong>${money(save)} a month, ${money(save * 12)} a year</strong>.`
+      : `The regular price is <strong>${money(save)} a month more</strong> than the launch price.`,
+    `One month only costs ${o.oneMonth}. Staying month to month at ${o.price} costs ${money(single)} a month less.`,
+    `${o.name} is ${money(step)} more than ${below.name}, and that ${money(step)} ${adds}.`,
+  ];
 };
 
 // Level-2 classified: the real math behind each file.
 const MATH = {
-  spark: ['$19.99 total. About <strong>$10 buys the ad</strong>, the rest covers setup, aiming it and your recap.', 'Over a 3-day run that is about <strong>$3.33 a day</strong> of real ad money.', 'The 30-Day Post Kit is included. On its own it costs $19.99, so the push is the bonus.', 'Platforms spend the first part of any run learning who responds. That is one reason longer runs tend to get more out of each dollar.'],
-  boost: ['$49.99 total. About <strong>$25 buys the ad</strong>: 2.5 times what Spark puts in.', 'Over a 5-day run that is about <strong>$5 a day</strong> of ad money.', 'On TikTok the same $25 runs as a one-day burst, so it lands hard on the day that counts.', 'If you already ran a Spark, Boost is the cheapest real step up.'],
-  blitz: ['$99.99 total. About <strong>$50 buys the ad</strong>: double Boost, five times Spark.', 'Over a 7-day run that is about <strong>$7.14 a day</strong> of ad money on one platform.', 'Three Blitzes cost $299.97. Surge is $300 a month and never restarts from zero.', 'Book it at least a week before your date so the whole run lands before the doors open.'],
-  surge: ['$300 a month. About <strong>$150 a month goes into the ads</strong> across up to 2 platforms.', 'That works out to roughly <strong>$5 a day</strong> of ad money, every day of the month.', 'One month only costs $450. Staying month to month saves $150 every month.', 'Three Blitzes would cost $299.97 for 21 days on one platform. Surge covers the whole month on two.'],
-  overdrive: ['Launch price $400 a month. Regular price $650 a month.', 'Staying on the launch price saves <strong>$250 a month, $3,000 a year</strong>.', 'One month only costs $550, so month-to-month saves $150 on top.', 'Overdrive is $100 more than Surge, and that $100 buys automatic posting plus AI tools.'],
-  'total-blackout': ['Launch price $500 a month. Regular price $800 a month.', 'Staying on the launch price saves <strong>$300 a month, $3,600 a year</strong>.', 'One month only costs $650. Month-to-month saves $150 on top.', 'It is $100 more than Overdrive, and that $100 adds the customer-answering AI assistant and a clean web page.'],
-  'post-kit': ['$19.99 for a 30-day calendar and 12 captions works out to about <strong>$1.67 a caption</strong>.', 'It comes free with every Spark, so buying Spark gets you the kit and a paid push for the same $19.99.', 'Twelve posts in thirty days is about three a week. That is enough to look alive without burning out.'],
-  'profile-fix': ['$49.99, one time. Nothing recurring.', 'Ads are wasted on a page that doesn’t explain itself. Fixing the page first makes every later push work harder.', 'You publish the changes yourself, so you never hand over a login.'],
-  'website-design': ['Every site is quoted in writing before work starts. No hourly meter running.', 'Have these ready for the quote call: what you sell, your prices if you list them, your hours, your address or service area, and the domain you own.', 'A site built for phones first matters most for ads, because almost all social ad traffic arrives on a phone.'],
-  'ai-consulting': ['Quoted in writing before we start.', 'Before the call, write down the five tasks you repeat most in a normal week. That list is where the time savings hide.', 'If AI is the wrong tool for a job, you will hear that too.'],
-  'ai-automation': ['Quoted in writing before we build.', 'The best first automation is the question you answer most. Count how many times a day you type the same reply.', 'Every build is tested on real examples from your business before it goes live.'],
-  'creator-systems': ['Quoted in writing before we build.', 'One stream can feed a week of short posts. The system is what makes that happen without filming more.', 'Pair it with a Boost when a clip takes off, and put money behind the thing that is already working.'],
+  spark: (o) => [
+    `${o.price} total. About <strong>${money(adOf(o))} buys the ad</strong>, the rest covers setup, aiming it and your recap.`,
+    `Over a ${o.run} that is about <strong>${money(adOf(o) / daysOf(o))} a day</strong> of real ad money.`,
+    `The ${S['post-kit'].name} is included. On its own it costs ${S['post-kit'].price}${num(S['post-kit'].price) >= num(o.price) ? ', so the push is the bonus' : ''}.`,
+    'Platforms spend the first part of any run learning who responds. That is one reason longer runs tend to get more out of each dollar.',
+  ],
+  boost: (o) => [
+    `${o.price} total. About <strong>${money(adOf(o))} buys the ad</strong>: ${times(adOf(o) / adOf(S.spark))} what ${S.spark.name} puts in.`,
+    `Over a ${o.run} that is about <strong>${money(adOf(o) / daysOf(o))} a day</strong> of ad money.`,
+    `On TikTok the same ${money(adOf(o))} runs as a one-day burst, so it lands hard on the day that counts.`,
+    `If you already ran a ${S.spark.name}, ${o.name} is the cheapest real step up.`,
+  ],
+  blitz: (o) => [
+    `${o.price} total. About <strong>${money(adOf(o))} buys the ad</strong>: ${times(adOf(o) / adOf(S.boost))} ${S.boost.name}, ${times(adOf(o) / adOf(S.spark))} ${S.spark.name}.`,
+    `Over a ${o.run} that is about <strong>${money(adOf(o) / daysOf(o))} a day</strong> of ad money on one platform.`,
+    `Three ${o.name}es cost ${money(3 * num(o.price))}. ${S.surge.name} is ${S.surge.price} a month and never restarts from zero.`,
+    'Book it at least a week before your date so the whole run lands before the doors open.',
+  ],
+  surge: (o) => [
+    `${o.price} a month. About <strong>${money(adOf(o))} a month goes into the ads</strong> across up to 2 platforms.`,
+    `That works out to roughly <strong>${money(adOf(o) / 30)} a day</strong> of ad money, every day of the month.`,
+    `One month only costs ${o.oneMonth}. Staying month to month at ${o.price} costs ${money(num(o.oneMonth) - num(o.price))} a month less.`,
+    `Three ${S.blitz.name}es would cost ${money(3 * num(S.blitz.price))} for ${3 * daysOf(S.blitz)} days on one platform. ${o.name} covers the whole month on two.`,
+  ],
+  overdrive: (o) => planMath(o, S.surge, 'buys automatic posting plus AI tools'),
+  'total-blackout': (o) => planMath(o, S.overdrive, 'adds the customer-answering AI assistant and a clean web page'),
+  'post-kit': (o) => [
+    `${o.price} for a 30-day calendar and 12 captions works out to about <strong>${money(num(o.price) / 12)} a caption</strong>.`,
+    `It comes free with every ${S.spark.name}, so buying ${S.spark.name} gets you the kit and a paid push for ${num(S.spark.price) === num(o.price) ? 'the same ' + o.price : S.spark.price}.`,
+    'Twelve posts in thirty days is about three a week. That is enough to look alive without burning out.',
+  ],
+  'profile-fix': (o) => [
+    `${o.price}, one time. Nothing recurring.`,
+    'Ads are wasted on a page that doesn’t explain itself. Fixing the page first makes every later push work harder.',
+    'You publish the changes yourself, so you never hand over a login.',
+  ],
+  'website-design': () => [
+    'Every site is quoted in writing before work starts. No hourly meter running.',
+    'Have these ready for the quote call: what you sell, your prices if you list them, your hours, your address or service area, and the domain you own.',
+    'Social ads get tapped inside the app, and the apps live on phones. A phone-first site is built for exactly that visitor.',
+  ],
+  'ai-consulting': () => ['Quoted in writing before we start.', 'Before the call, write down the five tasks you repeat most in a normal week. That list is where the time savings hide.', 'If AI is the wrong tool for a job, you will hear that too.'],
+  'ai-automation': () => ['Quoted in writing before we build.', 'The best first automation is the question you answer most. Count how many times a day you type the same reply.', 'Every build is tested on real examples from your business before it goes live.'],
+  'creator-systems': () => ['Quoted in writing before we build.', 'One stream can feed a week of short posts. The system is what makes that happen without filming more.', 'Pair it with a Boost when a clip takes off, and put money behind the thing that is already working.'],
+};
+
+// Meta descriptions the default template leaves under 120 characters. Built from the offer data.
+const where = `Blackout Syndicate, ${BIZ.city}, ${BIZ.region}.`;
+const META = {
+  surge: (o) => `${o.name}: paid ads every month on up to 2 platforms, about ${money(adOf(o))} a month of it in the ads. ${o.price}${o.suffix}, or ${o.oneMonth} for one month. ${where}`,
+  overdrive: (o) => `${o.name}: everything in ${S.surge.name} plus automatic posting and AI tools set up for you. ${o.price}${o.suffix} launch price, or ${o.oneMonth} for one month. ${BIZ.city}, ${BIZ.region}.`,
+  'total-blackout': (o) => `${o.name}: ads, AI-made posts, an AI assistant that answers customers and a clean web page, done for you. ${o.price}${o.suffix}, or ${o.oneMonth} for one month. ${BIZ.city}, ${BIZ.region}.`,
+  'profile-fix': (o) => `${o.name}: a rewritten bio, a pinned post plan, organized highlights and a shot list, so your page makes sense before ads send people. ${o.price}, one time.`,
+  'ai-automation': (o) => `${o.name}: automatic replies, lead capture, follow-ups and post scheduling built around your business. Quoted per job. ${where}`,
 };
 
 export default () => OFFERS.map((o, i) => {
@@ -33,8 +114,14 @@ export default () => OFFERS.map((o, i) => {
   const next = nextOffer ? offerPath(nextOffer) : 'how-it-works.html';
   const up = o.ladder && bySlug[o.ladder.to];
   const isService = o.kind === 'service';
-  const claimLabel = isService ? `Get a ${o.name} quote` : `Claim ${o.name}`;
-  const priceLine = isService ? 'Quoted per job' : `${o.price}${o.suffix}`;
+  const claimLabel = isService ? 'Get my quote' : `Claim ${o.name}`;
+  // The ladder card only shows when it points somewhere the "Next file" card below doesn't.
+  const showLadder = up && offerPath(up) !== next;
+  const rel = !up ? '' : (isService || up.kind === 'service') ? 'Related file' : (o.kind === 'addon' || up.kind === 'addon') ? 'Pairs with' : num(up.price) > num(o.price) ? 'Next step up' : 'Start smaller';
+  const drawer = o.kind === 'addon' ? OFFERS.filter((x) => x.kind === 'boost') : OFFERS.filter((x) => x.kind === o.kind && x.slug !== o.slug);
+  const drawerLabel = o.kind === 'addon' ? 'Pairs with any boost' : 'Also in this drawer';
+  const lean = o.notForYou.length < 2;
+  const ad = adOf(o);
 
   return {
     path,
@@ -46,7 +133,7 @@ export default () => OFFERS.map((o, i) => {
     kind: o.kind,
     offer: o.slug,
     title: `${o.name}${isService ? '' : ' · ' + o.price + o.suffix}`,
-    description: `${o.name}: ${o.tagline} ${isService ? 'Quoted per job.' : o.price + o.suffix + (o.kind === 'plan' ? '' : ', one time') + '.'} Blackout Syndicate, ${BIZ.city}, ${BIZ.region}.`,
+    description: o.meta || (META[o.slug] ? META[o.slug](o) : null) || `${o.name}: ${o.tagline} ${isService ? 'Quoted per job.' : o.price + o.suffix + (o.kind === 'plan' ? '' : ', one time') + '.'} ${where}`,
     teaser: o.teaser,
     next,
     jsonld: (ctx, cfg) => ({
@@ -59,14 +146,39 @@ export default () => OFFERS.map((o, i) => {
       url: cfg.siteUrl + '/' + path,
       ...(isService ? {} : { offers: { '@type': 'Offer', price: o.price.replace('$', ''), priceCurrency: 'USD', ...(o.suffix ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: o.price.replace('$', ''), priceCurrency: 'USD', unitText: 'MONTH' } } : {}) } }),
     }),
-    body: (c) => `
+    body: (c) => {
+      const priceHtml = `${o.price}${o.suffix ? `<small>${o.suffix}</small>` : ''}`;
+
+      // One signature module per kind, built only from the offer data.
+      const money_ = o.kind === 'boost' && ad ? `
+      <div class="offer-money">
+        <p class="label label--dim">Where the money goes</p>
+        <div class="offer-money__bar" role="img" aria-label="About ${money(ad)} of ${o.price} buys the ad itself"><i style="--w:${Math.round((ad / num(o.price)) * 100)}%"></i></div>
+        <div class="offer-money__key"><span><b>About ${money(ad)}</b>buys the ad itself</span><span><b>The rest</b>covers setup, aiming and your recap</span></div>
+      </div>` : '';
+      const rate = o.kind === 'plan' ? `
+      <div class="offer-rate">
+        <p class="label label--dim">${o.regular ? 'Launch price' : 'Month to month'}</p>
+        <p class="offer-rate__row"><span class="price">${priceHtml}</span>${o.regular ? `<s class="offer-rate__was"><span class="sr">Regular price </span>${o.regular}</s>` : ''}</p>
+        <p class="offer-rate__note">${o.regular ? (lockedIn(o) ? 'Locked in while you stay. ' : 'Month to month. ') : ''}${o.oneMonth ? `One month only: ${o.oneMonth}, no commitment.` : ''}</p>
+      </div>` : '';
+
+      const ladder = showLadder
+        ? `<a class="ladder" href="${c.link(offerPath(up))}"><span class="label">${rel} · ${up.file}</span><b>${up.name}</b><span>${o.ladder.text}</span><span class="file__open">Open file ${c.arrow}</span></a>`
+        : drawer.length ? `<div class="ladder ladder--list"><span class="label">${drawerLabel}</span><ul>${drawer.map((x) => `<li><a href="${c.link(offerPath(x))}"><b>${x.name}</b><span>${x.kind === 'service' ? x.file : `${x.price}${x.suffix}`}</span>${c.arrow}</a></li>`).join('')}</ul></div>` : '';
+
+      const claimNext = o.kind === 'plan' ? 'Your first month starts with the intake call.'
+        : o.kind === 'boost' ? 'Our target is live within 24 hours of payment. Platform ad review can take longer.'
+        : o.spend;
+
+      return `
 <header class="pagehead offer-head">
   <div class="wrap pagehead__in">
     ${c.crumbs([{ t: 'Home', p: 'index.html' }, { t: isService ? 'Built to order' : 'Packages', p: isService ? 'packages.html#built' : 'packages.html' }, { t: o.name }])}
     <div class="offer-head__grid">
       <div class="offer-head__main">
         <p class="label">${o.file} · ${k.label}${o.flagship ? ' · <span class="label--red">Flagship</span>' : ''}</p>
-        <h1 class="h1 offer-head__name">${o.name}</h1>
+        <h1 class="h1 offer-head__name${o.name.length > 12 ? ' offer-head__name--long' : ''}">${o.name}</h1>
         <p class="lede">${o.tagline}</p>
         <div class="ctas">
           ${c.btn(claimLabel + ' ' + c.arrow, 'contact.html?pkg=' + o.slug, 'lg')}
@@ -75,28 +187,31 @@ export default () => OFFERS.map((o, i) => {
       </div>
       <aside class="offer-card" aria-label="${o.name} at a glance">
         <div class="offer-card__top">
-          <div class="price offer-card__price">${isService ? 'Quoted' : o.price}${o.suffix ? `<small>${o.suffix}</small>` : ''}</div>
+          ${isService
+            ? '<div class="price offer-card__price offer-card__price--quote">By quote<span class="sr">. Price in writing before work starts.</span></div>'
+            : `<div class="price offer-card__price">${priceHtml}</div>`}
           <div class="stamp stamp--gold is-slam" aria-hidden="true">${k.stamp[0]}<br>${k.stamp[1]}<small>${k.stampSub}</small></div>
         </div>
         <dl class="ledger">
           <div><dt>Type</dt><dd>${k.label}</dd></div>
-          <div><dt>Run</dt><dd>${o.run}</dd></div>
+          ${isService ? `<div><dt>Starts with</dt><dd>${o.process[0].t}</dd></div>` : `<div><dt>Run</dt><dd>${o.run}</dd></div>`}
           <div><dt>Best for</dt><dd>${o.bestFor}</dd></div>
           ${o.regular ? `<div><dt>Regular price</dt><dd>${o.regular}</dd></div>` : ''}
           ${o.oneMonth ? `<div><dt>One month only</dt><dd>${o.oneMonth}, no commitment</dd></div>` : ''}
         </dl>
-        <p class="offer-card__spend">${o.spend}</p>
+        ${isService ? '' : `<p class="offer-card__spend">${o.spend}</p>`}
       </aside>
     </div>
   </div>
 </header>
 
-<section class="band" aria-labelledby="what-h">
+<section class="band${o.kind === 'addon' ? ' band--paper offer-paper' : ''}" aria-labelledby="what-h">
   <div class="wrap split split--wide">
-    <div class="prose rv">
+    <div class="offer-what rv">
       <p class="label">What it is</p>
-      <h2 class="h2" id="what-h">The <span class="whisper">short version.</span></h2>
+      <h2 class="h2" id="what-h">${head(k.heads.what)}</h2>
       <p class="lede">${o.summary}</p>
+      ${money_}${rate}
       ${o.kind === 'boost' || o.kind === 'plan' ? `<p class="muted small">${BIZ.resultsNote}</p>` : ''}
     </div>
     <div class="panel rv" style="--d:.1s">
@@ -106,26 +221,26 @@ export default () => OFFERS.map((o, i) => {
   </div>
 </section>
 
-<section class="band band--coal" aria-labelledby="run-h">
+<section class="band ${isService ? 'band--paper offer-paper' : 'band--coal'}" aria-labelledby="run-h">
   <div class="wrap">
-    <div class="band__head rv"><p class="label">How it runs</p><h2 class="h2" id="run-h">From hello <span class="whisper">to live.</span></h2></div>
+    <div class="band__head rv"><p class="label">How it runs</p><h2 class="h2" id="run-h">${head(k.heads.run)}</h2></div>
     <ol class="steps rv" style="--n:${o.process.length}">${o.process.map((s) => `<li><h3>${s.t}</h3><p>${s.d}</p></li>`).join('')}</ol>
   </div>
 </section>
 
 <section class="band" aria-labelledby="fit-h">
   <div class="wrap">
-    <div class="band__head rv"><p class="label">Straight talk</p><h2 class="h2" id="fit-h">Is this <span class="whisper">your file?</span></h2></div>
-    <div class="grid grid--2 rv">
+    <div class="band__head rv"><p class="label">Straight talk</p><h2 class="h2" id="fit-h">${head(k.heads.fit)}</h2></div>
+    <div class="grid grid--2 rv${lean ? ' offer-fit--lean' : ''}">
       <div class="panel"><p class="label">It’s for you if</p><ul class="ticks">${o.forYou.map((x) => `<li>${x}</li>`).join('')}</ul></div>
       <div class="panel"><p class="label label--red">It’s not for you if</p><ul class="ticks ticks--no">${o.notForYou.map((x) => `<li>${x}</li>`).join('')}</ul></div>
     </div>
   </div>
 </section>
 
-<section class="band band--flush-top" aria-label="Classified">
+<section class="band band--flush-top" aria-label="Bonus file">
   <div class="wrap wrap--narrow">
-    ${c.classified({ id: 'math-' + o.slug, level: 2, title: isService ? `Before you call: the ${o.name} file` : `The math on ${o.name}`, body: `<ul>${(MATH[o.slug] || []).map((m) => `<li>${m}</li>`).join('')}</ul>` })}
+    ${c.classified({ id: 'math-' + o.slug, level: 2, bypass: true, title: isService ? `Bonus file: before you call about ${o.name}` : `Bonus file: the math behind ${o.name}`, body: `<ul>${(MATH[o.slug] ? MATH[o.slug](o) : []).map((m) => `<li>${m}</li>`).join('')}</ul>` })}
   </div>
 </section>
 
@@ -146,40 +261,83 @@ export default () => OFFERS.map((o, i) => {
       <div class="claim__main">
         <p class="label">${o.file} · ${o.name}</p>
         <h2 class="h2" id="claim-h">${isService ? 'Get the quote.' : 'Claim the file.'}</h2>
-        <p class="lede">${isService ? 'Tell us what you need. You get a written price before any work starts.' : `Send the form and we’ll reach out to confirm the details and how you’d like to pay. ${o.kind === 'plan' ? 'Your first month starts with the intake call.' : 'Our target is live within 24 hours of payment.'}`}</p>
+        <p class="lede">${isService ? 'Tell us what you need. You get a written price before any work starts.' : `Send the form and we’ll reach out to confirm the details and how you’d like to pay. ${claimNext}`}</p>
         <div class="ctas">${c.btn(claimLabel + ' ' + c.arrow, 'contact.html?pkg=' + o.slug, 'lg')}${config.showPayLinks && o.store ? c.btn('Pay online now', o.store, 'ghost lg') : ''}</div>
         <p class="small muted">Or call or text <a href="${BIZ.phoneHref}" style="color:var(--gold)">${BIZ.phone}</a>.</p>
       </div>
       <div class="claim__side">
-        <div class="price claim__price">${isService ? 'Quoted' : o.price}${o.suffix ? `<small>${o.suffix}</small>` : ''}</div>
-        <p class="label label--dim">${priceLine === 'Quoted per job' ? 'Price before work starts' : o.cadence}</p>
-        ${up ? `<a class="ladder" href="${c.link(offerPath(up))}"><span class="label">Next step up · ${up.file}</span><b>${up.name}</b><span>${o.ladder.text}</span><span class="file__open">Open file ${c.arrow}</span></a>` : ''}
+        ${isService
+          ? `<p class="label label--dim">Price before work starts</p><ol class="ticks claim__path">${o.process.map((s) => `<li>${s.t}</li>`).join('')}</ol>`
+          : `<div class="price claim__price">${priceHtml}</div><p class="label label--dim">${o.cadence}</p>`}
+        ${ladder}
       </div>
     </div>
   </div>
-</section>`,
+</section>`;
+    },
     css: OFFER_CSS,
   };
 });
 
 const OFFER_CSS = `
-.offer-head__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:clamp(28px,5vw,72px);align-items:end}
-@media (max-width:900px){.offer-head__grid{grid-template-columns:1fr}}
+.offer-head__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:clamp(28px,5vw,72px);align-items:start}
+@media (max-width:900px){.offer-head__grid{grid-template-columns:minmax(0,1fr)}}
 .offer-head__main{display:grid;gap:22px;min-width:0}
 .offer-head__name{overflow-wrap:anywhere}
-.offer-card{background:var(--coal);border:1px solid var(--smoke);padding:24px 22px;display:grid;gap:16px;position:relative;min-width:0}
+.offer-head__name--long{font-size:clamp(56px,8vw,118px)}
+.offer-card{background:var(--coal);border:1px solid var(--smoke);padding:24px 22px;display:grid;gap:16px;position:relative;min-width:0;margin-top:2px}
 .offer-card::before{content:"";position:absolute;inset:-1px -1px auto auto;width:30px;height:30px;border-top:2px solid var(--gold);border-right:2px solid var(--gold)}
 .offer-card__top{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .offer-card__price{font-size:clamp(52px,6vw,74px)}
-.offer-card .stamp{width:118px;font-size:19px;flex:none}
+.offer-card__price--quote{text-transform:uppercase;font-size:clamp(40px,4.4vw,56px)}
+.offer-card .stamp{width:126px;padding:20px;font-size:18px;flex:none}
+.offer-card .stamp small{font-size:8px;letter-spacing:.08em;max-width:8em}
+@media (max-width:380px){.offer-card__price{font-size:46px}.offer-card .stamp{width:106px;padding:15px;font-size:15px}.offer-card .stamp small{font-size:7px}}
 .offer-card__spend{font-size:14.5px;color:var(--ash);border-top:1px dashed var(--smoke);padding-top:14px}
+@media (max-width:560px){.offer-head .btn,.claim .btn{white-space:normal;text-align:center;max-width:100%;line-height:1.05}.offer-head .btn--lg,.claim .btn--lg{font-size:21px;padding:17px 22px 16px}}
+
+.offer-what{display:grid;gap:18px;align-content:start;min-width:0}
+.offer-what .lede{max-width:56ch}
+.offer-money,.offer-rate{display:grid;gap:10px;padding-top:18px;border-top:1px dashed var(--smoke);max-width:56ch}
+.offer-money__bar{position:relative;height:12px;background:var(--smoke);overflow:hidden}
+.offer-money__bar i{position:absolute;inset:0 auto 0 0;width:var(--w);background:linear-gradient(90deg,var(--brass),var(--gold-hi))}
+.offer-money__key{display:flex;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;font-size:15px;color:var(--ash)}
+.offer-money__key b{display:block;font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1;letter-spacing:.02em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.offer-money__key span:last-child{text-align:right}
+.offer-money__key span:last-child b{color:var(--paper)}
+.offer-rate__row{display:flex;align-items:baseline;gap:8px 20px;flex-wrap:wrap}
+.offer-rate .price{font-size:clamp(52px,5.4vw,68px)}
+.offer-rate__was{font-family:var(--f-display);font-weight:800;font-size:30px;line-height:1;color:var(--ash);text-decoration:line-through;text-decoration-color:var(--signal);text-decoration-thickness:2px}
+.offer-rate__note{font-size:15px;color:var(--ash)}
+
+.offer-paper .panel{background:var(--paper-2);border-color:rgba(23,20,15,.18)}
+.offer-paper .steps{background:rgba(23,20,15,.18);border-color:rgba(23,20,15,.18)}
+.offer-paper .steps>li{background:var(--paper)}
+.offer-paper .steps>li:hover{background:var(--paper-2)}
+.offer-paper .steps>li::before{-webkit-text-stroke-color:var(--brass)}
+.offer-paper .steps>li:hover::before{color:var(--brass)}
+.offer-paper .steps p{color:var(--ink-mute)}
+
+.offer-fit--lean{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:start}
+@media (max-width:640px){.offer-fit--lean{grid-template-columns:minmax(0,1fr)}}
+#faq-h .whisper{display:block;white-space:nowrap;margin-top:.08em}
+
 .claim{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);padding:clamp(28px,4.5vw,56px);border:1px solid var(--gold);background:linear-gradient(160deg,#211a0d,var(--coal) 60%);align-items:start}
-@media (max-width:860px){.claim{grid-template-columns:1fr}}
+@media (max-width:860px){.claim{grid-template-columns:minmax(0,1fr)}}
 .claim__main{display:grid;gap:20px;min-width:0}
 .claim__side{display:grid;gap:12px;min-width:0}
 .claim__price{font-size:clamp(64px,8vw,104px)}
+.claim__path{gap:10px;font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1.05;text-transform:uppercase;letter-spacing:.02em}
 .ladder{display:grid;gap:6px;margin-top:14px;padding:18px;border:1px solid var(--smoke);background:var(--void);text-decoration:none;color:var(--paper);transition:border-color .3s}
-.ladder:hover{border-color:var(--gold)}
+a.ladder:hover{border-color:var(--gold)}
 .ladder b{font-family:var(--f-display);font-weight:900;font-size:36px;line-height:.9;text-transform:uppercase}
 .ladder span:not(.label):not(.file__open){color:var(--ash);font-size:15px}
+.ladder--list ul{list-style:none;display:grid}
+.ladder--list li+li{border-top:1px solid var(--smoke)}
+.ladder--list a{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:baseline;gap:12px;padding:11px 0 10px;color:var(--paper);text-decoration:none}
+.ladder--list a b{font-size:28px;line-height:.95;transition:color .2s}
+.ladder--list a span{font-family:var(--f-type);font-size:13px;letter-spacing:.08em;white-space:nowrap}
+.ladder--list a .arw{width:16px;height:16px;color:var(--gold);transition:transform .25s var(--ease)}
+.ladder--list a:hover b{color:var(--gold-hi)}
+.ladder--list a:hover .arw{transform:translateX(4px)}
 `;

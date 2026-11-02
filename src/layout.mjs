@@ -14,7 +14,7 @@ export const icon = (key, cls = 'ico') => `<svg class="${cls}" viewBox="0 0 24 2
 
 export const arrow = `<svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>`;
 
-export function makeCtx(page, all) {
+export function makeCtx(page, all, config = {}) {
   const depth = page.path.split('/').length - 1;
   const r = depth ? '../'.repeat(depth) : '';
   const link = (p) => r + p;
@@ -47,7 +47,7 @@ export function makeCtx(page, all) {
     <span class="price">${o.price}${o.suffix ? `<small>${o.suffix}</small>` : ''}</span>
     <span class="file__open">Open file ${arrow}</span>
   </span>
-  ${o.oneMonth && !opts.compact ? `<span class="file__note">One month only: ${o.oneMonth}, no commitment</span>` : ''}
+  ${o.oneMonth && !opts.compact ? `<span class="file__note">One month only: ${o.oneMonth}, billed once</span>` : ''}
 </a>`;
 
   const crumbs = (items) => `<nav class="crumbs" aria-label="Breadcrumb"><ol>${items.map((it, i) => i === items.length - 1 ? `<li aria-current="page">${it.t}</li>` : `<li><a href="${link(it.p)}">${it.t}</a></li>`).join('')}</ol></nav>`;
@@ -55,13 +55,13 @@ export function makeCtx(page, all) {
   const contactLines = () => `
 <div class="lines">
   <div class="lines__row"><a class="lines__big" href="${BIZ.phoneHref}">${BIZ.phone}</a><button class="copy" type="button" data-copy="${BIZ.phone}">Copy</button></div>
-  <div class="lines__row"><span class="lines__mail">${BIZ.email}</span><button class="copy" type="button" data-copy="${BIZ.email}">Copy</button></div>
+  <div class="lines__row"><a class="lines__mail" href="mailto:${BIZ.email}">${BIZ.email}</a><button class="copy" type="button" data-copy="${BIZ.email}">Copy</button></div>
   <p class="lines__note">Call or text. ${BIZ.area.join(', ')} and anywhere online.</p>
 </div>`;
 
   const socialRow = (cls = 'socials') => `<ul class="${cls}">${SOCIALS.map((s) => `<li><a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}: ${esc(s.handle)}">${icon(s.key)}<span>${s.label}</span></a></li>`).join('')}</ul>`;
 
-  return { POLICY, PLATFORMS, REEL, page, all, r, link, btn, classified, mark, offerCard, crumbs, contactLines, socialRow, icon, arrow, logoMark, esc, BIZ, SOCIALS, LEVELS, OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, offerPath };
+  return { POLICY, PLATFORMS, REEL, config, page, all, r, link, btn, classified, mark, offerCard, crumbs, contactLines, socialRow, icon, arrow, logoMark, esc, BIZ, SOCIALS, LEVELS, OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, offerPath };
 }
 
 // ── Chrome ───────────────────────────────────────────────────────────────────
@@ -83,15 +83,15 @@ function topbar(ctx) {
     <a class="brand brand--compact" href="${link('index.html')}" aria-label="Blackout Syndicate home">${CELL}</a>
     <nav class="menu" id="menu" aria-label="Main">
       <ul>${NAV.map((n) => `<li><a href="${link(n.p)}"${page.section === n.key ? ' aria-current="page"' : ''}>${n.t}</a></li>`).join('')}</ul>
-      <a class="btn btn--sm menu__cta" href="${link('contact.html')}">Get seen</a>
+      <a class="btn btn--sm menu__cta" href="${link('contact.html')}">Make contact</a>
     </nav>
     <div class="topbar__end">
-      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false" aria-label="Your clearance level">
-        <span class="hud__lv">LV <b data-hud-lv>0</b></span>
+      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false">
+        <span class="sr">Clearance </span><span class="hud__lv">LV <b data-hud-lv>0</b></span>
         <span class="hud__name" data-hud-name>Outsider</span>
         <span class="hud__bar" aria-hidden="true"><i data-hud-bar></i></span>
       </button>
-      <a class="btn btn--sm topbar__cta" href="${link('contact.html')}">Get seen</a>
+      <a class="btn btn--sm topbar__cta" href="${link('contact.html')}">Make contact</a>
       <button class="burger" type="button" data-burger aria-controls="menu" aria-expanded="false"><span class="burger__lines" aria-hidden="true"></span><span class="sr">Menu</span></button>
     </div>
   </div>
@@ -110,6 +110,7 @@ function nextFile(ctx) {
   return `
 <section class="nextfile band band--tight" aria-label="Next file">
   <div class="wrap">
+    <div data-jump hidden></div>
     <a class="nextfile__card" href="${link(n.path)}" data-spot>
       <span class="label">Next file${n.file ? ' · ' + n.file : ''}</span>
       <span class="nextfile__title">${n.navTitle || n.h1 || n.title}</span>
@@ -122,6 +123,8 @@ function nextFile(ctx) {
 
 function footer(ctx) {
   const { link, BIZ, offerPath } = ctx;
+  // Same rule as the build's clearance registry, so the no-JS fallback shows the real total.
+  const totalFiles = ctx.all.filter((p) => p.file && p.xp !== false).length;
   const col = (title, items) => `<div class="foot__col"><p class="label">${title}</p><ul>${items.map((i) => `<li><a href="${link(i.p)}">${i.t}</a></li>`).join('')}</ul></div>`;
   return `
 <footer class="foot">
@@ -145,7 +148,7 @@ function footer(ctx) {
     </div>
     <div class="foot__base">
       <p>© <span data-year>2026</span> ${BIZ.name} · a ${BIZ.legal} company · ${BIZ.city}, ${BIZ.regionLong}</p>
-      <p class="foot__legal"><a href="${link('privacy.html')}">Privacy</a><a href="${link('terms.html')}">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 20</b></button></p>
+      <p class="foot__legal"><a href="${link('privacy.html')}">Privacy</a><a href="${link('terms.html')}">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / ${totalFiles}</b></button></p>
     </div>
   </div>
 </footer>`;
@@ -154,7 +157,7 @@ function footer(ctx) {
 function drawer() {
   return `
 <div class="scrim" data-scrim hidden></div>
-<aside class="drawer" id="clearance" data-drawer hidden aria-labelledby="drawer-title" tabindex="-1">
+<aside class="drawer" id="clearance" data-drawer hidden role="dialog" aria-modal="true" aria-labelledby="drawer-title" tabindex="-1">
   <div class="drawer__in">
     <div class="drawer__head">
       <p class="label">Visitor file</p>
@@ -183,7 +186,7 @@ const FONTS = 'https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0
 
 // ── Full document ────────────────────────────────────────────────────────────
 export function renderPage(page, all, config, assets) {
-  const ctx = makeCtx(page, all);
+  const ctx = makeCtx(page, all, config);
   const { r } = ctx;
   const body = page.body(ctx);
   const canonical = config.siteUrl + '/' + (page.path === 'index.html' ? '' : page.path);

@@ -43,13 +43,15 @@ export const PLATFORMS = [
 ];
 
 // Clearance ladder. XP thresholds tuned so a curious visitor levels up every 1–2 files.
+// href: where the level's reward lives (the build checks the page and anchor exist).
+// cl: the classified block id that holds it ("math-" = every math-* block); 'vault' = the Vault page.
 export const LEVELS = [
   { lv: 0, name: 'Outsider', xp: 0, unlock: 'Nothing yet. Keep reading.' },
-  { lv: 1, name: 'Lookout', xp: 25, unlock: 'Playbook Rule 01 on the home page' },
-  { lv: 2, name: 'Associate', xp: 60, unlock: 'The pricing math on every package file' },
-  { lv: 3, name: 'Operative', xp: 110, unlock: 'How a push is actually aimed (How it works)' },
-  { lv: 4, name: 'Lieutenant', xp: 170, unlock: 'The founder’s full file (About)' },
-  { lv: 5, name: 'Inner Circle', xp: 240, unlock: 'The Vault: the full Syndicate Playbook and your Syndicate ID' },
+  { lv: 1, name: 'Lookout', xp: 25, unlock: 'Playbook Rule 01 on the home page', href: 'index.html#cl-rule-01', cl: 'rule-01' },
+  { lv: 2, name: 'Associate', xp: 60, unlock: 'The pricing math on every package file', href: 'packages/spark.html#cl-math-spark', cl: 'math-' },
+  { lv: 3, name: 'Operative', xp: 110, unlock: 'How a push is actually aimed (How it works)', href: 'how-it-works.html#cl-aim', cl: 'aim' },
+  { lv: 4, name: 'Lieutenant', xp: 170, unlock: 'The founder’s full file (About)', href: 'about.html#cl-founder', cl: 'founder' },
+  { lv: 5, name: 'Inner Circle', xp: 240, unlock: 'The Vault: the full Syndicate Playbook and your Syndicate ID', href: 'vault.html', cl: 'vault' },
 ];
 
 export const XP = { visit: 10, read: 15, quiz: 30, lead: 50, mark: 25, blackout: 20 };
@@ -58,7 +60,7 @@ export const XP = { visit: 10, read: 15, quiz: 30, lead: 50, mark: 25, blackout:
 // Every page that mentions refunds or cancelling must say the same thing as this.
 export const POLICY = {
   updated: 'November 1, 2026',
-  boosts: 'Cancel before your ad is set up and you get a full refund. Once ad money has been paid to a platform, that part can’t be returned. If we don’t deliver the run, you get the setup part back too.',
+  boosts: 'Cancel before your ad is set up and you get a full refund. Ad money the platform has already spent can’t be returned. If we don’t deliver the run, you get back the setup part and any ad money the platform didn’t spend.',
   plans: 'Monthly plans run month to month. Cancel any time before your next billing date and you won’t be charged again. A month that has already started isn’t refunded.',
   addons: 'If we haven’t started the work, you get a full refund. One round of edits is included once it’s delivered.',
   quoted: 'Quoted jobs follow the written quote you approve before work starts.',

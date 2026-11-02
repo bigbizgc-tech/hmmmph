@@ -6,7 +6,8 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import baseConfig from './src/config.mjs';
 import { renderPage } from './src/layout.mjs';
-import { LEVELS, XP } from './src/data/business.mjs';
+import { LEVELS, XP, BIZ } from './src/data/business.mjs';
+import { OFFERS, offerPath } from './src/data/offers.mjs';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const PREVIEW = process.argv.includes('--preview');
@@ -16,6 +17,15 @@ const LENIENT = !!process.env.LENIENT;
 // BS_CONFIG_OVERRIDE='{"xPixelId":"test"}' lets QA build a variant without editing src/config.mjs.
 const override = process.env.BS_CONFIG_OVERRIDE ? JSON.parse(process.env.BS_CONFIG_OVERRIDE) : {};
 const config = { ...baseConfig, ...(PREVIEW ? { previewMode: true, xPixelId: '' } : {}), ...override };
+
+// Catch a half-finished setup before it ships.
+if (!PREVIEW && config.xPixelId && !config.xEvents?.lead) {
+  console.warn('⚠ xPixelId is set but xEvents.lead is empty: the X Lead conversion will not fire. Paste the tw-... event ID, or use a URL-based conversion on thank-you.html.');
+}
+if (!PREVIEW && !process.env.OUT_DIR && config.previewMode) {
+  console.error('✗ previewMode is true in a docs/ build: the form would skip sending and no lead would reach ' + BIZ.email + '. Set previewMode: false in src/config.mjs.');
+  process.exitCode = 1;
+}
 
 async function loadPages() {
   const dir = join(ROOT, 'src/pages');
@@ -50,15 +60,17 @@ function registry(pages) {
     .map((p) => ({ path: p.path, title: p.navTitle || p.title, file: p.file }));
 }
 
-function checkLinks(outFiles) {
+// extra: links that only exist in script (the clearance ladder), checked like any other link.
+function checkLinks(outFiles, extra = []) {
   const problems = [];
   const have = new Set(outFiles.map((f) => f.path));
   const ids = new Map(outFiles.map((f) => [f.path, new Set([...f.html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]))]));
   for (const f of outFiles) {
     const base = f.path.split('/').slice(0, -1);
     const markup = f.html.replace(/<script\b[\s\S]*?<\/script>/gi, '');
-    for (const m of markup.matchAll(/\shref="([^"]+)"/g)) {
-      const href = m[1];
+    const hrefs = [...markup.matchAll(/\shref="([^"]+)"/g)].map((m) => [f.path, m[1]]);
+    if (f.path === 'index.html') hrefs.push(...extra.map((h) => ['business.mjs LEVELS', h]));
+    for (const [from, href] of hrefs) {
       if (/^(https?:|mailto:|tel:|sms:|data:)/.test(href)) continue;
       const [pathPart, hash] = href.split('#');
       let target = f.path;
@@ -72,8 +84,8 @@ function checkLinks(outFiles) {
         if (target.endsWith('/')) target += 'index.html';
       }
       if (target.startsWith('assets/')) continue;
-      if (!have.has(target)) problems.push(`${f.path}: broken link → ${href}`);
-      else if (hash && !ids.get(target)?.has(hash)) problems.push(`${f.path}: missing anchor → ${href}`);
+      if (!have.has(target)) problems.push(`${from}: broken link → ${href}`);
+      else if (hash && !ids.get(target)?.has(hash)) problems.push(`${from}: missing anchor → ${href}`);
     }
   }
   return problems;
@@ -82,7 +94,9 @@ function checkLinks(outFiles) {
 async function main() {
   const pages = await loadPages();
   const files = registry(pages);
-  const configJs = `window.BS_CONFIG=${JSON.stringify(config)};window.BS_FILES=${JSON.stringify(files)};window.BS_LEVELS=${JSON.stringify(LEVELS)};window.BS_XP=${JSON.stringify(XP)};`;
+  // The engine needs the contact lines too (failed-send message), so they never drift from BIZ.
+  const clientConfig = { ...config, phone: BIZ.phone, phoneHref: BIZ.phoneHref, email: BIZ.email };
+  const configJs = `window.BS_CONFIG=${JSON.stringify(clientConfig)};window.BS_FILES=${JSON.stringify(files)};window.BS_LEVELS=${JSON.stringify(LEVELS)};window.BS_XP=${JSON.stringify(XP)};`;
   const css = await readFile(join(ROOT, 'src/assets/css/site.css'), 'utf8');
   const siteJs = await readFile(join(ROOT, 'src/assets/js/site.js'), 'utf8');
 
@@ -111,9 +125,14 @@ async function main() {
     await writeFile(join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
     await writeFile(join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${config.siteUrl}/sitemap.xml\n`);
     await writeFile(join(OUT, '.nojekyll'), '');
+    // Netlify / Cloudflare Pages: old Wix product pages (shared and indexed) land on the new package pages.
+    const moved = OFFERS.filter((o) => o.store && o.store.includes('/product-page/'))
+      .map((o) => `${new URL(o.store).pathname} /${offerPath(o)} 301`);
+    await writeFile(join(OUT, '_redirects'), moved.join('\n') + '\n');
   }
 
-  const problems = checkLinks(out);
+  // Clearance-ladder rewards are linked from script (toasts, drawer, "just declassified" card).
+  const problems = checkLinks(out, LEVELS.filter((l) => l.href).map((l) => l.href));
   console.log(`Built ${out.length} pages → ${OUT.replace(ROOT + '/', '')}/  (${files.length} clearance files)`);
   if (problems.length) {
     console.error(problems.join('\n'));

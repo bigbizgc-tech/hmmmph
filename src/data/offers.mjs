@@ -1,5 +1,10 @@
 // Every package and service. Facts come from the live store, the Get SEEN ad plan
 // and the current site. Prices are the single source of truth for every page.
+import { POLICY } from './business.mjs';
+
+// `store` links are the old Wix product pages. They only show when config.showPayLinks is true.
+// Before turning that on, replace each one with the new checkout link: once blackoutsyn.com
+// moves off Wix these pages are gone (the build writes 301s for their old addresses).
 const STORE = 'https://www.blackoutsyn.com/product-page/';
 
 const BOOST_PROCESS = [
@@ -13,7 +18,7 @@ const PLAN_PROCESS = [
   { t: 'Intake call', d: 'Twenty minutes on what you sell, who buys it and where they scroll. No script.' },
   { t: 'First month built', d: 'We pick the platforms, aim the ads at your area or your audience, and line up what runs.' },
   { t: 'It runs every month', d: 'Promotion keeps going without restarting from zero. We adjust aim as the numbers come in.' },
-  { t: 'Monthly recap', d: 'Spend, reach, clicks or views, and follows, every month, in plain English. Stay or walk.' },
+  { t: 'Monthly recap', d: 'Spend, reach, clicks or views, and follows, every month, in plain English.' },
 ];
 
 export const OFFERS = [
@@ -33,7 +38,7 @@ export const OFFERS = [
       'A short recap: spend, reach, and clicks or views',
     ],
     process: BOOST_PROCESS,
-    forYou: ['You have never run a paid ad and want to see how it feels', 'One post deserves more eyes than it got', 'You want new viewers, not bot followers'],
+    forYou: ['You have never run a paid ad and want to see how it feels', 'One post deserves more eyes than it got', 'You want real new viewers. Bot followers never watch anything'],
     notForYou: ['You need customers coming in every month. Look at Surge', 'You want guaranteed numbers. Nobody honest can promise those'],
     faq: [
       { q: 'Is $10 of ad money worth it?', a: 'At this size it is a test. Real people see a real placement, and you find out whether a bigger push makes sense. That is the whole job of Spark.' },
@@ -111,13 +116,13 @@ export const OFFERS = [
       'About $150 a month goes straight into the ads',
       'Aim checked and adjusted every month as numbers come in',
       'A monthly recap: spend, reach, clicks or views, and follows',
-      'Just want one month? $450, no commitment',
+      'Just want one month? $450, billed once and never renews',
     ],
     process: PLAN_PROCESS,
     forYou: ['You keep buying one-off boosts and want it to stop resetting', 'You sell to the same area every week', 'You want two platforms working at once'],
     notForYou: ['You only have one event to promote. A Blitz fits better', 'You also want posts and AI handled. Look at Overdrive'],
     faq: [
-      { q: 'Is there a contract?', a: 'The monthly price is for staying month to month. If you only want one month, it is $450 with no commitment.' },
+      { q: 'Is there a contract?', a: `No. ${POLICY.plans} Want a single month without monthly billing? That is $450, billed once, and it never renews.` },
       { q: 'Which two platforms?', a: 'Whichever two your people actually use. We decide that together on the intake call.' },
       { q: 'Can I move up to Overdrive?', a: 'Yes. Move up any month.' },
     ],
@@ -138,7 +143,7 @@ export const OFFERS = [
       'Automatic posting set up on your accounts',
       'AI tools set up for the repeat work in your business',
       'Launch price of $400 a month, locked in while you stay',
-      'Just want one month? $550, no commitment',
+      'Just want one month? $550, billed once and never renews',
     ],
     process: PLAN_PROCESS,
     forYou: ['You know you should post more and never do', 'You answer the same questions all day', 'You want ads and posting moving at the same time'],
@@ -158,14 +163,14 @@ export const OFFERS = [
     tagline: 'The full Blackout Syndicate marketing plan, done for you.',
     bestFor: 'Shops that want the whole thing handled',
     summary: 'Total Blackout is the one we built everything else around. Ads, posts, an AI assistant that answers your customers, and a clean web page, all set up and run for you. You run the business. We make sure people can find it.',
-    spend: 'Launch price: $500 a month. Regular price is $800 a month. Cancel any time.',
+    spend: 'Launch price: $500 a month. Regular price is $800 a month. Month to month.',
     run: 'Runs every month',
     includes: [
+      'Everything in Overdrive: about $150 a month in ads on up to 2 platforms, automatic posting and AI tools',
       'An AI assistant that answers customers and captures their contact info',
       'AI-made posts and promos for your pages',
-      'Paid promotion through the platforms your people use',
       'A clean web page with your hours, location and contact',
-      'Just want one month? $650, no commitment',
+      'Just want one month? $650, billed once and never renews',
     ],
     process: PLAN_PROCESS,
     forYou: ['You are a local shop with no time for any of this', 'Customers message you after hours and nobody answers', 'You don’t have a real web page yet'],
@@ -173,7 +178,7 @@ export const OFFERS = [
     faq: [
       { q: 'What does the AI assistant do?', a: 'It answers common customer questions and takes down their contact info so you can follow up. It is set up around your business, hours and prices.' },
       { q: 'Do I need a website already?', a: 'No. A clean web page with your hours, location and contact is part of the plan.' },
-      { q: 'Can I cancel?', a: 'Yes, any time. If you only want one month, it is $650 with no commitment.' },
+      { q: 'Can I cancel?', a: `Yes. ${POLICY.plans} Want a single month instead? It is $650, billed once, and it never renews.` },
     ],
     ladder: { to: 'post-kit', text: 'Not ready for the full plan? Start with the 30-Day Post Kit and build up.' },
     store: null,
@@ -279,7 +284,7 @@ export const OFFERS = [
     slug: 'ai-consulting', kind: 'service', file: 'File 10', name: 'AI Consulting', price: 'Quoted', suffix: '', cadence: 'Per job',
     tagline: 'Plain-English help finding where AI actually saves you time.',
     bestFor: 'Owners curious about AI but short on time',
-    summary: 'AI Consulting is a sit-down about your week, not a sales pitch. We look at what eats your time, find the parts AI can honestly handle, and set them up with you. I come to you, set it up, and you walk away with it running.',
+    summary: 'AI Consulting is a sit-down about your week. We look at what eats your time, find the parts AI can honestly handle, and set them up with you. We come to you around South Bend, Mishawaka and Elkhart, and you walk away with it running.',
     spend: 'Quoted per job. You know the price before we start.',
     run: 'Quoted per job',
     includes: [
@@ -329,7 +334,7 @@ export const OFFERS = [
     notForYou: ['You are not sure what to automate yet. Start with AI Consulting'],
     faq: [
       { q: 'Will it sound like a robot?', a: 'It is written around your business and the way you talk, and you approve it before it goes live.' },
-      { q: 'What if something breaks?', a: 'Call or text. You are dealing with a local person, not a ticket queue.' },
+      { q: 'What if something breaks?', a: 'Call or text us. What’s covered after hand-off is written into your quote.' },
     ],
     ladder: { to: 'creator-systems', text: 'Creator or streamer? Creator Content Systems is built for you.' },
     store: null,

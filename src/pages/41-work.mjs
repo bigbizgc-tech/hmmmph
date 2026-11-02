@@ -1,7 +1,7 @@
 // File 16: The Reel. The crew's own clips as poster cards (they open on YouTube), what the crew makes,
 // an honest line on client results, the Graveshift crew, and where to follow.
 import { BIZ, SOCIALS, REEL } from '../data/business.mjs';
-import { bySlug, offerPath } from '../data/offers.mjs';
+import { BOOSTS, bySlug, offerPath } from '../data/offers.mjs';
 
 const YT = SOCIALS.find((s) => s.key === 'youtube');
 const DISCORD = SOCIALS.find((s) => s.key === 'discord');
@@ -63,6 +63,14 @@ const MAKES = [
 ];
 
 const CS = bySlug['creator-systems'];
+const andList = (a) => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]);
+// What every recap shows (the same numbers the offers list). Follows come with the bigger boosts and the plans.
+const RECAP = [
+  ['Spend', 'What the platform charged'],
+  ['Reach', 'People who saw it'],
+  ['Clicks or views', 'The number that matches your goal'],
+  ['Follows', `${andList(BOOSTS.slice(1).map((o) => o.name))} and plans`],
+];
 const BOOST = bySlug.boost;
 
 const css = `
@@ -206,11 +214,16 @@ const css = `
 .rl-board{position:relative;aspect-ratio:5/4;border:2px dashed rgba(23,20,15,.32);display:grid;place-items:center;text-align:center;padding:clamp(24px,4vw,44px);background:repeating-linear-gradient(transparent 0 31px,rgba(23,20,15,.05) 31px 32px),var(--paper-2)}
 .rl-board__pin{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--signal);box-shadow:0 3px 0 rgba(23,20,15,.35)}
 .rl-board__pin:nth-child(1){top:16px;left:16px}.rl-board__pin:nth-child(2){top:16px;right:16px}.rl-board__pin:nth-child(3){bottom:16px;left:16px}.rl-board__pin:nth-child(4){bottom:16px;right:16px}
-.rl-board__in{display:grid;gap:14px;justify-items:center;max-width:30ch}
+.rl-board__in{display:grid;gap:16px;justify-items:center;width:100%;max-width:420px}
+.rl-board__in .label{color:var(--brass)}
 .rl-board__in b{font-family:var(--f-display);font-weight:900;font-size:clamp(40px,4.6vw,64px);line-height:.86;text-transform:uppercase;color:var(--ink)}
-.rl-board__in span{font-family:var(--f-type);font-size:13.5px;letter-spacing:.06em;color:var(--ink-mute)}
+.rl-board__in .ledger{width:100%;text-align:left;border-top:1.5px solid var(--ink)}
+.rl-board__in .ledger dd{max-width:60%}
+.rl-board__in>span{font-family:var(--f-type);font-size:13.5px;letter-spacing:.06em;color:var(--ink-mute)}
 .rl-board .stamp{position:absolute;right:clamp(10px,3vw,28px);bottom:clamp(10px,3vw,28px);width:116px;font-size:18px;box-shadow:inset 0 0 0 5px var(--paper-2),inset 0 0 0 6.5px var(--signal)}
-@media (max-width:600px){.rl-board{aspect-ratio:auto;min-height:380px;place-items:start center;padding-top:60px}.rl-board .stamp{width:100px;font-size:16px;right:30px;bottom:34px}}
+@media (min-width:901px){.rl-board{padding-bottom:clamp(96px,10vw,120px)}}
+@media (max-width:900px){.rl-board{aspect-ratio:auto;padding-bottom:140px}}
+@media (max-width:600px){.rl-board{padding:56px 22px 136px}.rl-board .stamp{width:100px;font-size:16px;right:24px;bottom:28px}}
 
 /* ── Follow ── */
 .rl-follow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
@@ -359,13 +372,13 @@ export default {
     <div class="rl-record__text rv">
       <p class="label">On the record</p>
       <h2 class="h2" id="record-h">Client results. <span class="whisper">With permission only.</span></h2>
-      <p class="lede">This reel is the crew’s own work. Client results go up here as they come in, and only with the client’s OK.</p>
-      <p>You won’t find made-up case studies, borrowed logos or invented numbers on this site. When a client says yes, their recap goes on this wall: what was spent, what it reached, and the clicks or views it got.</p>
+      <p class="lede">This reel is the crew’s own work. We don’t post a client’s numbers without the client’s OK.</p>
+      <p>You won’t find made-up case studies, borrowed logos or invented numbers on this site. If a client says yes, we share their real recap: what was spent, what it reached, and the clicks or views it got.</p>
       <p>${BIZ.resultsNote}</p>
     </div>
     <div class="rl-board rv" style="--d:.1s">
       <span class="rl-board__pin" aria-hidden="true"></span><span class="rl-board__pin" aria-hidden="true"></span><span class="rl-board__pin" aria-hidden="true"></span><span class="rl-board__pin" aria-hidden="true"></span>
-      <div class="rl-board__in"><b>Space held for client results</b><span>Posted only when the client says yes.</span></div>
+      <div class="rl-board__in"><p class="label">What you get back</p><b>Every client recap</b><dl class="ledger">${RECAP.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl><span>Shared publicly only with the client’s OK.</span></div>
       <span class="stamp" aria-hidden="true">Client<br>OK<small>Required</small></span>
     </div>
   </div>
@@ -381,7 +394,7 @@ export default {
       <div class="rl-panel rl-panel--gs">
         <p class="label label--red">The crew</p>
         <h3>Grave<i>shift</i> Gaming</h3>
-        <p>GC’s gaming crew. The crew, not the agency. Players get recruited on Discord, and a squad is forming for the GTA 6 launch.</p>
+        <p>GC’s gaming crew. It lives on Discord. Come say hi.</p>
         <div class="ctas">
           ${c.btn(c.icon('discord') + ' Join on Discord', DISCORD.url)}
           <a class="textlink" href="${c.link('about.html#graveshift')}">Meet the crew ${c.arrow}</a>

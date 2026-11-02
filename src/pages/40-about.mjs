@@ -16,9 +16,9 @@ const FILE_ROWS = [
   ['Company', `${BIZ.name}, a ${BIZ.legal} company`],
   ['Background', 'Ten years building things with his hands'],
   ['Trade now', 'Paid reach, content and AI setup for creators, streamers, solo businesses and local shops'],
-  ['Also handles', 'Websites, AI tools, computer and console repair, PC builds'],
+  ['Also handles', 'Websites, AI assistants and automations'],
   ['Territory', `${AREA}. All three on the St. Joseph River`],
-  ['Crew', 'Graveshift Gaming. Recruits on Discord. Squad forming for the GTA 6 launch'],
+  ['Crew', 'Graveshift Gaming, GC’s gaming crew. Find it on Discord'],
   ['Standing orders', 'Every dollar accounted for. If he can’t help you, he says so'],
   ['Found on', HANDLES.map((s) => `${s.handle} on ${s.label}`).join(', ')],
   ['Direct line', BIZ.phone],
@@ -27,11 +27,11 @@ const FILE_ROWS = [
 // What GC takes on. Each points at the file that covers it.
 const TRADES = [
   { t: 'Paid reach', d: `Real ads on ${andList(PLATFORMS.map((p) => p.name))}, from a one-time boost to a monthly plan.`, links: [{ t: 'Open the packages', p: 'packages.html' }] },
-  { t: 'Content', d: 'A month of posts planned and written, or a system that turns every stream into a week of posts.', links: [{ t: bySlug['post-kit'].name, p: offerPath(bySlug['post-kit']) }, { t: 'Creator systems', p: offerPath(bySlug['creator-systems']) }] },
-  { t: 'AI setup', d: 'Finding where AI honestly saves you time, then setting it up so it runs.', links: [{ t: bySlug['ai-consulting'].name, p: offerPath(bySlug['ai-consulting']) }, { t: bySlug['ai-automation'].name, p: offerPath(bySlug['ai-automation']) }] },
+  { t: 'Content', d: bySlug['post-kit'].tagline, links: [{ t: bySlug['post-kit'].name, p: offerPath(bySlug['post-kit']) }] },
+  { t: 'Creator systems', d: `${bySlug['creator-systems'].tagline} Built around how you already film.`, links: [{ t: bySlug['creator-systems'].name, p: offerPath(bySlug['creator-systems']) }] },
+  { t: 'AI consulting', d: bySlug['ai-consulting'].tagline, links: [{ t: bySlug['ai-consulting'].name, p: offerPath(bySlug['ai-consulting']) }] },
+  { t: 'AI automation', d: bySlug['ai-automation'].teaser, links: [{ t: bySlug['ai-automation'].name, p: offerPath(bySlug['ai-automation']) }] },
   { t: 'Websites', d: 'A clean site that works on a phone, so the people your ads reach have somewhere to land.', links: [{ t: bySlug['website-design'].name, p: offerPath(bySlug['website-design']) }] },
-  { t: 'Computer and console repair', d: 'Laptop, desktop or console acting up. Tell GC what it’s doing and get a straight answer on the fix.', links: [{ t: 'Ask about a repair', p: 'contact.html' }] },
-  { t: 'PC builds', d: 'A machine built for what you actually do, whether that’s streaming, gaming or work.', links: [{ t: 'Ask about a build', p: 'contact.html' }] },
 ];
 
 // What the name means for the people who hire it.
@@ -46,10 +46,10 @@ const TERMS = [
 const RULES = [
   { t: 'Your OK comes first', d: 'Nothing runs under your name until you say go. You see what runs before it runs.' },
   { t: 'You get a recap', d: 'When a run ends you get the numbers that matter: what was spent, how many people it reached, and the clicks or views it got.' },
-  { t: 'Price before work', d: `Boosts and plans have their price on the page. ${POLICY.quoted}` },
+  { t: 'Price before work', d: `Boosts, plans and add-ons have their price on the page. ${POLICY.quoted}` },
   { t: 'No promised numbers', d: BIZ.resultsNote },
   { t: 'Stay or walk', d: POLICY.plans },
-  { t: 'A local person, not a queue', d: `Call or text ${BIZ.phone}. You deal with a person in ${BIZ.city}, not a ticket system.` },
+  { t: 'A local person answers', d: `Call or text ${BIZ.phone}. You deal with a person in ${BIZ.city}.` },
 ];
 
 // The map (viewBox 0 0 800 500). Stylized, not to scale. West to east: South Bend, Mishawaka, Elkhart.
@@ -89,6 +89,7 @@ const css = `
 .ab-head__in{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(20px,4vw,56px);align-items:stretch}
 .ab-head__main{display:grid;gap:22px;align-content:end;min-width:0;padding-top:clamp(48px,7vw,96px)}
 .ab-head__title{overflow-wrap:anywhere}
+.ab-nw{white-space:nowrap}
 .ab-head__tease{font-family:var(--f-type);font-size:13.5px;letter-spacing:.06em;color:var(--ash);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
 .ab-head__tease a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--brass)}
 .ab-lamp{--cord:clamp(56px,7.5vw,112px);position:relative;min-height:clamp(440px,46vw,620px);min-width:0;pointer-events:none}
@@ -370,7 +371,7 @@ export default {
   <div class="wrap ab-head__in">
     <div class="ab-head__main">
       ${c.crumbs([{ t: 'Home', p: 'index.html' }, { t: 'About' }])}
-      <p class="label">File 15 · Personnel · ${BIZ.city}, ${BIZ.regionLong}</p>
+      <p class="label">File 15 · Personnel · <span class="ab-nw">${BIZ.city}, ${BIZ.regionLong}</span></p>
       <h1 class="h1 ab-head__title">Who runs <span class="whisper">the Syndicate.</span></h1>
       <p class="lede"><strong>Gregory Clark. Goes by GC.</strong> A South Bend guy who built things with his hands for ten years. Now he builds reach for creators, streamers, solo businesses and local shops.</p>
       <div class="ctas">
@@ -407,13 +408,13 @@ export default {
       <ol class="ab-line rv" style="--d:.1s">
         <li><p class="label">Then</p><h3>Ten years building</h3><p>Gregory Clark spent ten years building things with his hands. ${BIZ.name} is a ${BIZ.legal} company.</p></li>
         <li><p class="label">Now</p><h3>Building reach</h3><p>Real paid ads, content and AI setup for creators, streamers, solo businesses and local shops in ${AREA}.</p></li>
-        <li><p class="label">Also</p><h3>Fixing and building tech</h3><p>Websites, AI tools, computer and console repair, and PC builds. If your computer or console is giving you trouble, ask.</p></li>
-        <li><p class="label label--red">The crew</p><h3>Running Graveshift Gaming</h3><p>A gaming crew he recruits on Discord. A squad is forming for the GTA 6 launch. <a class="textlink" href="#graveshift">Meet the crew ${c.arrow}</a></p></li>
+        <li><p class="label">Also</p><h3>Websites and AI setup</h3><p>A clean site for your ads to land on, and AI assistants and automations that take the repeat work off your plate. Each one is quoted in writing before work starts.</p></li>
+        <li><p class="label label--red">The crew</p><h3>Running Graveshift Gaming</h3><p>GC’s gaming crew. It lives on Discord. <a class="textlink" href="#graveshift">Meet the crew ${c.arrow}</a></p></li>
       </ol>
     </div>
 
     <div class="ab-trades rv">
-      <div class="drawer-label"><h3 class="h3">What GC takes on</h3><span class="label label--dim">One number for all of it · ${BIZ.phone}</span></div>
+      <div class="drawer-label"><h3 class="h3">What GC takes on</h3><span class="label label--dim">One number for all of it · <span class="ab-nw">${BIZ.phone}</span></span></div>
       <div class="ab-trades__grid">
         ${TRADES.map((t) => `<div class="ab-trade"><h4>${t.t}</h4><p>${t.d}</p><div class="ab-trade__links">${t.links.map((l) => `<a class="textlink" href="${c.link(l.p)}">${l.t} ${c.arrow}</a>`).join('')}</div></div>`).join('')}
       </div>
@@ -486,8 +487,8 @@ export default {
   <div class="wrap ab-gs">
     <div class="ab-gs__text rv">
       <p class="label label--red">The crew</p>
-      <h2 class="h2" id="gs-h">Graveshift Gaming. <span class="whisper">The crew, not the agency.</span></h2>
-      <p class="lede"><strong>Graveshift is GC’s gaming crew.</strong> Players recruited on Discord, and right now a squad is forming for the GTA 6 launch.</p>
+      <h2 class="h2" id="gs-h">Graveshift Gaming. <span class="whisper">GC’s crew.</span></h2>
+      <p class="lede"><strong>The gaming crew lives on Discord.</strong> Its clips are on the Reel.</p>
       <p class="muted">The crew’s clips run on the same kind of system we build for streamers. That’s <a class="textlink" href="${c.link(offerPath(bySlug['creator-systems']))}">${bySlug['creator-systems'].name} ${c.arrow}</a></p>
       <div class="ctas">
         ${c.btn(c.icon('discord') + ' Join on Discord', DISCORD.url, 'lg')}
@@ -496,12 +497,12 @@ export default {
     </div>
     <a class="ab-poster rv" href="${DISCORD.url}" target="_blank" rel="noopener" style="--d:.1s">
       <span class="ab-poster__sheet">
-        <span class="ab-poster__top">Now recruiting</span>
+        <span class="ab-poster__top">Join the crew</span>
         <span class="ab-poster__name">Grave<i>shift</i></span>
         <span class="ab-poster__sub">Gaming</span>
         <span class="ab-poster__rule"></span>
-        <span class="ab-poster__mission">Squad forming for the GTA 6 launch</span>
-        <span class="ab-poster__where">${c.icon('discord')} Report to Discord</span>
+        <span class="ab-poster__mission">Find the crew on Discord</span>
+        <span class="ab-poster__where">${c.icon('discord')} ${DISCORD.url.replace(/^https?:\/\//, '')}</span>
       </span>
       <span class="stamp ab-poster__stamp" aria-hidden="true">Open<br>call</span>
       <span class="sr">(opens Discord in a new tab)</span>

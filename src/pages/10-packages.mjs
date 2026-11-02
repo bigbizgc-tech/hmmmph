@@ -70,6 +70,8 @@ const RULES = [
 ];
 
 const none = '<span class="pk-none" aria-hidden="true"></span><span class="sr">Not included</span>';
+// A launch price is only "locked in" when the offer itself says so (or sets lockIn) in offers.mjs.
+const lockedIn = (o) => o.lockIn ?? /locked in/i.test([o.spend, ...(o.includes || [])].join(' '));
 const priceHtml = (o) => `${o.price}${o.suffix ? `<small>${o.suffix}</small>` : ''}`;
 
 // ── Page script: the matcher. Serialized with toString(), so it must stay self-contained. ──
@@ -270,6 +272,7 @@ const css = `
 .pk-ctl button:hover:not([disabled]){color:var(--paper);border-color:var(--gold)}
 .pk-ctl button[disabled]{opacity:.35;cursor:default}
 .pk-ctl button[hidden]{display:none}
+@media (max-width:560px){.pk-quiz__top{flex-wrap:nowrap}.pk-segs i{width:22px}.pk-prog{gap:10px}.pk-prog__t{font-size:11.5px;letter-spacing:.1em}}
 .pk-q{display:grid;gap:20px}
 .pk-q[hidden]{display:none}
 .pk-q__title{font-family:var(--f-display);font-weight:900;font-size:clamp(36px,4.2vw,56px);line-height:.9;text-transform:uppercase}
@@ -592,7 +595,7 @@ export default {
       <div>
         <p class="label">Drawer 01 · ${BOOSTS.length} files</p>
         <h2 class="h2 pk-h2" id="boosts-h">One-time boosts. <span class="whisper">No contract.</span></h2>
-        <p>One push for one moment. Pick the size, point it at your post, page, channel or site, and we run a real paid placement on one platform through its own ad tools. Our target is live within 24 hours of payment.</p>
+        <p>One push for one moment. Pick the size, point it at your post, page, channel or site, and we run a real paid placement on one platform through its own ad tools. Our target is live within 24 hours of payment. Platform ad review can take longer.</p>
       </div>
       <a class="textlink" href="#compare-boosts">Compare the three ${c.arrow}</a>
     </div>
@@ -643,8 +646,8 @@ export default {
           <caption class="sr">Surge, Overdrive and Total Blackout compared: monthly price, regular price, one month only price, and what each plan includes.</caption>
           <thead><tr><td><span class="sr">Detail</span></td>${PLANS.map(colHead).join('')}</tr></thead>
           <tbody>
-            <tr><th scope="row">Monthly price</th>${PLANS.map((o) => cell(o, `${o.regular ? '<span class="pk-tag">Launch price</span>' : ''}<span class="pk-num">${priceHtml(o)}</span>${o.regular ? '<span class="pk-sub">Locked in while you stay</span>' : '<span class="pk-sub">Month to month</span>'}`)).join('')}</tr>
-            <tr><th scope="row">Regular price</th>${PLANS.map((o) => cell(o, o.regular ? `${o.regular}<span class="pk-sub">What new clients pay after the launch</span>` : none)).join('')}</tr>
+            <tr><th scope="row">Monthly price</th>${PLANS.map((o) => cell(o, `${o.regular ? '<span class="pk-tag">Launch price</span>' : ''}<span class="pk-num">${priceHtml(o)}</span>${lockedIn(o) ? '<span class="pk-sub">Locked in while you stay</span>' : '<span class="pk-sub">Month to month</span>'}`)).join('')}</tr>
+            <tr><th scope="row">Regular price</th>${PLANS.map((o) => cell(o, o.regular ? `${o.regular}${lockedIn(o) ? '<span class="pk-sub">What new clients pay after the launch</span>' : ''}` : none)).join('')}</tr>
             <tr><th scope="row">One month only</th>${PLANS.map((o) => cell(o, `${o.oneMonth}<span class="pk-sub">No commitment</span>`)).join('')}</tr>
             <tr><th scope="row">Paid ads</th>${PLANS.map((o) => cell(o, PLAN_ROWS[o.slug].ads)).join('')}</tr>
             <tr><th scope="row">Posting</th>${PLANS.map((o) => cell(o, PLAN_ROWS[o.slug].posting || none)).join('')}</tr>
@@ -727,7 +730,7 @@ export default {
     <div class="pk-final__main">
       <p class="label">Make contact</p>
       <h2 id="pk-final-h">Still<br>deciding?</h2>
-      <p>Tell us what you’re pushing. We’ll tell you straight which file fits, or whether you need one at all.</p>
+      <p>Tell us what you’re pushing and when. We’ll point you at one file, or tell you to keep your money.</p>
       <div class="ctas">${c.btn('Make contact ' + c.arrow, 'contact.html', 'lg')}${c.btn('Find my file', '#match', 'ghost lg')}</div>
     </div>
     <div class="pk-final__side">
