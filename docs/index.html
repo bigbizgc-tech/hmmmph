@@ -146,6 +146,11 @@ twq('config','rhx35');
 .quick__list span:not(.price){grid-area:meta;font-size:14px;color:var(--ash);margin-top:3px}
 .quick__list .price{grid-area:price;font-size:32px;text-align:right}
 .quick__list .price small{font-size:13px}
+/* prices hidden: each row ends in an arrow, and one line says how to get a price */
+.quick__list a>.arw{grid-area:price;width:22px;height:22px;color:var(--gold);transition:transform .25s var(--ease)}
+.quick__list a:hover>.arw{transform:translateX(4px)}
+.quick__ask{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin-top:14px;font-size:15px;color:var(--paper)}
+.quick__ask .textlink{font-size:15px;margin-left:auto}
 
 /* ── The problem ── */
 .truth{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(32px,6vw,90px);align-items:center}
@@ -296,10 +301,10 @@ twq('config','rhx35');
         <li>Call or text&nbsp;<a href="tel:+15742139097">(574) 213-9097</a></li>
       </ul>
       <div class="ctas">
-        <a class="btn btn--lg" href="packages.html">See packages and prices <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
+        <a class="btn btn--lg" href="packages.html">See the packages <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
         <a class="btn btn--ghost btn--lg" href="packages.html#match">Find my package</a>
       </div>
-      <p class="hero__prices"><span>Spark <b>$19.99</b></span><span>Boost <b>$49.99</b></span><span>Blitz <b>$99.99</b></span><span>Plans from <b>$300/mo</b></span></p>
+      
     </div>
     <aside class="visitor" data-visitor aria-label="Your visitor file">
       <div class="visitor__head"><span class="label">Visitor file</span><span class="badge badge--red" data-v="status">Uncleared</span></div>
@@ -319,11 +324,12 @@ twq('config','rhx35');
 
 <section class="quick" aria-labelledby="quick-h">
   <div class="wrap">
-    <div class="quick__head"><h2 class="quick__h" id="quick-h">Packages and prices</h2><a class="textlink" href="packages.html">Compare every package <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div>
+    <div class="quick__head"><h2 class="quick__h" id="quick-h">Packages</h2><a class="textlink" href="packages.html">Compare every package <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div>
     <ul class="quick__list">
-      <li><a href="packages/spark.html"><b>Spark</b><span>One-time · 3-day run · No contract</span><span class="price">$19.99</span></a></li><li><a href="packages/boost.html"><b>Boost</b><span>One-time · 5-day run · No contract</span><span class="price">$49.99</span></a></li><li><a href="packages/blitz.html"><b>Blitz</b><span>One-time · 7-day run · No contract</span><span class="price">$99.99</span></a></li>
-      <li><a href="packages.html#plans"><b>Monthly plans</b><span>Surge, Overdrive, Total Blackout</span><span class="price"><small>from </small>$300<small>/mo</small></span></a></li>
+      <li><a href="packages/spark.html"><b>Spark</b><span>One-time · 3-day run · No contract</span><svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></li><li><a href="packages/boost.html"><b>Boost</b><span>One-time · 5-day run · No contract</span><svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></li><li><a href="packages/blitz.html"><b>Blitz</b><span>One-time · 7-day run · No contract</span><svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></li>
+      <li><a href="packages.html#plans"><b>Monthly plans</b><span>Surge, Overdrive, Total Blackout</span><svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></li>
     </ul>
+    <p class="quick__ask"><span class="label">Pricing</span><span>Ask us.</span><a class="textlink" href="contact.html#intake">Get pricing <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></p>
   </div>
 </section>
 
@@ -389,7 +395,7 @@ twq('config','rhx35');
   <span class="file__name">Spark</span>
   <span class="file__tag">The first light. A small, real paid push to test the water.</span>
   <span class="file__foot">
-    <span class="price">$19.99</span>
+    <span class="price price--ask">Ask us <small>for pricing</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -400,7 +406,7 @@ twq('config','rhx35');
   <span class="file__name">Boost</span>
   <span class="file__tag">More fuel, longer run. Built for a launch, a drop or a stream night.</span>
   <span class="file__foot">
-    <span class="price">$49.99</span>
+    <span class="price price--ask">Ask us <small>for pricing</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -411,7 +417,7 @@ twq('config','rhx35');
   <span class="file__name">Blitz</span>
   <span class="file__tag">The biggest single push. For openings, events and big announcements.</span>
   <span class="file__foot">
-    <span class="price">$99.99</span>
+    <span class="price price--ask">Ask us <small>for pricing</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -424,10 +430,10 @@ twq('config','rhx35');
   <span class="file__name">Surge</span>
   <span class="file__tag">Ads every month. No restarting from zero.</span>
   <span class="file__foot">
-    <span class="price">$300<small>/mo</small></span>
+    <span class="price price--ask">Ask us <small>for pricing</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
-  <span class="file__note">One month only: $450, billed once</span>
+  
 </a>
 <a class="file" href="packages/overdrive.html" data-spot>
   <span class="file__tab">File 05</span>
@@ -435,10 +441,10 @@ twq('config','rhx35');
   <span class="file__name">Overdrive</span>
   <span class="file__tag">Everything in Surge, plus your posting on autopilot.</span>
   <span class="file__foot">
-    <span class="price">$400<small>/mo</small></span>
+    <span class="price price--ask">Ask us <small>for pricing</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
-  <span class="file__note">One month only: $550, billed once</span>
+  
 </a>
 <a class="file file--flag" href="packages/total-blackout.html" data-spot>
   <span class="file__tab">File 06</span>
@@ -446,10 +452,10 @@ twq('config','rhx35');
   <span class="file__name">Total Blackout</span>
   <span class="file__tag">The full Blackout Syndicate marketing plan, done for you.</span>
   <span class="file__foot">
-    <span class="price">$500<small>/mo</small></span>
+    <span class="price price--ask">Ask us <small>for pricing</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
-  <span class="file__note">One month only: $650, billed once</span>
+  
 </a></div>
     <div class="drawer-label files-sub rv"><h3 class="h3">Add-ons</h3><span class="label label--dim">Pair with any boost</span></div>
     <div class="grid grid--2 rv">
@@ -459,7 +465,7 @@ twq('config','rhx35');
   <span class="file__name">30-Day Post Kit</span>
   <span class="file__tag">A month of posts, planned and written. You just hit publish.</span>
   <span class="file__foot">
-    <span class="price">$19.99</span>
+    <span class="price price--ask">Ask us <small>for pricing</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -470,7 +476,7 @@ twq('config','rhx35');
   <span class="file__name">Profile Fix</span>
   <span class="file__tag">Clean up your page before the ads send people to it.</span>
   <span class="file__foot">
-    <span class="price">$49.99</span>
+    <span class="price price--ask">Ask us <small>for pricing</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -586,8 +592,8 @@ twq('config','rhx35');
 </div>
       </div>
       <div class="foot__cols">
-        <div class="foot__col"><p class="label">One-time boosts</p><ul><li><a href="packages/spark.html">Spark <span class="foot__price">$19.99</span></a></li><li><a href="packages/boost.html">Boost <span class="foot__price">$49.99</span></a></li><li><a href="packages/blitz.html">Blitz <span class="foot__price">$99.99</span></a></li><li><a href="packages/post-kit.html">30-Day Post Kit <span class="foot__price">$19.99</span></a></li><li><a href="packages/profile-fix.html">Profile Fix <span class="foot__price">$49.99</span></a></li></ul></div>
-        <div class="foot__col"><p class="label">Monthly plans</p><ul><li><a href="packages/surge.html">Surge <span class="foot__price">$300/mo</span></a></li><li><a href="packages/overdrive.html">Overdrive <span class="foot__price">$400/mo</span></a></li><li><a href="packages/total-blackout.html">Total Blackout <span class="foot__price">$500/mo</span></a></li></ul></div>
+        <div class="foot__col"><p class="label">One-time boosts</p><ul><li><a href="packages/spark.html">Spark</a></li><li><a href="packages/boost.html">Boost</a></li><li><a href="packages/blitz.html">Blitz</a></li><li><a href="packages/post-kit.html">30-Day Post Kit</a></li><li><a href="packages/profile-fix.html">Profile Fix</a></li></ul></div>
+        <div class="foot__col"><p class="label">Monthly plans</p><ul><li><a href="packages/surge.html">Surge</a></li><li><a href="packages/overdrive.html">Overdrive</a></li><li><a href="packages/total-blackout.html">Total Blackout</a></li></ul></div>
         <div class="foot__col"><p class="label">Built to order</p><ul><li><a href="services/website-design.html">Website Design</a></li><li><a href="services/ai-consulting.html">AI Consulting</a></li><li><a href="services/ai-automation.html">AI Automation</a></li><li><a href="services/creator-systems.html">Creator Content Systems</a></li></ul></div>
         <div class="foot__col"><p class="label">The Syndicate</p><ul><li><a href="how-it-works.html">How it works</a></li><li><a href="work.html">The Reel</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li><li><a href="vault.html">The Vault</a></li></ul></div>
       </div>

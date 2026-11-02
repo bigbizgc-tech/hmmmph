@@ -61,6 +61,15 @@ twq('config','rhx35');
 .gs-pop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,22px)}
 @media (max-width:980px){.gs-pop{grid-template-columns:1fr}}
 @media (min-width:981px){.gs-pop{grid-template-rows:auto auto 1fr auto auto;row-gap:14px}.gs-pop>.file{grid-row:span 5;grid-template-rows:subgrid}}
+/* prices hidden: the class (its price stays) and, when there's a donation link, the Washington trip */
+.gs-extra{display:grid;gap:clamp(14px,2vw,22px)}
+.gs-extra--2{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+@media (max-width:900px){.gs-extra--2{grid-template-columns:1fr}}
+.gs-class{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px 32px}
+.gs-class__txt{display:grid;gap:8px;min-width:0;flex:1 1 300px}
+.gs-class__txt p:not(.label){color:var(--ash);max-width:48ch}
+.gs-extra .note{align-content:center}
+.gs-extra .note p:not(.label){font-size:15.5px}
 
 .band.bk.bk .bk__card,.band.bk.bk .bk__card *{text-shadow:none}
 .bk__card{position:relative;background:var(--paper);color:var(--ink);padding:clamp(20px,3vw,34px);box-shadow:0 30px 60px -30px rgba(0,0,0,.8);display:grid;gap:18px}
@@ -113,7 +122,7 @@ twq('config','rhx35');
   <div class="wrap gs__in">
     <p class="label">You found the door · South Bend · Mishawaka · Elkhart</p>
     <h1 class="gs__title">Get started.<span class="whisper">Three ways in. Pick one.</span></h1>
-    <p class="lede"><strong>Real ads. Real people. No bots.</strong> Paid reach for creators, streamers, solo businesses and local shops. Prices are on every package. Nothing runs until you say go.</p>
+    <p class="lede"><strong>Real ads. Real people. No bots.</strong> Paid reach for creators, streamers, solo businesses and local shops. Ask us for pricing on any package. Nothing runs until you say go.</p>
   </div>
 </header>
 
@@ -141,6 +150,20 @@ twq('config','rhx35');
   </div>
 </section>
 
+<section class="band band--tight band--flush-top" aria-label="More ways in">
+  <div class="wrap">
+    <div class="gs-extra">
+      <div class="panel gs-class">
+        <div class="gs-class__txt">
+          <p class="label">Live class · With Biz</p>
+          <h2 class="h3" id="gs-class-h">Learn Claude With Me</h2>
+          <p>About an hour, live. Set up Claude and start your own work in it.</p>
+        </div>
+        <a class="btn btn--lg" href="learn-claude.html#book">$40 · Book a class</a>
+      </div></div>
+  </div>
+</section>
+
 <section class="band band--coal" aria-labelledby="pop-h">
   <div class="wrap">
     <div class="band__head band__head--row rv">
@@ -154,7 +177,7 @@ twq('config','rhx35');
   <span class="file__name">Spark</span>
   <span class="file__tag">The first light. A small, real paid push to test the water.</span>
   <span class="file__foot">
-    <span class="price">$19.99</span>
+    <span class="price price--ask">Ask us <small>for pricing</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
   
@@ -165,10 +188,10 @@ twq('config','rhx35');
   <span class="file__name">Surge</span>
   <span class="file__tag">Ads every month. No restarting from zero.</span>
   <span class="file__foot">
-    <span class="price">$300<small>/mo</small></span>
+    <span class="price price--ask">Ask us <small>for pricing</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
-  <span class="file__note">One month only: $450, billed once</span>
+  
 </a>
 <a class="file file--flag" href="packages/total-blackout.html" data-spot>
   <span class="file__tab">File 06</span>
@@ -176,10 +199,10 @@ twq('config','rhx35');
   <span class="file__name">Total Blackout</span>
   <span class="file__tag">The full Blackout Syndicate marketing plan, done for you.</span>
   <span class="file__foot">
-    <span class="price">$500<small>/mo</small></span>
+    <span class="price price--ask">Ask us <small>for pricing</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
-  <span class="file__note">One month only: $650, billed once</span>
+  
 </a></div>
     <p class="small muted" style="margin-top:22px">Results depend on your content, your audience and the platform. No set number of views, likes or followers is guaranteed.</p>
   </div>
@@ -239,8 +262,8 @@ twq('config','rhx35');
 </div>
       </div>
       <div class="foot__cols">
-        <div class="foot__col"><p class="label">One-time boosts</p><ul><li><a href="packages/spark.html">Spark <span class="foot__price">$19.99</span></a></li><li><a href="packages/boost.html">Boost <span class="foot__price">$49.99</span></a></li><li><a href="packages/blitz.html">Blitz <span class="foot__price">$99.99</span></a></li><li><a href="packages/post-kit.html">30-Day Post Kit <span class="foot__price">$19.99</span></a></li><li><a href="packages/profile-fix.html">Profile Fix <span class="foot__price">$49.99</span></a></li></ul></div>
-        <div class="foot__col"><p class="label">Monthly plans</p><ul><li><a href="packages/surge.html">Surge <span class="foot__price">$300/mo</span></a></li><li><a href="packages/overdrive.html">Overdrive <span class="foot__price">$400/mo</span></a></li><li><a href="packages/total-blackout.html">Total Blackout <span class="foot__price">$500/mo</span></a></li></ul></div>
+        <div class="foot__col"><p class="label">One-time boosts</p><ul><li><a href="packages/spark.html">Spark</a></li><li><a href="packages/boost.html">Boost</a></li><li><a href="packages/blitz.html">Blitz</a></li><li><a href="packages/post-kit.html">30-Day Post Kit</a></li><li><a href="packages/profile-fix.html">Profile Fix</a></li></ul></div>
+        <div class="foot__col"><p class="label">Monthly plans</p><ul><li><a href="packages/surge.html">Surge</a></li><li><a href="packages/overdrive.html">Overdrive</a></li><li><a href="packages/total-blackout.html">Total Blackout</a></li></ul></div>
         <div class="foot__col"><p class="label">Built to order</p><ul><li><a href="services/website-design.html">Website Design</a></li><li><a href="services/ai-consulting.html">AI Consulting</a></li><li><a href="services/ai-automation.html">AI Automation</a></li><li><a href="services/creator-systems.html">Creator Content Systems</a></li></ul></div>
         <div class="foot__col"><p class="label">The Syndicate</p><ul><li><a href="how-it-works.html">How it works</a></li><li><a href="work.html">The Reel</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li><li><a href="vault.html">The Vault</a></li></ul></div>
       </div>

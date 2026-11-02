@@ -6,7 +6,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import baseConfig from './src/config.mjs';
 import { renderPage } from './src/layout.mjs';
-import { LEVELS, XP, BIZ } from './src/data/business.mjs';
+import { XP, BIZ, levelsFor } from './src/data/business.mjs';
 import { OFFERS, offerPath } from './src/data/offers.mjs';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
@@ -98,7 +98,7 @@ async function main() {
   const files = registry(pages);
   // The engine needs the contact lines too (failed-send message), so they never drift from BIZ.
   const clientConfig = { ...config, phone: BIZ.phone, phoneHref: BIZ.phoneHref, email: BIZ.email };
-  const configJs = `window.BS_CONFIG=${JSON.stringify(clientConfig)};window.BS_FILES=${JSON.stringify(files)};window.BS_LEVELS=${JSON.stringify(LEVELS)};window.BS_XP=${JSON.stringify(XP)};`;
+  const configJs = `window.BS_CONFIG=${JSON.stringify(clientConfig)};window.BS_FILES=${JSON.stringify(files)};window.BS_LEVELS=${JSON.stringify(levelsFor(config))};window.BS_XP=${JSON.stringify(XP)};`;
   const css = await readFile(join(ROOT, 'src/assets/css/site.css'), 'utf8');
   const siteJs = await readFile(join(ROOT, 'src/assets/js/site.js'), 'utf8');
 
@@ -134,7 +134,7 @@ async function main() {
   }
 
   // Clearance-ladder rewards are linked from script (toasts, drawer, "just declassified" card).
-  const problems = checkLinks(out, LEVELS.filter((l) => l.href).map((l) => l.href));
+  const problems = checkLinks(out, levelsFor(config).filter((l) => l.href).map((l) => l.href));
   console.log(`Built ${out.length} pages → ${OUT.replace(ROOT + '/', '')}/  (${files.length} clearance files)`);
   if (problems.length) {
     console.error(problems.join('\n'));
