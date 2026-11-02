@@ -44,6 +44,7 @@
   /* a dark halo for small type standing straight on the city (page heads), so it reads over a lit
      window or a beam; invisible on plain black */
   --halo: 0 0 1px var(--void), 0 0 3px var(--void), 0 0 6px var(--void), 0 0 10px var(--void), 0 0 16px var(--void), 0 0 26px var(--void);
+  --halo-sm: 0 0 2px var(--void), 0 0 5px var(--void), 0 0 11px var(--void);
 
   color-scheme: dark;
   padding-top: env(safe-area-inset-top, 0px);
@@ -249,6 +250,9 @@ main:focus { outline: none; }
 .band--flush-top { padding-top: 0; }
 .band--coal { background: var(--glass-coal); border-block: 1px solid var(--smoke); }
 :where(main > header) + .band--coal { background: linear-gradient(transparent, var(--glass-coal) clamp(44px, 6vw, 72px)); }
+/* small type in the dark bands and the footer gets a lighter halo against a lit window behind the glass */
+:is(.band:not(.band--paper, .band--gold), .foot) :is(p, dt, dd, label, small, .label, .copy, .textlink) { text-shadow: var(--halo-sm); }
+:is(.band, .foot) :is([class*="paper"], [class*="sheet"], .classified) :is(p, dt, dd, label, small, .label, .copy, .textlink), :is(.band, .foot) .copy:hover { text-shadow: none; }
 .band--paper { background: var(--paper); color: var(--ink); }
 .band--paper .label { color: var(--ink-mute); }
 .band--paper .label--dim, .band--paper .muted { color: var(--ink-mute); }
