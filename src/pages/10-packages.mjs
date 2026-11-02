@@ -308,7 +308,7 @@ const css = `
 .pk-result__price .price{color:var(--ink);font-size:clamp(40px,4.4vw,54px)}
 .pk-result__price .price small{color:var(--ink-mute)}
 .pk-result__cad{font-family:var(--f-type);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
-.pk-result .stamp{flex:none;width:118px;font-size:20px;margin-top:6px;box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
+.pk-result .stamp{flex:none;width:118px;font-size:20px;margin-top:6px;color:var(--ink);box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
 .pk-result .stamp small{max-width:8em}
 .pk-result__why{font-family:var(--f-type);font-size:16.5px;line-height:1.65;max-width:58ch}
 .pk-result__addon{display:grid;gap:6px;padding:14px 16px;border:1px dashed var(--brass);background:rgba(138,109,52,.06)}
@@ -430,7 +430,7 @@ const css = `
 .pk-rules h3{font-family:var(--f-display);font-weight:900;font-size:clamp(26px,2.6vw,32px);line-height:.95;text-transform:uppercase}
 .pk-rules p{color:var(--ink-mute);font-size:15.5px;max-width:58ch;margin-top:6px}
 .pk-record{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px 22px;align-items:center;margin-top:clamp(28px,4vw,44px);padding-top:clamp(22px,3vw,30px);border-top:2px solid var(--ink)}
-.pk-record .stamp{width:112px;font-size:17px;box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
+.pk-record .stamp{width:112px;font-size:17px;color:var(--ink);box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
 .pk-record p{font-family:var(--f-type);font-size:17px;line-height:1.6;max-width:62ch}
 @media (max-width:520px){.pk-record{grid-template-columns:1fr}.pk-rules li{grid-template-columns:1fr;padding:22px 18px}.pk-rules li::before{grid-row:auto;font-size:46px}}
 

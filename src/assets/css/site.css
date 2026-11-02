@@ -35,6 +35,16 @@
   --ease: cubic-bezier(.2, .7, .2, 1);
   --snap: cubic-bezier(.7, 0, .2, 1);
 
+  /* The city behind every page (src/assets/js/sky.js) shows through the dark surfaces. Each one lays a
+     scrim of its own colour over it: light where the sky is, deeper where text sits, so text keeps its
+     contrast while the lights stay in view. Paper, gold, panels, cards and fields stay solid. */
+  --glass: color-mix(in srgb, var(--void) 60%, transparent);
+  --glass-coal: color-mix(in srgb, var(--coal) 76%, transparent);
+  --glass-deep: color-mix(in srgb, var(--void) 82%, transparent);
+  /* a dark halo for small type standing straight on the city (page heads), so it reads over a lit
+     window or a beam; invisible on plain black */
+  --halo: 0 0 1px var(--void), 0 0 3px var(--void), 0 0 6px var(--void), 0 0 10px var(--void), 0 0 16px var(--void), 0 0 26px var(--void);
+
   color-scheme: dark;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -59,8 +69,15 @@
 html { scroll-behavior: smooth; scroll-padding-top: calc(84px + env(safe-area-inset-top, 0px)); -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--void); color: var(--paper); font-family: var(--f-body); font-size: var(--t-body); line-height: 1.6; overflow-x: clip; -webkit-font-smoothing: antialiased; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--void); }
-.page[data-bare] { background: var(--void); color: var(--paper); font-family: var(--f-body); font-size: var(--t-body); line-height: 1.6; overflow-x: clip; }
+.page[data-bare] { position: relative; isolation: isolate; background: var(--void); color: var(--paper); font-family: var(--f-body); font-size: var(--t-body); line-height: 1.6; overflow-x: clip; }
 img, svg, canvas { max-width: 100%; }
+
+/* The backdrop: one fixed canvas behind everything, as tall as the screen with the phone's address bar
+   hidden, standing on the bottom edge so the skyline stays put while the bar slides. Its gradient is
+   the whole backdrop without JavaScript; sky.js fades the city in over it. Never printed. */
+.sky { position: fixed; left: 0; right: 0; bottom: 0; z-index: -1; display: block; width: 100%; max-width: none; height: 100vh; height: 100lvh; pointer-events: none; opacity: 0; transition: opacity .5s var(--ease); background: radial-gradient(130% 55% at 50% 100%, rgba(217,178,95,.075), rgba(217,178,95,.02) 55%, transparent 80%), linear-gradient(to top, var(--coal), var(--void) 45%); }
+.sky.is-lit, .no-js .sky { opacity: 1; }
+@media print { .sky, .grain { display: none !important; } }
 a { color: inherit; }
 p { margin: 0; }
 h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
@@ -109,7 +126,7 @@ main:focus { outline: none; }
 .topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; isolation: isolate; border-bottom: 1px solid transparent; transition: border-color .3s; }
 /* The blur lives on ::before: backdrop-filter on .topbar itself would become the containing block
    of the fixed phone menu and clip it to the bar's height. */
-.topbar::before { content: ""; position: absolute; inset: 0; z-index: -1; background: color-mix(in srgb, var(--void) 84%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); pointer-events: none; }
+.topbar::before { content: ""; position: absolute; inset: 0; z-index: -1; background: color-mix(in srgb, var(--void) 80%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); pointer-events: none; }
 .topbar.is-scrolled { border-bottom-color: var(--smoke); }
 .topbar__in { display: flex; align-items: center; gap: 20px; padding-block: 12px; }
 .brand { display: inline-flex; align-items: center; flex: none; color: var(--gold); text-decoration: none; line-height: 0; }
@@ -195,7 +212,7 @@ main:focus { outline: none; }
 .btn:hover { transform: translateY(-2px); }
 .btn:hover::after { left: 120%; }
 .btn:active { transform: translateY(0); }
-.btn .arw { width: 18px; height: 18px; transition: transform .25s var(--ease); }
+.btn .arw { width: 18px; height: 18px; flex-shrink: 0; transition: transform .25s var(--ease); }
 .btn:hover .arw { transform: translateX(4px); }
 .btn--ghost { --bg: transparent; --fg: var(--gold); }
 .btn--ghost:hover { --bg: var(--gold); --fg: var(--void); }
@@ -205,6 +222,9 @@ main:focus { outline: none; }
 .btn--paper.btn--ghost:hover { --bg: var(--ink); --fg: var(--paper); }
 .btn--sm { font-size: 16px; padding: 10px 15px 9px; }
 .btn--lg { font-size: 24px; padding: 19px 30px 18px; }
+/* a long label never pushes its column wider than the screen: it wraps instead */
+.btn { max-width: 100%; }
+@media (max-width: 380px) { .btn--lg { white-space: normal; padding-inline: 18px; text-align: center; } }
 .btn--block { width: 100%; }
 .btn[disabled] { opacity: .6; cursor: progress; transform: none; }
 .ctas { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
@@ -220,10 +240,15 @@ main:focus { outline: none; }
 .textlink .arw { width: 16px; height: 16px; }
 
 /* ── Bands (sections) ─────────────────────────────────────────────────── */
-.band { padding-block: clamp(76px, 10vw, 136px); position: relative; }
+.band { padding-block: clamp(76px, 10vw, 136px); position: relative; background: var(--glass); }
+/* the first band after a page head fades in from clear, so its glass doesn't cut the skyline with a
+   hard edge; the ramp ends before the band's text starts. Class-level weight: any band with its own
+   background (paper, gold, a page's own) still wins. */
+:where(main > header) + .band { background: linear-gradient(transparent, var(--glass) clamp(44px, 6vw, 72px)); }
 .band--tight { padding-block: clamp(44px, 6vw, 72px); }
 .band--flush-top { padding-top: 0; }
-.band--coal { background: var(--coal); border-block: 1px solid var(--smoke); }
+.band--coal { background: var(--glass-coal); border-block: 1px solid var(--smoke); }
+:where(main > header) + .band--coal { background: linear-gradient(transparent, var(--glass-coal) clamp(44px, 6vw, 72px)); }
 .band--paper { background: var(--paper); color: var(--ink); }
 .band--paper .label { color: var(--ink-mute); }
 .band--paper .label--dim, .band--paper .muted { color: var(--ink-mute); }
@@ -244,6 +269,14 @@ main:focus { outline: none; }
 .pagehead::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(clamp(260px, 40vw, 560px) circle at var(--x, 78%) var(--y, 10%), rgba(217,178,95,.14), transparent 70%); transition: background-position .2s; }
 .pagehead__in { display: grid; gap: 22px; }
 .pagehead .lede { color: var(--paper); }
+/* Page heads (the home hero, .pagehead and each page's own <header>) stand straight on the city.
+   Small type gets the halo, ghost buttons a smoked fill; paper sheets, panels and cards inside a head
+   keep their own surface. */
+main > header :is(p, li, dd, dt, label, small, .label, .crumbs, .textlink, .whisper) { text-shadow: var(--halo); }
+/* red is the hardest colour to read over light: red labels in a head also sit on a smoked strip */
+main > header .label--red { width: fit-content; max-width: 100%; background: color-mix(in srgb, var(--void) 60%, transparent); box-shadow: 0 0 0 5px color-mix(in srgb, var(--void) 60%, transparent); }
+main > header :is([class*="paper"], [class*="sheet"], .classified, .panel, .form, aside, nav:not(.crumbs)) :is(p, li, dd, dt, label, small, .label, .textlink, .whisper) { text-shadow: none; }
+main > header .btn--ghost:not(:hover) { --bg: color-mix(in srgb, var(--void) 55%, transparent); }
 
 /* ── Breadcrumbs ──────────────────────────────────────────────────────── */
 .crumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 10px; font-family: var(--f-type); font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ash); }
@@ -438,7 +471,7 @@ a.copy { display: inline-flex; align-items: center; text-decoration: none; }
 .socials a:hover { color: var(--void); background: var(--gold); border-color: var(--gold); }
 
 /* ── Footer ───────────────────────────────────────────────────────────── */
-.foot { border-top: 1px solid var(--smoke); background: var(--void); padding-block: 72px calc(28px + env(safe-area-inset-bottom, 0px)); }
+.foot { border-top: 1px solid var(--smoke); background: var(--glass-deep); padding-block: 72px calc(28px + env(safe-area-inset-bottom, 0px)); }
 .foot__top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 48px; padding-bottom: 48px; }
 .foot__brand { display: grid; gap: 18px; align-content: start; }
 .foot__line { font-family: var(--f-serif); font-style: italic; font-size: 22px; color: var(--paper); }

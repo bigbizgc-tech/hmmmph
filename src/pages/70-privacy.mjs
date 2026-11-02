@@ -6,9 +6,9 @@
 // This module also exports the shared legal-page pieces that 71-terms.mjs imports.
 import { BIZ, SOCIALS, XP } from '../data/business.mjs';
 import { OFFERS } from '../data/offers.mjs';
-import config from '../config.mjs';
 
-export const SITE_HOST = new URL(config.siteUrl).host;
+// The site's host name, from the build config (so BS_CONFIG_OVERRIDE works), never from config.mjs.
+export const siteHost = (c) => new URL(c.config.siteUrl).host;
 const pad = (i) => String(i + 1).padStart(2, '0');
 const mail = `<a href="mailto:${BIZ.email}">${BIZ.email}</a>`;
 const tel = `<a href="${BIZ.phoneHref}">${BIZ.phone}</a>`;
@@ -287,7 +287,7 @@ const SECTIONS = (c) => [
     id: 'who-we-are', t: 'Who we are',
     body: `
 <p>${BIZ.name} is a small marketing business in ${BIZ.city}, ${BIZ.regionLong}. We run paid social media ads, content and AI setup for creators, streamers, solo businesses and local shops. ${BIZ.name} is a ${BIZ.legal} company, run by founder ${BIZ.founder}.</p>
-<p>This policy covers this website, ${SITE_HOST}, and what happens to anything you send us through it. When we say “we” or “us”, we mean ${BIZ.name}.</p>
+<p>This policy covers this website, ${siteHost(c)}, and what happens to anything you send us through it. When we say “we” or “us”, we mean ${BIZ.name}.</p>
 <p>Questions about your information go to ${mail} or ${tel}, by call or text.</p>`,
   },
   {
@@ -477,7 +477,7 @@ ${legalHead(c, {
   meta: [
     ['Last updated', c.POLICY.updated],
     ['Clearance needed', 'None'],
-    ['Covers', SITE_HOST],
+    ['Covers', siteHost(c)],
     ['Run by', BIZ.legal],
     ['Questions', `<a href="mailto:${BIZ.email}">${BIZ.email}</a>`],
   ],

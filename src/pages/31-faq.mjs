@@ -149,7 +149,7 @@ mark.hit{background:var(--gold);color:var(--void);padding:0 .08em}
 .ask__phone:hover{color:var(--brass)}
 .ask__mail{font-size:19px;color:var(--ink);overflow-wrap:anywhere;text-underline-offset:4px;text-decoration-color:var(--brass)}
 .ask__note{font-size:15px;color:var(--ink-mute)}
-.ask .stamp{position:absolute;right:0;top:-62px;width:128px;font-size:20px;box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
+.ask .stamp{position:absolute;right:0;top:-62px;width:128px;font-size:20px;color:var(--ink);box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal)}
 @media (max-width:560px){.ask .stamp{width:104px;font-size:17px;top:-48px;right:-4px}}
 `;
 

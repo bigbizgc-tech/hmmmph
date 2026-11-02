@@ -3,7 +3,7 @@
 // every price from src/data/offers.mjs. Shared legal-page pieces live in 70-privacy.mjs.
 import { BIZ, XP } from '../data/business.mjs';
 import { OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, offerPath, bySlug } from '../data/offers.mjs';
-import { LEGAL_CSS, legalHead, legalShort, legalBody, legalClose, SITE_HOST } from './70-privacy.mjs';
+import { LEGAL_CSS, legalHead, legalShort, legalBody, legalClose } from './70-privacy.mjs';
 
 const mail = `<a href="mailto:${BIZ.email}">${BIZ.email}</a>`;
 const tel = `<a href="${BIZ.phoneHref}">${BIZ.phone}</a>`;

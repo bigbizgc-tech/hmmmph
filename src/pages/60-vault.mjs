@@ -4,7 +4,6 @@
 import { BIZ, LEVELS, XP, SOCIALS } from '../data/business.mjs';
 import { bySlug } from '../data/offers.mjs';
 import { arrow } from '../layout.mjs';
-import config from '../config.mjs';
 
 const TOP = LEVELS[LEVELS.length - 1];
 const X_HANDLE = (SOCIALS.find((s) => s.key === 'x') || {}).handle || '';
@@ -221,7 +220,7 @@ const css = `
 .tumblers .pin{position:absolute;left:34%;right:34%;top:0;bottom:0;background:linear-gradient(var(--gold),var(--brass));opacity:.55;transform:translateY(calc(86% - var(--p,0%) * .86));transition:transform 1s var(--ease),opacity .4s}
 .tumblers li.is-set .pin{opacity:1;background:linear-gradient(var(--gold-hi),var(--brass));box-shadow:0 0 14px rgba(243,212,138,.55)}
 .tumblers small{display:grid;gap:2px;font-family:var(--f-type);font-size:10px;letter-spacing:0;line-height:1.15;text-transform:uppercase;color:var(--ash);word-break:keep-all}
-.tumblers small b{font-weight:700;color:var(--brass)}
+.tumblers small b{font-weight:700;color:var(--paper)}
 .tumblers li.is-set small,.tumblers li.is-set small b{color:var(--gold)}
 @media (max-width:480px){.tumblers small{font-size:8.5px}}
 .ways{list-style:none;display:grid;border-top:1px solid var(--smoke)}
@@ -530,6 +529,8 @@ const js = `
   const img = fig.querySelector('[data-sid-img]'), tilt = fig.querySelector('.sid__tilt');
   const nameIn = document.getElementById('sid-name'), bizIn = document.getElementById('sid-biz');
   const msg = document.querySelector('[data-sid-msg]'), share = document.querySelector('[data-sid-share]');
+  // the Vault's own public address, from the page's canonical link (built from the config's siteUrl)
+  const SHARE_URL = (document.querySelector('link[rel="canonical"]') || {}).href || location.href.split('#')[0];
   const W = 1200, H = 756, KEY = 'bs2.sid';
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const g = cv.getContext('2d');
@@ -691,7 +692,7 @@ const js = `
     } catch (e) { swapToCanvas(); }
     if (share) {
       const L = info.L, txt = L.lv >= 5 ? 'Inner Circle at the Blackout Syndicate. The Vault is open. ${X_HANDLE}' : 'Level ' + L.lv + ': ' + L.name + ' at the Blackout Syndicate. Working my way into the Vault. ${X_HANDLE}';
-      share.href = 'https://x.com/intent/tweet?text=' + encodeURIComponent(txt) + '&url=' + encodeURIComponent('${config.siteUrl}/vault.html');
+      share.href = 'https://x.com/intent/tweet?text=' + encodeURIComponent(txt) + '&url=' + encodeURIComponent(SHARE_URL);
     }
   }
   function swapToCanvas() { if (cv.isConnected) return; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', img.alt); img.replaceWith(cv); }

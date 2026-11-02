@@ -37,7 +37,7 @@ const css = `
 .slip .ledger dd{color:var(--ink);overflow-wrap:anywhere}
 .slip__stampzone{position:relative;height:118px;border-bottom:1px dashed rgba(23,20,15,.3)}
 .slip__stampzone > span{position:absolute;left:0;bottom:6px;font-family:var(--f-type);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute)}
-.ty-stamp.stamp{position:absolute;right:4px;top:-4px;width:132px;font-size:22px;padding:12px;box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal);animation:tySlam .6s cubic-bezier(.2,1.5,.4,1) .75s both}
+.ty-stamp.stamp{position:absolute;right:4px;top:-4px;width:132px;font-size:22px;padding:12px;color:var(--ink);box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6.5px var(--signal);animation:tySlam .6s cubic-bezier(.2,1.5,.4,1) .75s both}
 .ty-stamp small{font-size:9.5px}
 @keyframes tySlam{0%{opacity:0;transform:rotate(-13deg) scale(2.4)}60%{opacity:1;transform:rotate(-13deg) scale(.94)}100%{opacity:1;transform:rotate(-13deg) scale(1)}}
 @media (prefers-reduced-motion:reduce){.slip__sheet,.ty-stamp.stamp{animation:none}}

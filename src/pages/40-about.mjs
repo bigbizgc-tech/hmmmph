@@ -157,7 +157,7 @@ const css = `
 .ab-def__word{font-family:var(--f-serif);font-style:italic;font-weight:700;font-size:clamp(46px,5.4vw,74px);line-height:1;color:var(--ink)}
 .ab-def__word i{font-family:var(--f-type);font-style:normal;font-weight:400;color:var(--brass);margin:0 .06em;font-size:.6em;vertical-align:.18em}
 .ab-def__say{font-family:var(--f-type);font-size:14px;color:var(--ink-mute);letter-spacing:.04em}
-.ab-def__say i{font-family:var(--f-serif);font-size:17px;margin-left:10px;color:var(--brass)}
+.ab-def__say i{font-family:var(--f-serif);font-size:17px;margin-left:10px;color:var(--ink-mute)}
 .ab-def ol{padding-left:1.4em;display:grid;gap:8px;font-size:18px;color:var(--ink)}
 .ab-def ol li::marker{font-family:var(--f-type);color:var(--brass)}
 .ab-name__blackout{font-size:var(--t-lede);line-height:1.5;color:var(--ink);max-width:44ch}
@@ -165,7 +165,7 @@ const css = `
 .ab-terms li{background:var(--paper);padding:26px 22px 24px;display:grid;gap:10px;align-content:start;min-width:0}
 .ab-terms b{font-family:var(--f-display);font-weight:900;font-size:clamp(26px,2.4vw,32px);line-height:.95;text-transform:uppercase}
 .ab-terms p{font-size:15.5px;color:var(--ink-mute)}
-.ab-terms__n{font-family:var(--f-type);font-size:12px;letter-spacing:.16em;color:var(--brass)}
+.ab-terms__n{font-family:var(--f-type);font-size:12px;letter-spacing:.16em;color:var(--ink-mute)}
 @media (max-width:560px){.ab-terms{grid-template-columns:minmax(0,1fr)}}
 
 /* ── The rules ── */

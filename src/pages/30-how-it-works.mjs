@@ -174,7 +174,7 @@ const css = `
 .gloss{margin:0;display:grid;border-top:2px solid var(--ink)}
 .gloss>div{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:8px 28px;padding:20px 0;border-bottom:1px solid rgba(23,20,15,.18)}
 .gloss dt{display:grid;gap:8px;align-content:start;font-family:var(--f-display);font-weight:900;font-size:clamp(32px,3vw,42px);line-height:.88;text-transform:uppercase;color:var(--ink)}
-.gloss dt small{font-family:var(--f-type);font-weight:400;font-size:11.5px;letter-spacing:.14em;line-height:1.35;color:var(--brass)}
+.gloss dt small{font-family:var(--f-type);font-weight:400;font-size:11.5px;letter-spacing:.14em;line-height:1.35;color:var(--ink-mute)}
 .gloss dd{margin:0;color:var(--ink);font-size:16.5px;line-height:1.55}
 @media (max-width:560px){.gloss>div{grid-template-columns:1fr}}
 .ri{margin:0;border:1.5px solid var(--ink);padding:clamp(20px,3vw,28px);display:grid;gap:20px;background:var(--paper);box-shadow:10px 10px 0 rgba(23,20,15,.12);position:sticky;top:110px}

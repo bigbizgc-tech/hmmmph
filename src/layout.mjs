@@ -1,4 +1,5 @@
 // Shared page chrome + component helpers. Every page renders through renderPage().
+import { readFileSync } from 'node:fs';
 import { BIZ, SOCIALS, LEVELS, POLICY, PLATFORMS, REEL } from './data/business.mjs';
 import { ICONS } from './data/icons.mjs';
 import { LOCKUP, CELL, snapbrim } from './data/logo.mjs';
@@ -198,6 +199,16 @@ twq('config','${esc(config.xPixelId)}');
 // About 110 KB of Latin font files instead of 202 KB. site.css has metric-matched fallbacks for the swap.
 const FONTS = 'https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=Big+Shoulders+Display:wght@800;900&family=Bodoni+Moda:ital,opsz,wght@1,48,500;1,48,700&family=Courier+Prime:wght@400;700&display=swap';
 
+// ── The city behind every page ───────────────────────────────────────────────
+// One fixed canvas, drawn by src/assets/js/sky.js (the build copies it with the other assets).
+// Without JS, the canvas's CSS gradient is the backdrop; in print it is hidden.
+const readAsset = (p) => { try { return readFileSync(new URL('./assets/' + p, import.meta.url), 'utf8'); } catch (e) { return ''; } };
+const SKY_JS = readAsset('js/sky.js');
+// Short content hash for asset URLs, so a returning visitor never runs new pages on a cached old
+// stylesheet or script (site.css and sky.js change together with the page markup).
+const ver = (s) => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return (h >>> 0).toString(36); };
+const V = { css: ver(readAsset('css/site.css')), site: ver(readAsset('js/site.js')), sky: ver(SKY_JS) };
+
 // ── Full document ────────────────────────────────────────────────────────────
 export function renderPage(page, all, config, assets) {
   const ctx = makeCtx(page, all, config);
@@ -207,9 +218,10 @@ export function renderPage(page, all, config, assets) {
   // The artifact preview's entry page is named like a product in the gallery.
   const title = page.path === 'index.html' ? (assets.bare ? 'Blackout Syndicate 2.0' : page.title) : `${page.title} · Blackout Syndicate`;
   const ld = page.jsonld ? `<script type="application/ld+json">${JSON.stringify(page.jsonld(ctx, config))}</script>` : '';
-  const css = assets.inline ? `<style>${assets.css}</style>` : `<link rel="stylesheet" href="${r}assets/css/site.css">`;
+  const css = assets.inline ? `<style>${assets.css}</style>` : `<link rel="stylesheet" href="${r}assets/css/site.css?v=${V.css}">`;
   const cfg = assets.inline ? `<script>${assets.configJs}</script>` : `<script src="${r}assets/js/config.js"></script>`;
-  const js = assets.inline ? `<script>${assets.siteJs}</script>` : `<script src="${r}assets/js/site.js"></script>`;
+  const js = assets.inline ? `<script>${assets.siteJs}</script>` : `<script src="${r}assets/js/site.js?v=${V.site}"></script>`;
+  const sky = assets.inline ? `<script>${SKY_JS}</script>` : `<script src="${r}assets/js/sky.js?v=${V.sky}"></script>`;
 
   const head = `<title>${esc(title)}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -247,6 +259,7 @@ ${ld}`;
 
   const bodyAttrs = `data-path="${page.path}" data-root="${r}"${page.kind ? ` data-kind="${page.kind}"` : ''}${page.offer ? ` data-offer="${page.offer}"` : ''}`;
   const inner = `<a class="skip" href="#main">Skip to content</a>
+<canvas class="sky" data-sky aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
 ${topbar(ctx)}
 <main id="main" tabindex="-1">
@@ -257,7 +270,8 @@ ${nextFile(ctx)}
 ${footer(ctx)}
 ${drawer()}
 ${js}
-${page.js ? `<script>${page.js}</script>` : ''}`;
+${page.js ? `<script>${page.js}</script>` : ''}
+${sky}`;
 
   if (assets.bare) {
     // Artifact entry page: the host supplies doctype/html/head/body.
