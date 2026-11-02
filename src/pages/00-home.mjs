@@ -5,9 +5,9 @@ const css = `
 .hero{position:relative;overflow:hidden;isolation:isolate;border-bottom:1px solid var(--smoke);--x:30%;--y:45%}
 .hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(clamp(240px,34vw,520px) circle at var(--x) var(--y),rgba(217,178,95,.17),rgba(217,178,95,.05) 45%,transparent 72%)}
 .hero__sky{position:absolute;inset:0;width:100%;height:100%;z-index:-2;display:block}
-.hero__in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:clamp(28px,4vw,64px);align-items:end;padding-block:clamp(40px,6vw,84px) clamp(48px,7vw,96px)}
+.hero__in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:clamp(28px,4vw,64px);align-items:end;padding-block:clamp(28px,4vw,56px) clamp(40px,5vw,72px)}
 .hero__main{display:grid;gap:clamp(20px,2.6vw,30px);min-width:0}
-.hero__title{margin:0;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(104px,36vw,288px);line-height:.8;letter-spacing:-.012em}
+.hero__title{margin:0;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(104px,min(36vw,27vh),288px);line-height:.8;letter-spacing:-.012em}
 .hero__stack{display:grid;--x:30%;--y:50%}
 .hero__stack>span{grid-area:1/1}
 .hero__dark{color:transparent;-webkit-text-stroke:2px rgba(242,234,216,.5)}
@@ -52,10 +52,18 @@ const css = `
 
 /* ── Files ── */
 .files-sub{margin-top:clamp(48px,6vw,72px)}
-.svc-row{display:flex;flex-wrap:wrap;gap:10px}
-.svc-row a{font-family:var(--f-display);font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:.03em;padding:10px 18px;border:1px solid var(--brass);color:var(--paper);text-decoration:none;display:inline-flex;gap:10px;align-items:center;transition:background .2s,color .2s}
-.svc-row a:hover{background:var(--gold);color:var(--void);border-color:var(--gold)}
-.svc-row .arw{width:18px;height:18px}
+.svc-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--smoke);border:1px solid var(--smoke)}
+@media (max-width:980px){.svc-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.svc-row{grid-template-columns:1fr}}
+.svc{--x:50%;--y:0%;position:relative;display:grid;gap:10px;align-content:start;padding:22px 20px;background:var(--coal);color:var(--paper);text-decoration:none;isolation:isolate;min-width:0;transition:background .3s}
+.svc::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;background:radial-gradient(240px circle at var(--x) var(--y),rgba(217,178,95,.16),transparent 70%);transition:opacity .3s}
+.svc:hover::before,.svc:focus-visible::before{opacity:1}
+.svc b{font-family:var(--f-display);font-weight:900;font-size:clamp(28px,2.6vw,34px);line-height:.92;text-transform:uppercase;transition:color .3s}
+.svc:hover b{color:var(--gold-hi)}
+.svc span:not(.label):not(.file__open){color:var(--ash);font-size:15px;line-height:1.45}
+.svc-row-old a{font-family:var(--f-display);font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:.03em;padding:10px 18px;border:1px solid var(--brass);color:var(--paper);text-decoration:none;display:inline-flex;gap:10px;align-items:center;transition:background .2s,color .2s}
+.svc-row-old a:hover{background:var(--gold);color:var(--void);border-color:var(--gold)}
+
 .match-cta{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px 32px;padding:clamp(22px,3vw,32px);border:1px dashed var(--brass);margin-top:clamp(36px,5vw,56px)}
 .match-cta h3{font-family:var(--f-display);font-weight:900;font-size:clamp(30px,3.6vw,46px);line-height:.9;text-transform:uppercase}
 .match-cta p{color:var(--ash);margin-top:8px;max-width:52ch}
@@ -79,7 +87,7 @@ const css = `
 /* ── Reel ── */
 .reel{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 @media (max-width:1000px){.reel{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){.reel{grid-template-columns:1fr}}
+@media (max-width:520px){.reel{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:80%;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:6px}.clip{scroll-snap-align:start;aspect-ratio:3/4}}
 .clip{--tone:var(--gold);position:relative;display:grid;align-content:end;aspect-ratio:9/13;max-width:100%;overflow:hidden;text-decoration:none;color:var(--paper);background:var(--coal);border:1px solid var(--smoke);isolation:isolate;transition:border-color .3s}
 .clip--red{--tone:var(--signal)}.clip--smoke{--tone:var(--ash)}
 .clip::before{content:"";position:absolute;inset:-40%;z-index:-2;background:conic-gradient(from 200deg at 50% 50%,transparent 0 60%,color-mix(in srgb,var(--tone) 30%,transparent) 70%,transparent 80%);animation:sweep 9s linear infinite}
@@ -96,7 +104,7 @@ const css = `
 
 /* ── Final call ── */
 .final{display:grid;gap:clamp(24px,3vw,36px);justify-items:start}
-.final h2{font-family:var(--f-display);font-weight:900;font-size:clamp(70px,13vw,200px);line-height:.8;text-transform:uppercase}
+.final h2{font-family:var(--f-display);font-weight:900;font-size:clamp(70px,13vw,200px);line-height:.86;text-transform:uppercase}
 .final p{font-size:var(--t-lede);max-width:52ch}
 .final .btn{--bg:var(--void);--fg:var(--gold);--bd:var(--void)}
 .final .btn--ghost{--bg:transparent;--fg:var(--void);--bd:var(--void)}
@@ -351,9 +359,12 @@ const js = `
   }
   document.querySelectorAll('[data-crowd-mode]').forEach((b) => b.addEventListener('click', () => set(b.dataset.crowdMode)));
   set('feed');
-  let auto = setInterval(() => set(document.querySelector('[data-crowd-mode="feed"]').getAttribute('aria-pressed') === 'true' ? 'paid' : 'feed'), 4200);
-  document.querySelector('.crowd__toggle').addEventListener('click', () => clearInterval(auto), { once: true });
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) clearInterval(auto);
+  // Auto-flip only while the section is on screen, never with reduced motion, and stop for good once the visitor takes over.
+  let auto = 0, touched = false;
+  const flip = () => set(document.querySelector('[data-crowd-mode="feed"]').getAttribute('aria-pressed') === 'true' ? 'paid' : 'feed');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  new IntersectionObserver(([e]) => { clearInterval(auto); auto = 0; if (e.isIntersecting && !touched && !reduce) auto = setInterval(flip, 4200); }).observe(grid);
+  document.querySelector('.crowd__toggle').addEventListener('click', () => { touched = true; clearInterval(auto); cap.setAttribute('aria-live', 'polite'); }, true);
 })();
 `;
 
@@ -364,7 +375,7 @@ export default {
   navTitle: 'Home',
   section: 'home',
   title: 'Blackout Syndicate · Get Seen in South Bend',
-  description: 'Real ads. Real people. No bots. Blackout Syndicate puts paid reach behind creators, streamers, solo businesses and local shops in South Bend, Mishawaka and Elkhart.',
+  description: 'Real ads. Real people. No bots. Paid reach for creators, streamers, solo businesses and local shops in South Bend, Mishawaka and Elkhart, Indiana.',
   teaser: 'Real ads, real people, no bots. Step into the light.',
   next: 'packages.html',
   css, js,
@@ -393,7 +404,7 @@ export default {
       <h1 class="hero__title"><span class="sr">Get seen.</span><span class="hero__stack" data-spot-layer aria-hidden="true"><span class="hero__dark">Get<br>Seen.</span><span class="hero__lit">Get<br>Seen.</span></span><span class="hero__whisper">You’ve been in the dark long enough.</span></h1>
       <p class="lede"><strong>Real ads. Real people. No bots.</strong> We put paid reach behind creators, streamers, solo businesses and local shops, on the feeds your people already scroll.</p>
       <div class="ctas">
-        ${c.btn('Open the files ' + c.arrow, 'packages.html', 'lg')}
+        ${c.btn('See packages and prices ' + c.arrow, 'packages.html', 'lg')}
         ${c.btn('Find my package', 'packages.html#match', 'ghost lg')}
       </div>
       <p class="hero__call">Rather talk? Call or text <a href="${BIZ.phoneHref}">${BIZ.phone}</a></p>
@@ -431,7 +442,7 @@ export default {
         <button type="button" data-crowd-mode="paid" aria-pressed="false">You pick</button>
       </div>
       <div class="crowd__grid" data-crowd aria-hidden="true">${'<i></i>'.repeat(96)}</div>
-      <p class="crowd__cap" data-crowd-cap aria-live="polite"><b>The feed picks.</b> A few scattered people, chosen by an algorithm that has never heard of your town.</p>
+      <p class="crowd__cap" data-crowd-cap><b>The feed picks.</b> A few scattered people, chosen by an algorithm that has never heard of your town.</p>
       <p class="label label--dim">Illustration, not data</p>
     </div>
   </div>
@@ -444,7 +455,7 @@ export default {
       <a class="textlink" href="${c.link('how-it-works.html')}">The full play, step by step ${c.arrow}</a>
     </div>
     <ol class="steps rv" style="--n:3">
-      <li><h3>Pick your size</h3><p>A one-time boost to test the water, or a monthly plan that keeps the push running every week.</p></li>
+      <li><h3>Pick your size</h3><p>A one-time boost to test the water, or a monthly plan that keeps the push running all month, every month.</p></li>
       <li><h3>Point it</h3><p>Your post, page, channel, website or booking line. Tell us where you want new people to land.</p></li>
       <li><h3>We push</h3><p>A real paid placement on the platform you choose, aimed at your area or your audience. You get a recap of what ran.</p></li>
     </ol>
@@ -475,7 +486,7 @@ export default {
     <div class="drawer-label files-sub rv"><h3 class="h3">Add-ons</h3><span class="label label--dim">Pair with any boost</span></div>
     <div class="grid grid--2 rv">${c.ADDONS.map((o) => c.offerCard(o)).join('')}</div>
     <div class="drawer-label files-sub rv"><h3 class="h3">Built to order</h3><span class="label label--dim">Quoted per job</span></div>
-    <div class="svc-row rv">${c.SERVICES.map((o) => `<a href="${c.link(c.offerPath(o))}">${o.name} ${c.arrow}</a>`).join('')}</div>
+    <div class="svc-row rv">${c.SERVICES.map((o) => `<a class="svc" href="${c.link(c.offerPath(o))}" data-spot><span class="label label--dim">${o.file} · Quoted</span><b>${o.name}</b><span>${o.tagline}</span><span class="file__open">Open file ${c.arrow}</span></a>`).join('')}</div>
     <div class="match-cta rv">
       <div><h3>Not sure which file is yours?</h3><p>Three questions. We’ll point you at the one that fits, and it’s worth clearance.</p></div>
       ${c.btn('Find my match ' + c.arrow, 'packages.html#match')}
@@ -514,7 +525,7 @@ export default {
 <section class="band" aria-labelledby="reel-h">
   <div class="wrap">
     <div class="band__head band__head--row rv">
-      <div><p class="label">The reel</p><h2 class="h2" id="reel-h">Watch <span class="whisper">the work.</span></h2><p>Spots cut for Blackout Syndicate and the Graveshift Gaming crew. Opens on YouTube.</p></div>
+      <div><p class="label">The reel</p><h2 class="h2" id="reel-h">Watch <span class="whisper">the work.</span></h2><p>Ad spots, gaming highlights and AI tool showdowns made by the crew. Opens on YouTube.</p></div>
       <a class="textlink" href="${c.link('work.html')}">The whole reel ${c.arrow}</a>
     </div>
     <div class="reel rv">${REEL.map((r) => `<a class="clip clip--${r.tone}" href="${r.url}" target="_blank" rel="noopener"><span class="clip__badge">${r.kind} · ${r.length}</span><span class="clip__play" aria-hidden="true"></span><span class="clip__meta"><span class="label">${r.who}</span><b>${r.title}</b></span></a>`).join('')}</div>
