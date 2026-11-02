@@ -1,12 +1,14 @@
 // Shared page chrome + component helpers. Every page renders through renderPage().
 import { BIZ, SOCIALS, LEVELS, POLICY, PLATFORMS, REEL } from './data/business.mjs';
 import { ICONS } from './data/icons.mjs';
+import { LOCKUP, CELL, snapbrim } from './data/logo.mjs';
 import { OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, offerPath } from './data/offers.mjs';
 
 export const esc = (s = '') => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // ── Small building blocks ────────────────────────────────────────────────────
-export const logoMark = (cls = 'mark-svg') => `<svg class="${cls}" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><ellipse cx="20" cy="27" rx="18" ry="4.5" fill="currentColor"/><path d="M9 26C9 14 12 9 20 9s11 5 11 17Z" fill="currentColor"/><path d="M20 12c-3 2-3 5 0 7 3-2 3-5 0-7Z" fill="var(--void)"/><rect x="9" y="21.5" width="22" height="3.2" fill="var(--void)"/></svg>`;
+// The snap-brim fedora (secondary icon) is also the clearance game's hidden mark.
+export const logoMark = snapbrim;
 
 export const icon = (key, cls = 'ico') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="${ICONS[key]}"/></svg>`;
 
@@ -77,10 +79,8 @@ function topbar(ctx) {
   return `
 <header class="topbar" data-topbar>
   <div class="wrap topbar__in">
-    <a class="brand" href="${link('index.html')}" aria-label="Blackout Syndicate home">
-      ${logoMark('brand__mark')}
-      <span class="brand__words"><b>Blackout</b><small>Syndicate</small></span>
-    </a>
+    <a class="brand" href="${link('index.html')}" aria-label="Blackout Syndicate home">${LOCKUP}</a>
+    <a class="brand brand--compact" href="${link('index.html')}" aria-label="Blackout Syndicate home">${CELL}</a>
     <nav class="menu" id="menu" aria-label="Main">
       <ul>${NAV.map((n) => `<li><a href="${link(n.p)}"${page.section === n.key ? ' aria-current="page"' : ''}>${n.t}</a></li>`).join('')}</ul>
       <a class="btn btn--sm menu__cta" href="${link('contact.html')}">Get seen</a>
@@ -128,7 +128,7 @@ function footer(ctx) {
   <div class="wrap">
     <div class="foot__top">
       <div class="foot__brand">
-        <a class="brand brand--lg" href="${link('index.html')}" aria-label="Blackout Syndicate home">${logoMark('brand__mark')}<span class="brand__words"><b>Blackout</b><small>Syndicate</small></span></a>
+        <a class="brand brand--lg" href="${link('index.html')}" aria-label="Blackout Syndicate home">${LOCKUP}</a>
         <p class="foot__line">${BIZ.tagline}</p>
         ${ctx.contactLines()}
       </div>
@@ -215,6 +215,7 @@ export function renderPage(page, all, config, assets) {
 <meta name="twitter:image" content="${config.siteUrl}/assets/img/og.png">
 <meta name="twitter:image:alt" content="Blackout Syndicate: Get seen. Real ads. Real people. No bots. South Bend, Mishawaka, Elkhart.">
 ${page.noindex ? '<meta name="robots" content="noindex">' : ''}
+<link rel="icon" href="${r}assets/img/favicon.ico" sizes="any">
 <link rel="icon" href="${r}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${r}assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">

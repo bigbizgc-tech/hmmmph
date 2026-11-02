@@ -8,7 +8,6 @@
     "build": "node build.mjs",
     "build:preview": "node build.mjs --preview",
     "serve": "python3 -m http.server 8080 --directory docs",
-    "shots": "node scripts/shots.mjs",
-    "og": "node scripts/og.mjs"
+    "shots": "node scripts/shots.mjs"
   }
 }

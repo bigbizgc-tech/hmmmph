@@ -103,6 +103,7 @@ async function main() {
 
   await cp(join(ROOT, 'src/assets'), join(OUT, 'assets'), { recursive: true });
   await writeFile(join(OUT, 'assets/js/config.js'), configJs + '\n');
+  await cp(join(ROOT, 'src/assets/img/favicon.ico'), join(OUT, 'favicon.ico'));
 
   if (!PREVIEW) {
     const urls = pages.filter((p) => !p.noindex).map((p) => `  <url><loc>${config.siteUrl}/${p.path === 'index.html' ? '' : p.path}</loc></url>`).join('\n');

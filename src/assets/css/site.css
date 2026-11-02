@@ -93,14 +93,16 @@ main:focus { outline: none; }
 .topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: color-mix(in srgb, var(--void) 84%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid transparent; transition: border-color .3s; }
 .topbar.is-scrolled { border-bottom-color: var(--smoke); }
 .topbar__in { display: flex; align-items: center; gap: 20px; padding-block: 12px; }
-.brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; color: var(--gold); flex: none; }
-.brand__mark { width: 38px; height: 38px; transition: transform .4s var(--ease); }
-.brand:hover .brand__mark { transform: rotate(-8deg) translateY(-1px); }
-.brand__words { display: grid; line-height: 1; }
-.brand__words b { font-family: var(--f-serif); font-style: italic; font-weight: 700; font-size: 23px; letter-spacing: .01em; }
-.brand__words small { font-family: var(--f-type); font-size: 9.5px; letter-spacing: .52em; color: var(--ash); margin-top: 5px; text-transform: uppercase; }
-.brand--lg .brand__mark { width: 52px; height: 52px; }
-.brand--lg .brand__words b { font-size: 32px; }
+.brand { display: inline-flex; align-items: center; flex: none; color: var(--gold); text-decoration: none; line-height: 0; }
+.brand svg { display: block; width: auto; max-width: none; }
+.brand__logo { height: 38px; aspect-ratio: 366.72 / 123.33; }
+.brand__cell { height: 34px; aspect-ratio: 83.13 / 122; }
+.brand .bs-void { fill: var(--void); }
+.brand .bs-paper { fill: var(--paper); transition: fill .45s var(--ease); }
+.brand:hover .bs-paper, .brand:focus-visible .bs-paper { fill: var(--gold-hi); }
+.brand:focus-visible { outline: 2px solid var(--gold); outline-offset: 6px; }
+.brand--compact { display: none; }
+.brand--lg .brand__logo { height: 64px; }
 .menu { display: flex; align-items: center; gap: 4px; margin-left: auto; }
 .menu ul { list-style: none; display: flex; gap: 2px; }
 .menu a:not(.btn) { display: block; padding: 8px 11px; text-decoration: none; font-size: 15px; color: var(--ash); transition: color .2s; position: relative; }
@@ -156,14 +158,12 @@ main:focus { outline: none; }
 @media (max-width: 440px) {
   .topbar__in { gap: 10px; }
   .topbar__end { gap: 6px; }
-  .brand__mark { width: 32px; height: 32px; }
-  .brand__words b { font-size: 20px; }
-  .brand__words small { letter-spacing: .34em; }
+  .topbar .brand__logo { height: 30px; }
   .hud { padding: 7px 8px; }
   .hud__bar { display: none; }
   .topbar .topbar__cta { padding-inline: 11px; }
 }
-@media (max-width: 350px) { .topbar .topbar__cta { display: none; } }
+@media (max-width: 350px) { .topbar .topbar__cta { display: none; } .topbar .brand:not(.brand--compact) { display: none; } .topbar .brand--compact { display: inline-flex; } }
 
 /* ── Buttons ──────────────────────────────────────────────────────────── */
 .btn { --bg: var(--gold); --fg: var(--void); --bd: var(--gold); position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--f-display); font-weight: 800; font-size: 20px; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; line-height: 1; padding: 15px 24px 14px; background: var(--bg); color: var(--fg); border: 1.5px solid var(--bd); cursor: pointer; white-space: nowrap; transition: transform .18s var(--ease), background .2s, color .2s, border-color .2s; isolation: isolate; }
