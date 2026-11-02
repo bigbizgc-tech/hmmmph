@@ -252,6 +252,8 @@ main:focus { outline: none; }
 :where(main > header) + .band--coal { background: linear-gradient(transparent, var(--glass-coal) clamp(44px, 6vw, 72px)); }
 /* small type in the dark bands and the footer gets a lighter halo against a lit window behind the glass */
 :is(.band:not(.band--paper, .band--gold), .foot) :is(p, dt, dd, label, small, .label, .copy, .textlink) { text-shadow: var(--halo-sm); }
+/* paper never glows: the halo is only for type standing on the city, never for ink on a paper card or slip */
+:is(.band--paper, .band--gold, .classified, .intake, .pk-result, .lg-slip, .bk__card, .stamp, .panel--paper) :is(*, *::before, *::after) { text-shadow: none !important; }
 :is(.band, .foot) :is([class*="paper"], [class*="sheet"], .classified) :is(p, dt, dd, label, small, .label, .copy, .textlink), :is(.band, .foot) .copy:hover { text-shadow: none; }
 .band--paper { background: var(--paper); color: var(--ink); }
 .band--paper .label { color: var(--ink-mute); }
