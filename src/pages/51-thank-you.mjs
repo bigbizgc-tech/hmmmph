@@ -12,10 +12,10 @@ const css = `
 @media (max-width:900px){.ty-hero__in{grid-template-columns:1fr}}
 .ty-hero__main{display:grid;gap:clamp(18px,2.4vw,26px);min-width:0;container-type:inline-size}
 .ty-title{margin:0;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(60px,11vw,160px);font-size:clamp(56px,26cqi,180px);line-height:.8;letter-spacing:-.01em}
-.ty-stack{display:grid;--x:30%;--y:50%}
+.ty-stack{display:grid;--x:30%;--y:50%;filter:drop-shadow(0 0 26px rgba(243,212,138,.34))}
 .ty-stack>span{grid-area:1/1}
 .ty-dark{color:transparent;-webkit-text-stroke:2px rgba(242,234,216,.5)}
-.ty-lit{color:var(--gold-hi);text-shadow:0 0 42px rgba(243,212,138,.38);-webkit-mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%);mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%)}
+.ty-lit{color:var(--gold-hi);-webkit-mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%);mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%)}
 .no-js .ty-lit{-webkit-mask-image:none;mask-image:none}
 .ty-got{font-family:var(--f-serif);font-style:italic;font-weight:500;font-size:clamp(32px,4.4vw,58px);line-height:1.02;color:var(--gold);overflow-wrap:anywhere}
 .ty-hero .lede{max-width:46ch}
@@ -164,7 +164,7 @@ export default {
 <section class="band band--coal" aria-labelledby="next-h">
   <div class="wrap">
     <div class="band__head band__head--row rv">
-      <div><p class="label">From here</p><h2 class="h2" id="next-h">What happens <span class="whisper">next.</span></h2></div>
+      <div><p class="label">From here</p><h2 class="h2" id="next-h">What happens next.</h2></div>
       <p class="muted" style="max-width:42ch">Nothing is booked and nothing is charged yet.</p>
     </div>
     <ol class="steps rv" style="--n:3">
@@ -193,7 +193,7 @@ export default {
     <div class="ty-wait__head rv">
       <div class="band__head">
         <p class="label">While you wait</p>
-        <h2 class="h2" id="wait-h">Go <span class="whisper">deeper.</span></h2>
+        <h2 class="h2" id="wait-h">Go deeper.</h2>
         <p data-xp-line>Sending the form is worth <b>+${XP.lead} clearance</b>. Spend it on the files below.</p>
       </div>
       <section class="ty-clear" data-visitor aria-label="Your clearance">

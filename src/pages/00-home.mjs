@@ -121,10 +121,11 @@ const css = CLIP_ART_CSS + `
 
 /* ── Reel: each clip shows its own poster (art from src/data/clipart.mjs, sized to the card) ── */
 .reel{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-@media (max-width:1100px){.reel{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){.reel{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:82%;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:6px}.clip{scroll-snap-align:start;aspect-ratio:3/4}}
-.clip{--tone:var(--gold);--art-words:30cqw;--art-top:max(46px,12cqh);--vs-size:15.5cqw;--vs-a:max(52px,14cqh);--vs-b:52cqh;--vs-x:38cqh;--ret-w:min(76cqw,300px);--ret-top:max(44px,11cqh);container-type:size;position:relative;display:grid;align-content:end;aspect-ratio:9/13;max-width:100%;overflow:hidden;text-decoration:none;color:var(--paper);background:var(--void);border:1px solid var(--smoke);isolation:isolate;transition:border-color .3s,transform .45s var(--ease),box-shadow .45s}
+.clip{--tone:var(--gold);--art-words:30cqw;--art-top:max(46px,12cqh);--vs-size:15.5cqw;--vs-a:max(52px,14cqh);--vs-b:52cqh;--vs-x:38cqh;--ret-w:min(70cqw,300px);--ret-top:max(44px,11cqh);container-type:size;position:relative;display:grid;align-content:end;aspect-ratio:9/13;max-width:100%;overflow:hidden;text-decoration:none;color:var(--paper);background:var(--void);border:1px solid var(--smoke);isolation:isolate;transition:border-color .3s,transform .45s var(--ease),box-shadow .45s}
 .clip--red{--tone:var(--signal)}.clip--smoke{--tone:var(--ash)}
+@media (max-width:1100px){.reel{grid-template-columns:repeat(2,minmax(0,1fr))}.clip{aspect-ratio:4/5}}
+@media (max-width:520px){.reel{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:82%;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:6px}.clip{scroll-snap-align:start;aspect-ratio:3/4}}
+@media (max-width:360px){.clip{aspect-ratio:2/3}}
 .clip::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(7,7,8,.5) 0,transparent 18%,transparent 52%,rgba(7,7,8,.96) 84%),repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 2px,transparent 2px 4px)}
 .clip:hover,.clip:focus-visible{border-color:var(--tone);transform:translateY(-4px);box-shadow:0 30px 60px -34px color-mix(in srgb,var(--tone) 55%,transparent)}
 .clip__badge{position:absolute;top:12px;left:12px;font-family:var(--f-type);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;background:var(--void);border:1px solid var(--smoke);padding:4px 8px;white-space:nowrap}

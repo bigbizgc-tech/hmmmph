@@ -308,8 +308,6 @@ const css = `
 .js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status{font-size:0;gap:8px}
 .js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status span{display:none}
 .js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__body{max-height:4.6em}
-.js .pb__deck .classified.is-locked ~ .classified.is-locked .classified__status{font-size:0;gap:8px}
-.js .pb__deck .classified.is-locked ~ .classified.is-locked .classified__status span{display:none}
 .pb__end{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 32px;padding:clamp(22px,3vw,30px);border:1px dashed var(--brass)}
 .pb__end p{color:var(--ash);max-width:56ch}
 .pb__end b{color:var(--paper);font-weight:600}
@@ -452,8 +450,7 @@ const js = `
       let n = 0;
       $$('[data-classified^="pb-"]').forEach((el) => {
         const open = el.classList.contains('is-open'); if (open) n++;
-        const a = $('[data-pb-link="' + el.dataset.classified + '"]');
-        if (a) { a.classList.toggle('is-open', open); const i = $('i', a); if (i) i.textContent = open ? 'Open' : 'Sealed'; }
+        $$('[data-pb-link="' + el.dataset.classified + '"]').forEach((a) => { a.classList.toggle('is-open', open); const i = $('i', a); if (i) i.textContent = open ? 'Open' : 'Sealed'; });
       });
       $$('[data-pb-open]').forEach((e) => (e.textContent = n));
     }
@@ -481,6 +478,44 @@ const js = `
     });
   }
   if (window.BS) start(); else document.addEventListener('bs:ready', start);
+})();
+
+/* ── The playbook on wide screens: one rule at a time, picked from the index or with previous / next.
+   Every rule stays in the page; phones and no-JS get the full stack. ── */
+(() => {
+  const pb = document.querySelector('[data-pb]');
+  if (!pb) return;
+  const sheets = [...pb.querySelectorAll('[data-pb-deck] > [data-classified]')];
+  const links = [...pb.querySelectorAll('.pb__nav [data-pb-link]')];
+  const bar = pb.querySelector('[data-pb-bar]'), pos = pb.querySelector('[data-pb-pos]');
+  const prev = pb.querySelector('[data-pb-prev]'), next = pb.querySelector('[data-pb-next]');
+  if (!sheets.length || !bar) return;
+  const wide = matchMedia('(min-width: 981px)');
+  let cur = 0;
+  const show = (i, focus) => {
+    cur = Math.max(0, Math.min(sheets.length - 1, i));
+    const deck = wide.matches;
+    pb.classList.toggle('pb--deck', deck);
+    bar.hidden = !deck;
+    sheets.forEach((el, k) => { el.hidden = deck && k !== cur; });
+    links.forEach((a, k) => { if (deck && k === cur) a.setAttribute('aria-current', 'step'); else a.removeAttribute('aria-current'); });
+    pos.textContent = String(cur + 1).padStart(2, '0');
+    prev.disabled = cur === 0; next.disabled = cur === sheets.length - 1;
+    if (focus && deck) {
+      const t = sheets[cur].querySelector('.classified__title');
+      if (t) { t.tabIndex = -1; t.focus({ preventScroll: true }); }
+      const top = bar.getBoundingClientRect().top;
+      if (top < 70 || top > innerHeight * .6) scrollBy({ top: top - 100, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    }
+  };
+  const go = (i) => { show(i, true); try { history.replaceState(null, '', '#cl-' + sheets[cur].dataset.classified); } catch (e) { /* file:// */ } };
+  links.forEach((a, k) => a.addEventListener('click', (e) => { if (!wide.matches) return; e.preventDefault(); go(k); }));
+  prev.addEventListener('click', () => go(cur - 1));
+  next.addEventListener('click', () => go(cur + 1));
+  const fromHash = () => { const k = sheets.findIndex((el) => '#cl-' + el.dataset.classified === location.hash); if (k >= 0) show(k, false); };
+  if (wide.addEventListener) wide.addEventListener('change', () => show(cur, false));
+  show(0, false); fromHash();
+  addEventListener('hashchange', fromHash);
 })();
 
 /* ── Your Syndicate ID: drawn on a canvas, shown as an image so it can be saved ── */
@@ -525,6 +560,45 @@ const js = `
   const hash = (s) => { let h = 2166136261; for (const ch of s) { h ^= ch.codePointAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
   const memberNo = (n) => { const k = n.trim().toLowerCase().replace(/\\s+/g, ' '); if (!k) return 'BS-0000-0000'; return 'BS-' + String(hash(k) % 10000).padStart(4, '0') + '-' + String(hash(k + '|syndicate') % 10000).padStart(4, '0'); };
   const level = () => (window.BS ? window.BS.level() : { lv: 0, name: 'Outsider' });
+  // What the visitor has earned on the site, read from the engine (never written here).
+  const earned = () => {
+    const B = window.BS;
+    if (!B) return { files: 0, read: 0 };
+    if (B.stamps) return B.stamps();
+    const S = B.state(), F = B.FILES || [], read = F.filter((f) => S.read[f.path]).length;
+    return { files: F.length, read, archive: F.length > 0 && read >= F.length, allMarks: Object.keys(S.marks || {}).length >= 3, blackout: !!S.blackout, lead: !!S.lead };
+  };
+  // The earned stamps, packed from the right edge of the card's upper band. None earned: the band stays clean.
+  function stamps(E) {
+    const items = [];
+    if (E.archive) items.push({ w: 124, draw: (x, y) => {
+      g.save(); g.translate(x + 62, y); g.rotate(-0.14); g.strokeStyle = C.gold; g.fillStyle = C.gold;
+      g.lineWidth = 3.5; g.beginPath(); g.arc(0, 0, 60, 0, Math.PI * 2); g.stroke();
+      g.lineWidth = 1.2; g.beginPath(); g.arc(0, 0, 51, 0, Math.PI * 2); g.stroke(); g.beginPath(); g.arc(0, 0, 31, 0, Math.PI * 2); g.stroke();
+      g.font = '700 12.5px ' + F.type; arc('ARCHIVE', 0, 0, 41, false, 3.5); arc('ALL FILES READ', 0, 0, 41, true, 1.4);
+      g.font = '900 25px ' + F.display; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = C.hi; g.fillText(E.read + '/' + E.files, 0, 1); g.textBaseline = 'alphabetic'; g.textAlign = 'left';
+      g.restore();
+    } });
+    if (E.allMarks) items.push({ w: 166, draw: (x, y) => {
+      for (let k = 0; k < 3; k++) hat(x + k * 56, y - 52, 1.35, C.hi);
+      spaced('3 OF 3 MARKS', x + 83, y + 34, 3.5, '700 14px ' + F.type, C.gold, 'center');
+    } });
+    const box = (text, sub, col, tilt) => {
+      g.font = '900 35px ' + F.display; const tw = g.measureText(text).width, w = Math.ceil(tw + 44);
+      items.push({ w, draw: (x, y) => {
+        g.save(); g.translate(x + w / 2, y); g.rotate(tilt); g.strokeStyle = col; g.fillStyle = col;
+        g.lineWidth = 3.5; rr(-w / 2, -35, w, 70, 6); g.stroke(); g.lineWidth = 1.2; rr(-w / 2 + 7, -28, w - 14, 56, 3); g.stroke();
+        g.font = '900 35px ' + F.display; g.textAlign = 'center'; g.fillText(text, 0, 7);
+        spaced(sub, 0, 23, 2.8, '700 11px ' + F.type, col, 'center');
+        g.restore();
+      } });
+    };
+    if (E.blackout) box('SAID THE NAME', 'BLACKOUT', C.paper, 0.06);
+    if (E.lead) box('MADE CONTACT', 'FILE ON THE DESK', C.gold, -0.07);
+    let x = W - 76;
+    items.forEach((it) => { x -= it.w; it.draw(x, 240); x -= 22; });
+    return items.length;
+  }
   const today = () => new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
 
   function draw() {
@@ -588,15 +662,19 @@ const js = `
       g.font = '700 13px ' + F.type; g.textAlign = 'left'; spaced('UNTIL LEVEL 5', 0, 27, 3, '700 12px ' + F.type, C.signal, 'center');
       g.restore();
     }
+    const E = earned();
+    stamps(E);
     spaced('GOOD FOR BRAGGING RIGHTS · BLACKOUTSYN.COM', 82, H - 56, 3.5, '400 15px ' + F.type, rgba(C.ash, .85));
     g.restore();
-    return { L, name: rawName || 'Unknown', biz, no: memberNo(rawName) };
+    return { L, E, name: rawName || 'Unknown', biz, no: memberNo(rawName) };
   }
 
   let blob = null, url = '', t = 0, info = null;
   function publish() {
     info = draw();
-    img.alt = 'Syndicate ID card for ' + info.name + ', ' + info.biz + '. Member number ' + info.no + '. Clearance Level ' + info.L.lv + ', ' + info.L.name + (info.L.lv >= 5 ? ', with the Inner Circle seal.' : ', stamped provisional until Level 5.') + ' Issued ' + new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + '.';
+    const E = info.E, got = [E.archive && 'Archive, all ' + E.files + ' files read', E.allMarks && 'all three hidden marks', E.blackout && 'Said the name', E.lead && 'Made contact'].filter(Boolean);
+    img.alt = 'Syndicate ID card for ' + info.name + ', ' + info.biz + '. Member number ' + info.no + '. Clearance Level ' + info.L.lv + ', ' + info.L.name + (info.L.lv >= 5 ? ', with the Inner Circle seal.' : ', stamped provisional until Level 5.') + (got.length ? ' Stamps: ' + got.join(', ') + '.' : '') + ' Issued ' + new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + '.';
+    document.querySelectorAll('[data-earn]').forEach((li) => li.classList.toggle('is-on', !!{ archive: E.archive, marks: E.allMarks, blackout: E.blackout, lead: E.lead }[li.dataset.earn]));
     const show = (u) => { img.src = u; };
     try {
       cv.toBlob((b) => {
@@ -629,7 +707,7 @@ const js = `
         a.href = u; a.download = 'syndicate-id-' + slug + '.png'; a.rel = 'noopener';
         document.body.appendChild(a); a.click(); a.remove();
         setTimeout(() => URL.revokeObjectURL(u), 4000);
-        say('Your card is on its way to your downloads. If nothing shows up, long-press or right-click the card and save the image.');
+        say('Saved. Your card is on its way to your downloads. Now attach it to your post. If nothing shows up, long-press or right-click the card and save the image.');
       } catch (e) { say(fallback); }
     };
     try { draw(); cv.toBlob((b) => (b ? go(b) : say(fallback)), 'image/png'); } catch (e) { say(fallback); }
@@ -645,8 +723,10 @@ const js = `
     publish();
     // redraw once the brand fonts are in, and whenever clearance changes
     if (document.fonts && document.fonts.load) Promise.all(['900 64px "Big Shoulders Display"', 'italic 700 40px "Bodoni Moda"', 'italic 500 40px "Bodoni Moda"', '400 20px "Courier Prime"', '700 20px "Courier Prime"'].map((f) => document.fonts.load(f).catch(() => null))).then(publish);
-    const hud = document.querySelector('[data-hud-lv]'); let lv = level().lv;
-    if (hud) new MutationObserver(() => { if (level().lv !== lv) { lv = level().lv; publish(); } }).observe(hud, { childList: true, characterData: true, subtree: true });
+    // redraw when the level or an earned stamp changes
+    const sig = () => { const E = earned(); return [level().lv, E.archive, E.allMarks, E.blackout, E.lead].join(); };
+    let last = sig();
+    document.addEventListener('bs:change', () => { const now = sig(); if (now !== last) { last = now; publish(); } });
   };
   if (window.BS) begin(); else document.addEventListener('bs:ready', begin);
 })();
@@ -791,7 +871,7 @@ export default {
       <div class="pb__rules">
         <nav class="pb__jump" aria-label="Jump to a rule">${rules.map((r, i) => `<a href="#cl-pb-${pad(i)}" data-pb-link="pb-${pad(i)}" aria-label="Rule ${pad(i)}: ${r.s}">${pad(i)}</a>`).join('')}</nav>
         <div class="pb__bar" data-pb-bar hidden>
-          <p class="pb__pos" aria-live="polite"><b data-pb-pos>01</b>Rule <span data-pb-pos-n>1</span> of ${rules.length}</p>
+          <p class="pb__pos" aria-live="polite"><span class="sr">Rule </span><b data-pb-pos>01</b> of ${rules.length}</p>
           <div class="pb__step"><button class="btn btn--ghost btn--sm" type="button" data-pb-prev>Previous rule</button><button class="btn btn--sm" type="button" data-pb-next>Next rule ${c.arrow}</button></div>
         </div>
         <div class="pb__deck" data-pb-deck>

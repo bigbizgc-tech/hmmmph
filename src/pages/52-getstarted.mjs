@@ -82,7 +82,7 @@ export default {
 <section class="band band--gold" aria-labelledby="gs-final">
   <div class="wrap" style="display:grid;gap:22px;justify-items:start">
     <p class="label">No pressure</p>
-    <h2 class="h2" id="gs-final">Not ready? <span class="whisper" style="color:var(--void)">Look around.</span></h2>
+    <h2 class="h2" id="gs-final">Not ready? Look around.</h2>
     <p style="font-size:var(--t-lede);max-width:56ch">Every file you open raises your clearance, and higher levels unlock classified files. Start with how a push works, or meet the guy behind it.</p>
     <div class="ctas">${c.btn('How it works ' + c.arrow, 'how-it-works.html', 'paper lg')}${c.btn('Who runs this', 'about.html', 'paper ghost lg')}</div>
   </div>

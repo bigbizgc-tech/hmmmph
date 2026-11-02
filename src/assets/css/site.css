@@ -18,7 +18,7 @@
 
   --f-display: "Big Shoulders Display", "BSD Fallback", "BSD Fallback R", "Arial Narrow", Impact, sans-serif;
   --f-body: "Archivo", "Archivo Fallback", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --f-serif: "Bodoni Moda", "Bodoni 72", Didot, Georgia, serif;
+  --f-serif: "Bodoni Moda", "Bodoni 72", Didot, "Bodoni Fallback", "Bodoni Fallback N", "Bodoni Fallback T", Georgia, serif;
   --f-type: "Courier Prime", "Courier New", ui-monospace, monospace;
 
   --t-hero: clamp(88px, 19.5vw, 288px);
@@ -40,8 +40,8 @@
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* Metric-matched stand-ins while the web fonts load: the phone's own Arial, Helvetica or Roboto,
-   scaled to the same widths, so headlines and buttons wrap the same way and nothing jumps when the
+/* Metric-matched stand-ins while the web fonts load: the phone's own Arial, Helvetica, Roboto,
+   Georgia, Noto Serif or Times, scaled to the same widths, so headlines and buttons wrap the same way and nothing jumps when the
    real fonts swap in. They are only ever seen for that first moment. */
 @font-face { font-family: "BSD Fallback"; src: local("Arial Bold"), local("Arial-BoldMT"), local("Helvetica Bold"), local("Helvetica-Bold"), local("Liberation Sans Bold"), local("LiberationSans-Bold"); font-weight: 100 849; size-adjust: 67.7%; ascent-override: 144.8%; descent-override: 31%; line-gap-override: 0%; }
 @font-face { font-family: "BSD Fallback"; src: local("Arial Bold"), local("Arial-BoldMT"), local("Helvetica Bold"), local("Helvetica-Bold"), local("Liberation Sans Bold"), local("LiberationSans-Bold"); font-weight: 850 1000; size-adjust: 72.5%; ascent-override: 135.2%; descent-override: 29%; line-gap-override: 0%; }
@@ -49,6 +49,9 @@
 @font-face { font-family: "BSD Fallback R"; src: local("Roboto Bold"), local("Roboto-Bold"), local("Roboto"); font-weight: 850 1000; size-adjust: 77.2%; ascent-override: 126.9%; descent-override: 27.2%; line-gap-override: 0%; }
 @font-face { font-family: "Archivo Fallback"; src: local("Arial"), local("ArialMT"), local("Helvetica"), local("Liberation Sans"), local("LiberationSans"), local("Roboto"), local("Roboto-Regular"); font-weight: 100 549; size-adjust: 97.7%; ascent-override: 90.1%; descent-override: 21.5%; line-gap-override: 0%; }
 @font-face { font-family: "Archivo Fallback"; src: local("Arial Bold"), local("Arial-BoldMT"), local("Helvetica Bold"), local("Liberation Sans Bold"), local("LiberationSans-Bold"), local("Roboto Bold"), local("Roboto-Bold"); font-weight: 550 1000; size-adjust: 101.4%; ascent-override: 86.8%; descent-override: 20.7%; line-gap-override: 0%; }
+@font-face { font-family: "Bodoni Fallback"; font-style: italic; src: local("Georgia Italic"), local("Georgia-Italic"); font-weight: 100 1000; size-adjust: 96.8%; ascent-override: 116.7%; descent-override: 41.3%; line-gap-override: 0%; }
+@font-face { font-family: "Bodoni Fallback N"; font-style: italic; src: local("Noto Serif Italic"), local("NotoSerif-Italic"); font-weight: 100 1000; size-adjust: 93.8%; ascent-override: 120.5%; descent-override: 42.6%; line-gap-override: 0%; }
+@font-face { font-family: "Bodoni Fallback T"; font-style: italic; src: local("Times New Roman Italic"), local("TimesNewRomanPS-ItalicMT"), local("Liberation Serif Italic"), local("LiberationSerif-Italic"); font-weight: 100 1000; size-adjust: 108.5%; ascent-override: 104.1%; descent-override: 36.9%; line-gap-override: 0%; }
 
 /* ── Base ─────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
@@ -572,6 +575,9 @@ a.copy { display: inline-flex; align-items: center; text-decoration: none; }
 .toast--level { border-color: var(--gold); background: linear-gradient(120deg, #241d0e, var(--coal) 70%); }
 .toast--level .toast__big { font-size: 40px; }
 .toast.is-out { animation: toastOut .35s var(--ease) forwards; }
+/* lights out: the one toast that shows sits back in the dark with the page */
+.toasts.is-dark .toast { background: var(--void); border-color: var(--smoke); box-shadow: none; }
+.toasts.is-dark .toast__main { color: var(--ash); }
 @media (max-width: 600px) {
   .toasts { left: var(--gut-l); right: var(--gut-r); width: auto; }
   .toast { gap: 1px 10px; padding: 8px 12px; font-size: 14px; box-shadow: 0 10px 24px -12px rgba(0,0,0,.9); }

@@ -546,7 +546,7 @@
     if (on) {
       clearToasts();
       const paid = award('blackout', '', XP.blackout, 'You said the name on the door.', { quiet: true });
-      toast(finePointer ? 'Lights out. Move your pointer to search the dark. Type it again or press Esc to bring them back.' : 'Lights out. Tap to search the dark. Say it again in the Vault box to bring them back.', paid ? `+${XP.blackout} · You said the name on the door` : 'The name on the door', paid ? '+' + XP.blackout : '', '', '', '', { force: true });
+      toast(finePointer ? 'Lights out. Move your pointer to search the dark. Type it again or press Esc to bring them back.' : 'Lights out. Tap to search the dark. Say it again in the Vault box to bring them back.', paid ? 'You said the name on the door' : 'The name on the door', paid ? '+' + XP.blackout : '', '', '', '', { force: true });
     } else { clearToasts(); release(); }
   };
   addEventListener('keydown', (e) => {

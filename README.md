@@ -38,9 +38,9 @@ Then rebuild: `npm run build` (or `node build.mjs`). That rewrites `docs/`.
 3. In Events Manager, **Add events**. Paste each event ID (looks like `tw-xxxxx-yyyyy`) into `xEvents`:
    - **Lead** → `xEvents.lead`. This is the conversion. It fires on `thank-you.html` once per real send.
    - **Call, text or email** → `xEvents.call`. It fires when someone taps a phone number, a Text button or an
-     email address on any page (header menu, footer, contact page, package pages, the failed-send message). It
-     tells X which package page the tap came from. A tap means they opened their phone or mail app, not that the
-     call connected or the message was sent.
+     email address on any page (phone menu, footer, contact page, package pages, the failed-send message). It
+     tells X which package page the tap came from. A tap means they opened their phone or mail app; it can't tell
+     whether the call connected or the message was sent.
    - Optional: **Form submit** → `formSubmit`, **Content view** → `packageView` (package pages), **Page view** →
      `contactView` (contact page).
 4. Rebuild and deploy. Check with the **X Pixel Helper** Chrome extension on the live site.
@@ -53,7 +53,7 @@ counts twice. Keep `formSubmit` as a secondary event (useful for checking that s
 If you want calls and texts to count too, add **Call, text or email** as a second conversion; it never fires for a form
 send, so nothing is counted twice.
 
-**Use the event, not a URL rule.** Don't set the Lead conversion to "page URL contains `thank-you`". `thank-you.html` is
+**Count Lead by its event. Skip URL rules.** Don't set the Lead conversion to "page URL contains `thank-you`". `thank-you.html` is
 a public address: anyone can open it, reload it or share it, and a URL rule would count every one of those visits.
 
 How the Lead event is counted: after a successful send the form leaves a one-time token in that browser tab and goes to

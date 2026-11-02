@@ -168,7 +168,7 @@ const css = `
 .need__fine a{color:var(--gold)}
 
 /* ── The recap (paper) ── */
-@media (max-width:600px){.recap-h .whisper{display:block;margin-top:.12em}}
+
 .recap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:start}
 @media (max-width:960px){.recap{grid-template-columns:1fr}}
 .gloss{margin:0;display:grid;border-top:2px solid var(--ink)}
@@ -414,7 +414,7 @@ export default {
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">01 · The two paths</p>
-      <h2 class="h2" id="paths-h">One push, <span class="whisper">or every month.</span></h2>
+      <h2 class="h2" id="paths-h">One push, or every month.</h2>
       <p>A boost is one push with a start and an end. A plan keeps the push running month after month. Same real ads, different rhythm.</p>
     </div>
     <div class="paths">
@@ -467,7 +467,7 @@ export default {
     <div class="need__side">
       <div class="need__intro rv">
         <p class="label">02 · What we need from you</p>
-        <h2 class="h2" id="need-h">What we need <span class="whisper">from you.</span></h2>
+        <h2 class="h2" id="need-h">What we need from you.</h2>
         <p class="muted">Have these ready and the first conversation takes minutes. Tick them off as you go. Missing one? Ask anyway. Sorting it out is part of the job.</p>
       </div>
       <div class="need__card rv" data-need-card>
@@ -498,7 +498,7 @@ export default {
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">03 · What you get back</p>
-      <h2 class="h2 recap-h" id="recap-h">The recap, <span class="whisper">in plain English.</span></h2>
+      <h2 class="h2 recap-h" id="recap-h">The recap, in plain English.</h2>
       <p>Every boost ends with a recap. Every plan gets one each month. Here is what each number on it means.</p>
     </div>
     <div class="recap">
@@ -546,7 +546,7 @@ export default {
   <div class="wrap">
     <div class="band__head rv">
       <p class="label">05 · Where we push</p>
-      <h2 class="h2" id="where-h">${PLATFORMS.length} feeds. <span class="whisper">One honest pick.</span></h2>
+      <h2 class="h2" id="where-h">${PLATFORMS.length} feeds. One honest pick.</h2>
       <p>We put your money where your people already scroll, and tell you straight when a platform is the wrong fit.</p>
     </div>
     <ul class="feeds rv">

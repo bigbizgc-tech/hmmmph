@@ -26,10 +26,10 @@ const css = `
 .bn-main{display:grid;gap:clamp(18px,2.4vw,26px);min-width:0;container-type:inline-size}
 .bn-title{margin:0;display:grid;gap:clamp(8px,1.2vw,16px)}
 .bn-pre{display:block;font-family:var(--f-serif);font-style:italic;font-weight:500;font-size:clamp(32px,4.4vw,60px);line-height:1;color:var(--gold)}
-.bn-stack{display:grid;--x:30%;--y:50%;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(88px,30cqi,250px);line-height:.8;letter-spacing:-.012em}
+.bn-stack{display:grid;--x:30%;--y:50%;filter:drop-shadow(0 0 26px rgba(243,212,138,.34));font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(88px,30cqi,250px);line-height:.8;letter-spacing:-.012em}
 .bn-stack>span{grid-area:1/1}
 .bn-dark{color:transparent;-webkit-text-stroke:2px rgba(242,234,216,.45)}
-.bn-lit{color:var(--gold-hi);text-shadow:0 0 42px rgba(243,212,138,.38);-webkit-mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%);mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%)}
+.bn-lit{color:var(--gold-hi);-webkit-mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%);mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%)}
 .no-js .bn-lit{-webkit-mask-image:none;mask-image:none}
 .bn-hero .lede{max-width:50ch}
 .bn-code{font-family:var(--f-type);font-size:14px;letter-spacing:.06em;color:var(--ash)}
