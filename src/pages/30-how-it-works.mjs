@@ -75,9 +75,9 @@ const css = `
 .hw-index .is-unlocked{color:var(--gold)}
 
 /* ── The two paths ── */
-.paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,2.4vw,28px);align-items:start}
+.paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,2.4vw,28px);align-items:stretch}
 @media (max-width:900px){.paths{grid-template-columns:1fr}}
-.path{--bg:var(--coal);background:var(--bg);border:1px solid var(--smoke);padding:clamp(22px,3vw,36px);display:grid;gap:28px;min-width:0;position:relative}
+.path{--bg:var(--coal);background:var(--bg);border:1px solid var(--smoke);padding:clamp(22px,3vw,36px);display:grid;grid-template-rows:auto auto 1fr;align-content:start;gap:28px;min-width:0;position:relative}
 .path--plan{border-color:var(--brass);background:linear-gradient(170deg,#1d170c 0%,var(--coal) 46%)}
 .path--plan::before{content:"";position:absolute;inset:-1px -1px auto auto;width:36px;height:36px;border-top:2px solid var(--gold);border-right:2px solid var(--gold)}
 .path__head{display:grid;gap:12px}
@@ -107,7 +107,7 @@ const css = `
 .loop-tag svg{width:14px;height:14px;animation:spin 6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.path__end{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--smoke);background:var(--void);font-size:15px;color:var(--ash);flex-wrap:wrap}
+.path__end{align-self:end;display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--smoke);background:var(--void);font-size:15px;color:var(--ash);flex-wrap:wrap}
 .path__end b{color:var(--paper);font-weight:600}
 .path__end>span:nth-child(2){flex:1 1 220px;min-width:0}
 .path__stop{width:14px;height:14px;background:var(--gold);flex:none}
@@ -213,7 +213,7 @@ const css = `
 .never h3{font-family:var(--f-display);font-weight:900;font-size:clamp(40px,4.2vw,58px);line-height:.92;text-transform:uppercase;color:var(--paper)}
 .never h3{transition:color .6s .35s}
 .never .nv{position:relative;display:inline-block}
-.never .nv::after{content:"";position:absolute;left:-.05em;right:-.05em;top:50%;height:.12em;margin-top:-.03em;background:var(--signal);box-shadow:0 0 10px rgba(229,72,77,.35);transform-origin:left center;transition:transform .32s var(--snap) calc(var(--i,0) * .14s)}
+.never .nv::after{content:"";position:absolute;left:-.05em;right:-.05em;bottom:.44em;height:.11em;background:var(--signal);box-shadow:0 0 10px rgba(229,72,77,.35);transform-origin:left center;transition:transform .32s var(--snap) calc(var(--i,0) * .14s)}
 .never .nv:not(:last-child)::after{right:-.3em}
 .js .never>li:not(.is-struck) .nv::after{transform:scaleX(0)}
 .never>li.is-struck h3{color:var(--ash)}
@@ -346,7 +346,14 @@ const js = `
   const el = document.querySelector('[data-aim-state]');
   if (!el) return;
   const go = () => { try { const open = window.BS.level().lv >= 3; el.textContent = open ? 'Opened' : 'Clearance 3'; el.className = open ? 'is-unlocked' : 'is-locked'; } catch (e) { /* engine missing */ } };
-  if (window.BS) go(); else document.addEventListener('bs:ready', go);
+  const watch = () => {
+    go();
+    /* Clearance can rise while you're on this page (opening and reading it both count), so keep the index in step */
+    document.addEventListener('bs:change', go);
+    const hud = document.querySelector('[data-hud-lv]');
+    if (hud && window.MutationObserver) new MutationObserver(go).observe(hud, { childList: true, characterData: true, subtree: true });
+  };
+  if (window.BS) watch(); else document.addEventListener('bs:ready', watch, { once: true });
 })();
 `;
 
@@ -426,7 +433,7 @@ export default {
         <header class="path__head">
           <p class="label">Monthly · Stay or walk</p>
           <h3 class="path__name" id="pp-h">The plan path</h3>
-          <p class="path__meta"><span>${nameLinks(PLANS)}</span><span>From <b>${PLANS[0].price}${PLANS[0].suffix}</b></span><span>Every month</span></p>
+          <p class="path__meta"><span>${nameLinks(PLANS)}</span><span>From <b>${PLANS[0].price}${PLANS[0].suffix}</b></span></p>
         </header>
         <ol class="track" data-track>
           ${PLAN_STEPS.map((s, i) => step(s, i, i === 2 ? ' class="is-loop is-loop--first"' : i === 3 ? ' class="is-loop is-loop--last"' : '')).join('').replace('<div class="track__body"><h4><span class="sr">Step 3: </span>', `<div class="track__body"><span class="loop-tag" aria-hidden="true">${loopIcon}Repeats monthly</span><h4><span class="sr">Step 3: </span>`)}

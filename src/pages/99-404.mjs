@@ -52,7 +52,7 @@ const css = `
 /* ── Ways back ── */
 .bn-doors{row-gap:36px}
 .bn-doors .file__name{font-size:clamp(40px,3.6vw,52px)}
-.bn-doors .file--flag::after{content:"Direct line"}
+.bn-doors .file--flag::after{content:"A real person"}
 .bn-call{margin-top:clamp(36px,5vw,56px);display:flex;flex-wrap:wrap;gap:10px 24px;align-items:baseline;font-family:var(--f-serif);font-style:italic;font-size:clamp(20px,2vw,24px);color:var(--ash)}
 .bn-call a{font-family:var(--f-display);font-style:normal;font-weight:900;font-size:clamp(30px,3.4vw,42px);line-height:1;color:var(--gold);text-decoration:none}
 .bn-call a:hover{color:var(--gold-hi)}

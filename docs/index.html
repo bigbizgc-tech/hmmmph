@@ -6,13 +6,13 @@
 
 <title>Blackout Syndicate · Get Seen in South Bend</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Real ads. Real people. No bots. Blackout Syndicate puts paid reach behind creators, streamers, solo businesses and local shops in South Bend, Mishawaka and Elkhart.">
+<meta name="description" content="Real ads. Real people. No bots. Paid reach for creators, streamers, solo businesses and local shops in South Bend, Mishawaka and Elkhart, Indiana.">
 <link rel="canonical" href="https://www.blackoutsyn.com/">
 <meta name="theme-color" content="#070708">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Blackout Syndicate">
 <meta property="og:title" content="Blackout Syndicate · Get Seen in South Bend">
-<meta property="og:description" content="Real ads. Real people. No bots. Blackout Syndicate puts paid reach behind creators, streamers, solo businesses and local shops in South Bend, Mishawaka and Elkhart.">
+<meta property="og:description" content="Real ads. Real people. No bots. Paid reach for creators, streamers, solo businesses and local shops in South Bend, Mishawaka and Elkhart, Indiana.">
 <meta property="og:url" content="https://www.blackoutsyn.com/">
 <meta property="og:image" content="https://www.blackoutsyn.com/assets/img/og.png">
 <meta property="og:image:width" content="1200">
@@ -21,7 +21,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@BzTheG">
 <meta name="twitter:title" content="Blackout Syndicate · Get Seen in South Bend">
-<meta name="twitter:description" content="Real ads. Real people. No bots. Blackout Syndicate puts paid reach behind creators, streamers, solo businesses and local shops in South Bend, Mishawaka and Elkhart.">
+<meta name="twitter:description" content="Real ads. Real people. No bots. Paid reach for creators, streamers, solo businesses and local shops in South Bend, Mishawaka and Elkhart, Indiana.">
 <meta name="twitter:image" content="https://www.blackoutsyn.com/assets/img/og.png">
 <meta name="twitter:image:alt" content="Blackout Syndicate: Get seen. Real ads. Real people. No bots. South Bend, Mishawaka, Elkhart.">
 
@@ -40,9 +40,9 @@
 .hero{position:relative;overflow:hidden;isolation:isolate;border-bottom:1px solid var(--smoke);--x:30%;--y:45%}
 .hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(clamp(240px,34vw,520px) circle at var(--x) var(--y),rgba(217,178,95,.17),rgba(217,178,95,.05) 45%,transparent 72%)}
 .hero__sky{position:absolute;inset:0;width:100%;height:100%;z-index:-2;display:block}
-.hero__in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:clamp(28px,4vw,64px);align-items:end;padding-block:clamp(40px,6vw,84px) clamp(48px,7vw,96px)}
+.hero__in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:clamp(28px,4vw,64px);align-items:end;padding-block:clamp(28px,4vw,56px) clamp(40px,5vw,72px)}
 .hero__main{display:grid;gap:clamp(20px,2.6vw,30px);min-width:0}
-.hero__title{margin:0;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(104px,36vw,288px);line-height:.8;letter-spacing:-.012em}
+.hero__title{margin:0;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(104px,min(36vw,27vh),288px);line-height:.8;letter-spacing:-.012em}
 .hero__stack{display:grid;--x:30%;--y:50%}
 .hero__stack>span{grid-area:1/1}
 .hero__dark{color:transparent;-webkit-text-stroke:2px rgba(242,234,216,.5)}
@@ -87,10 +87,18 @@
 
 /* ── Files ── */
 .files-sub{margin-top:clamp(48px,6vw,72px)}
-.svc-row{display:flex;flex-wrap:wrap;gap:10px}
-.svc-row a{font-family:var(--f-display);font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:.03em;padding:10px 18px;border:1px solid var(--brass);color:var(--paper);text-decoration:none;display:inline-flex;gap:10px;align-items:center;transition:background .2s,color .2s}
-.svc-row a:hover{background:var(--gold);color:var(--void);border-color:var(--gold)}
-.svc-row .arw{width:18px;height:18px}
+.svc-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--smoke);border:1px solid var(--smoke)}
+@media (max-width:980px){.svc-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.svc-row{grid-template-columns:1fr}}
+.svc{--x:50%;--y:0%;position:relative;display:grid;gap:10px;align-content:start;padding:22px 20px;background:var(--coal);color:var(--paper);text-decoration:none;isolation:isolate;min-width:0;transition:background .3s}
+.svc::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;background:radial-gradient(240px circle at var(--x) var(--y),rgba(217,178,95,.16),transparent 70%);transition:opacity .3s}
+.svc:hover::before,.svc:focus-visible::before{opacity:1}
+.svc b{font-family:var(--f-display);font-weight:900;font-size:clamp(28px,2.6vw,34px);line-height:.92;text-transform:uppercase;transition:color .3s}
+.svc:hover b{color:var(--gold-hi)}
+.svc span:not(.label):not(.file__open){color:var(--ash);font-size:15px;line-height:1.45}
+.svc-row-old a{font-family:var(--f-display);font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:.03em;padding:10px 18px;border:1px solid var(--brass);color:var(--paper);text-decoration:none;display:inline-flex;gap:10px;align-items:center;transition:background .2s,color .2s}
+.svc-row-old a:hover{background:var(--gold);color:var(--void);border-color:var(--gold)}
+
 .match-cta{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px 32px;padding:clamp(22px,3vw,32px);border:1px dashed var(--brass);margin-top:clamp(36px,5vw,56px)}
 .match-cta h3{font-family:var(--f-display);font-weight:900;font-size:clamp(30px,3.6vw,46px);line-height:.9;text-transform:uppercase}
 .match-cta p{color:var(--ash);margin-top:8px;max-width:52ch}
@@ -114,7 +122,7 @@
 /* ── Reel ── */
 .reel{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 @media (max-width:1000px){.reel{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){.reel{grid-template-columns:1fr}}
+@media (max-width:520px){.reel{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:80%;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:6px}.clip{scroll-snap-align:start;aspect-ratio:3/4}}
 .clip{--tone:var(--gold);position:relative;display:grid;align-content:end;aspect-ratio:9/13;max-width:100%;overflow:hidden;text-decoration:none;color:var(--paper);background:var(--coal);border:1px solid var(--smoke);isolation:isolate;transition:border-color .3s}
 .clip--red{--tone:var(--signal)}.clip--smoke{--tone:var(--ash)}
 .clip::before{content:"";position:absolute;inset:-40%;z-index:-2;background:conic-gradient(from 200deg at 50% 50%,transparent 0 60%,color-mix(in srgb,var(--tone) 30%,transparent) 70%,transparent 80%);animation:sweep 9s linear infinite}
@@ -131,7 +139,7 @@
 
 /* ── Final call ── */
 .final{display:grid;gap:clamp(24px,3vw,36px);justify-items:start}
-.final h2{font-family:var(--f-display);font-weight:900;font-size:clamp(70px,13vw,200px);line-height:.8;text-transform:uppercase}
+.final h2{font-family:var(--f-display);font-weight:900;font-size:clamp(70px,13vw,200px);line-height:.86;text-transform:uppercase}
 .final p{font-size:var(--t-lede);max-width:52ch}
 .final .btn{--bg:var(--void);--fg:var(--gold);--bd:var(--void)}
 .final .btn--ghost{--bg:transparent;--fg:var(--void);--bd:var(--void)}
@@ -150,15 +158,15 @@
     <a class="brand brand--compact" href="index.html" aria-label="Blackout Syndicate home"><svg class="brand__cell" viewBox="0 0 83.13 122" aria-hidden="true" focusable="false"><path class="bs-void" fill="#070708" d="M2,120v-118h79.13v118z"/><path fill="currentColor" d="M0,122l0,-62.67h17v51.68h23.13c9.33,0 16.05,-1.9 20.15,-5.69c4.11,-3.79 6.35,-10.01 6.72,-18.68c0.09,-1.46 0.13,-2.77 0.13,-3.94c0,-1.17 -0.04,-2.44 -0.13,-3.81c-0.17,-4.71 -1.15,-8.43 -2.94,-11.16c-1.79,-2.73 -4.6,-4.72 -8.43,-5.97l0,-2.42l27.5,0v62.67zM40.13,68.38c2.87,0 4.94,0.86 6.21,2.59c1.27,1.73 1.91,4.65 1.91,8.78c0,1.13 0,2.23 0,3.31c0,1.09 0,2.19 0,3.32c0,2.62 -0.7,4.63 -2.09,6.03c-1.4,1.39 -3.41,2.09 -6.03,2.09h-4.38v-26.12z"/><path class="bs-paper" fill="#f2ead8" d="M0,0h83.13v60.13h-27.49v-1.37c3.71,-1.25 6.43,-3.22 8.18,-5.91c1.75,-2.69 2.78,-6.3 3.07,-10.84c0.08,-1.08 0.12,-2.16 0.12,-3.25c0,-1.08 0,-2.2 0,-3.37c0,-8.71 -2.15,-14.95 -6.44,-18.72c-4.29,-3.77 -11.1,-5.66 -20.43,-5.66h-23.13l0,49.13h-17zM40.13,27.5c2.62,0 4.63,0.59 6.03,1.78c1.39,1.19 2.09,2.89 2.09,5.1c0,1.17 0,2.34 0,3.53c0,1.19 0,2.38 0,3.59c0,3.29 -0.7,5.85 -2.09,7.66c-1.4,1.81 -3.41,2.72 -6.03,2.72h-4.38v-24.38z"/></svg></a>
     <nav class="menu" id="menu" aria-label="Main">
       <ul><li><a href="packages.html">Packages</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="work.html">The Reel</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li></ul>
-      <a class="btn btn--sm menu__cta" href="contact.html">Get seen</a>
+      <a class="btn btn--sm menu__cta" href="contact.html">Make contact</a>
     </nav>
     <div class="topbar__end">
-      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false" aria-label="Your clearance level">
-        <span class="hud__lv">LV <b data-hud-lv>0</b></span>
+      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false">
+        <span class="sr">Clearance </span><span class="hud__lv">LV <b data-hud-lv>0</b></span>
         <span class="hud__name" data-hud-name>Outsider</span>
         <span class="hud__bar" aria-hidden="true"><i data-hud-bar></i></span>
       </button>
-      <a class="btn btn--sm topbar__cta" href="contact.html">Get seen</a>
+      <a class="btn btn--sm topbar__cta" href="contact.html">Make contact</a>
       <button class="burger" type="button" data-burger aria-controls="menu" aria-expanded="false"><span class="burger__lines" aria-hidden="true"></span><span class="sr">Menu</span></button>
     </div>
   </div>
@@ -173,7 +181,7 @@
       <h1 class="hero__title"><span class="sr">Get seen.</span><span class="hero__stack" data-spot-layer aria-hidden="true"><span class="hero__dark">Get<br>Seen.</span><span class="hero__lit">Get<br>Seen.</span></span><span class="hero__whisper">You’ve been in the dark long enough.</span></h1>
       <p class="lede"><strong>Real ads. Real people. No bots.</strong> We put paid reach behind creators, streamers, solo businesses and local shops, on the feeds your people already scroll.</p>
       <div class="ctas">
-        <a class="btn btn--lg" href="packages.html">Open the files <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
+        <a class="btn btn--lg" href="packages.html">See packages and prices <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
         <a class="btn btn--ghost btn--lg" href="packages.html#match">Find my package</a>
       </div>
       <p class="hero__call">Rather talk? Call or text <a href="tel:+15742139097">(574) 213-9097</a></p>
@@ -211,7 +219,7 @@
         <button type="button" data-crowd-mode="paid" aria-pressed="false">You pick</button>
       </div>
       <div class="crowd__grid" data-crowd aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      <p class="crowd__cap" data-crowd-cap aria-live="polite"><b>The feed picks.</b> A few scattered people, chosen by an algorithm that has never heard of your town.</p>
+      <p class="crowd__cap" data-crowd-cap><b>The feed picks.</b> A few scattered people, chosen by an algorithm that has never heard of your town.</p>
       <p class="label label--dim">Illustration, not data</p>
     </div>
   </div>
@@ -224,7 +232,7 @@
       <a class="textlink" href="how-it-works.html">The full play, step by step <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
     </div>
     <ol class="steps rv" style="--n:3">
-      <li><h3>Pick your size</h3><p>A one-time boost to test the water, or a monthly plan that keeps the push running every week.</p></li>
+      <li><h3>Pick your size</h3><p>A one-time boost to test the water, or a monthly plan that keeps the push running all month, every month.</p></li>
       <li><h3>Point it</h3><p>Your post, page, channel, website or booking line. Tell us where you want new people to land.</p></li>
       <li><h3>We push</h3><p>A real paid placement on the platform you choose, aimed at your area or your audience. You get a recap of what ran.</p></li>
     </ol>
@@ -294,7 +302,7 @@
     <span class="price">$300<small>/mo</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
-  <span class="file__note">One month only: $450, no commitment</span>
+  <span class="file__note">One month only: $450, billed once</span>
 </a>
 <a class="file" href="packages/overdrive.html" data-spot>
   <span class="file__tab">File 05</span>
@@ -305,7 +313,7 @@
     <span class="price">$400<small>/mo</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
-  <span class="file__note">One month only: $550, no commitment</span>
+  <span class="file__note">One month only: $550, billed once</span>
 </a>
 <a class="file file--flag" href="packages/total-blackout.html" data-spot>
   <span class="file__tab">File 06</span>
@@ -316,7 +324,7 @@
     <span class="price">$500<small>/mo</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
-  <span class="file__note">One month only: $650, no commitment</span>
+  <span class="file__note">One month only: $650, billed once</span>
 </a></div>
     <div class="drawer-label files-sub rv"><h3 class="h3">Add-ons</h3><span class="label label--dim">Pair with any boost</span></div>
     <div class="grid grid--2 rv">
@@ -343,7 +351,7 @@
   
 </a></div>
     <div class="drawer-label files-sub rv"><h3 class="h3">Built to order</h3><span class="label label--dim">Quoted per job</span></div>
-    <div class="svc-row rv"><a href="services/website-design.html">Website Design <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a><a href="services/ai-consulting.html">AI Consulting <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a><a href="services/ai-automation.html">AI Automation <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a><a href="services/creator-systems.html">Creator Content Systems <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div>
+    <div class="svc-row rv"><a class="svc" href="services/website-design.html" data-spot><span class="label label--dim">File 09 · Quoted</span><b>Website Design</b><span>A clean, fast site that says what you do, where you are and how to reach you.</span><span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span></a><a class="svc" href="services/ai-consulting.html" data-spot><span class="label label--dim">File 10 · Quoted</span><b>AI Consulting</b><span>Plain-English help finding where AI actually saves you time.</span><span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span></a><a class="svc" href="services/ai-automation.html" data-spot><span class="label label--dim">File 11 · Quoted</span><b>AI Automation</b><span>Stop doing everything by hand.</span><span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span></a><a class="svc" href="services/creator-systems.html" data-spot><span class="label label--dim">File 12 · Quoted</span><b>Creator Content Systems</b><span>A system that turns every stream into a week of posts.</span><span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span></a></div>
     <div class="match-cta rv">
       <div><h3>Not sure which file is yours?</h3><p>Three questions. We’ll point you at the one that fits, and it’s worth clearance.</p></div>
       <a class="btn" href="packages.html#match">Find my match <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
@@ -393,7 +401,7 @@
 <section class="band" aria-labelledby="reel-h">
   <div class="wrap">
     <div class="band__head band__head--row rv">
-      <div><p class="label">The reel</p><h2 class="h2" id="reel-h">Watch <span class="whisper">the work.</span></h2><p>Spots cut for Blackout Syndicate and the Graveshift Gaming crew. Opens on YouTube.</p></div>
+      <div><p class="label">The reel</p><h2 class="h2" id="reel-h">Watch <span class="whisper">the work.</span></h2><p>Ad spots, gaming highlights and AI tool showdowns made by the crew. Opens on YouTube.</p></div>
       <a class="textlink" href="work.html">The whole reel <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
     </div>
     <div class="reel rv"><a class="clip clip--gold" href="https://www.youtube.com/shorts/EKYdYyosvf0" target="_blank" rel="noopener"><span class="clip__badge">Short · 0:46</span><span class="clip__play" aria-hidden="true"></span><span class="clip__meta"><span class="label">Blackout Syndicate</span><b>Get Seen. We push for you.</b></span></a><a class="clip clip--red" href="https://www.youtube.com/shorts/QMssQ39tNm4" target="_blank" rel="noopener"><span class="clip__badge">Short · 0:31</span><span class="clip__play" aria-hidden="true"></span><span class="clip__meta"><span class="label">Graveshift Gaming</span><b>Trophy Hunt: Taking Names</b></span></a><a class="clip clip--gold" href="https://www.youtube.com/watch?v=CBeBPZVmA9k" target="_blank" rel="noopener"><span class="clip__badge">Video · AI showdown</span><span class="clip__play" aria-hidden="true"></span><span class="clip__meta"><span class="label">AI Tools series</span><b>Grok vs Gemini</b></span></a><a class="clip clip--smoke" href="https://www.youtube.com/channel/UCmJc9N5EHufdvCeG0FmvlRQ" target="_blank" rel="noopener"><span class="clip__badge">Channel · Every drop</span><span class="clip__play" aria-hidden="true"></span><span class="clip__meta"><span class="label">YouTube</span><b>See the whole channel</b></span></a></div>
@@ -413,6 +421,7 @@
 
 <section class="nextfile band band--tight" aria-label="Next file">
   <div class="wrap">
+    <div data-jump hidden></div>
     <a class="nextfile__card" href="packages.html" data-spot>
       <span class="label">Next file · Index</span>
       <span class="nextfile__title">The Files</span>
@@ -432,7 +441,7 @@
         
 <div class="lines">
   <div class="lines__row"><a class="lines__big" href="tel:+15742139097">(574) 213-9097</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></div>
-  <div class="lines__row"><span class="lines__mail">info@blackoutsyn.com</span><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
+  <div class="lines__row"><a class="lines__mail" href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
   <p class="lines__note">Call or text. South Bend, Mishawaka, Elkhart and anywhere online.</p>
 </div>
       </div>
@@ -449,13 +458,13 @@
     </div>
     <div class="foot__base">
       <p>© <span data-year>2026</span> Blackout Syndicate · a GC General Contracting LLC company · South Bend, Indiana</p>
-      <p class="foot__legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 20</b></button></p>
+      <p class="foot__legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 19</b></button></p>
     </div>
   </div>
 </footer>
 
 <div class="scrim" data-scrim hidden></div>
-<aside class="drawer" id="clearance" data-drawer hidden aria-labelledby="drawer-title" tabindex="-1">
+<aside class="drawer" id="clearance" data-drawer hidden role="dialog" aria-modal="true" aria-labelledby="drawer-title" tabindex="-1">
   <div class="drawer__in">
     <div class="drawer__head">
       <p class="label">Visitor file</p>
@@ -715,9 +724,12 @@
   }
   document.querySelectorAll('[data-crowd-mode]').forEach((b) => b.addEventListener('click', () => set(b.dataset.crowdMode)));
   set('feed');
-  let auto = setInterval(() => set(document.querySelector('[data-crowd-mode="feed"]').getAttribute('aria-pressed') === 'true' ? 'paid' : 'feed'), 4200);
-  document.querySelector('.crowd__toggle').addEventListener('click', () => clearInterval(auto), { once: true });
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) clearInterval(auto);
+  // Auto-flip only while the section is on screen, never with reduced motion, and stop for good once the visitor takes over.
+  let auto = 0, touched = false;
+  const flip = () => set(document.querySelector('[data-crowd-mode="feed"]').getAttribute('aria-pressed') === 'true' ? 'paid' : 'feed');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  new IntersectionObserver(([e]) => { clearInterval(auto); auto = 0; if (e.isIntersecting && !touched && !reduce) auto = setInterval(flip, 4200); }).observe(grid);
+  document.querySelector('.crowd__toggle').addEventListener('click', () => { touched = true; clearInterval(auto); cap.setAttribute('aria-live', 'polite'); }, true);
 })();
 </script>
 </body>

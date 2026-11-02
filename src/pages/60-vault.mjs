@@ -273,6 +273,9 @@ const css = `
 .pb__rules .classified__body a{color:var(--ink);text-decoration-color:var(--brass);text-underline-offset:3px;font-weight:700}
 .js .pb__rules .classified.is-locked .classified__body a{text-decoration:none}
 .js .pb__rules .classified.is-locked .classified__body{max-height:9.4em;overflow:hidden;-webkit-mask-image:linear-gradient(#000 40%,transparent);mask-image:linear-gradient(#000 40%,transparent)}
+.js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status{font-size:0;gap:8px}
+.js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status span{display:none}
+.js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__body{max-height:4.6em}
 .pb__end{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 32px;padding:clamp(22px,3vw,30px);border:1px dashed var(--brass)}
 .pb__end p{color:var(--ash);max-width:56ch}
 .pb__end b{color:var(--paper);font-weight:600}
@@ -347,6 +350,7 @@ const js = `
       if (hint) hint.textContent = s === 'open' ? (userShut ? 'Press to open' : 'Press to close') : 'Try the door';
       const w = $('[data-vt-whisper]');
       if (w) w.textContent = s === 'open' ? 'You’re in.' : 'Inner Circle only.';
+      const ln = $('[data-vt-lock-note]'); if (ln) ln.hidden = s === 'open';
       $$('[data-vt-cta]').forEach((a) => { const o = s === 'open' ? a.dataset.open : a.dataset.closed; if (o) { const [t, h] = o.split('|'); a.innerHTML = t + ' ' + ARW; a.setAttribute('href', h); } });
     }
     function settle() {
@@ -427,7 +431,7 @@ const js = `
       e.preventDefault();
       const inp = $('input', say), out = $('[data-sayit-msg]'), v = inp.value.toLowerCase().replace(/[^a-z]/g, '');
       if (v === 'blackout' || v === 'blackoutsyndicate') {
-        inp.value = ''; inp.blur();
+        inp.value = ''; say.querySelector('button').focus();
         'blackout'.split('').forEach((k) => document.body.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true })));
         const veil = $('[data-veil]'), dark = veil && !veil.hidden;
         out.textContent = dark ? 'Lights out. Say it again to bring them back.' : 'Lights back on.';
@@ -529,7 +533,7 @@ const js = `
     field(636, 'TERRITORY', 'SOUTH BEND, IN');
     // seal or provisional stamp
     if (inner) {
-      g.save(); g.translate(1050, 600); g.rotate(-0.2);
+      g.save(); g.translate(1030, 590); g.rotate(-0.2);
       g.strokeStyle = C.gold; g.lineWidth = 3.5; g.beginPath(); g.arc(0, 0, 84, 0, Math.PI * 2); g.stroke();
       g.lineWidth = 1.2; g.beginPath(); g.arc(0, 0, 74, 0, Math.PI * 2); g.stroke(); g.beginPath(); g.arc(0, 0, 50, 0, Math.PI * 2); g.stroke();
       g.fillStyle = C.gold; g.font = '700 14px ' + F.type; arc('INNER CIRCLE', 0, 0, 62, false, 3); arc('BLACKOUT SYNDICATE', 0, 0, 62, true, 1.6);
@@ -537,7 +541,7 @@ const js = `
       g.fillStyle = C.hi; g.font = '900 30px ' + F.display; g.textAlign = 'center'; g.fillText('LV 5', 0, 30); g.textAlign = 'left';
       g.restore();
     } else {
-      g.save(); g.translate(1046, 614); g.rotate(-0.21); g.globalAlpha = .92;
+      g.save(); g.translate(1012, 588); g.rotate(-0.21); g.globalAlpha = .92;
       g.strokeStyle = C.signal; g.lineWidth = 4; rr(-112, -46, 224, 92, 8); g.stroke();
       g.lineWidth = 1.5; rr(-103, -37, 206, 74, 4); g.stroke();
       g.fillStyle = C.signal; g.font = '900 40px ' + F.display; g.textAlign = 'center'; g.fillText('PROVISIONAL', 0, 7);
@@ -636,7 +640,7 @@ export default {
       <p class="vd__cap label label--dim" aria-hidden="true"><b data-vd-cap>Locked</b><span>·</span><span data-vd-hint>Try the door</span></p>
     </div>
     <div class="vt-hero__body">
-      <p class="lede">Behind this door: <strong>the full Syndicate Playbook</strong>, ten rules we run every push on, and <strong>a Syndicate ID</strong> with your name on it. Level ${TOP.lv} opens it.</p>
+      <p class="lede">Behind this door: <strong>the full Syndicate Playbook</strong>, ten rules we run every push on, and <strong>a Syndicate ID</strong> with your name on it. <span data-vt-lock-note>Level ${TOP.lv} opens it.</span></p>
       <p class="vt-state" id="vd-state" data-vd-state aria-live="polite"><span><b>Locked.</b> Clearance ${TOP.lv} required.</span></p>
       <div class="ctas">
         <a class="btn btn--lg" href="#get-in" data-vt-cta data-open="Read the playbook|#playbook">How to get in ${c.arrow}</a>
@@ -654,7 +658,7 @@ export default {
       <p data-vt-intro>Level ${TOP.lv} takes ${TOP.xp} clearance. Here is every way to earn it. Your clearance lives in this browser only.</p>
     </div>
     <div class="vt-in">
-      <aside class="vt-card rv" data-visitor aria-label="Your clearance">
+      <section class="vt-card rv" data-visitor aria-label="Your clearance">
         <div class="vt-card__head"><span class="label">Your clearance</span><span class="badge badge--red" data-v="status">Uncleared</span></div>
         <div class="vt-card__lv"><b data-v="lv">0</b><span><span class="vt-card__name" data-v="name">${LEVELS[0].name}</span><span class="vt-card__xp"><span data-v="xp">0</span> <span data-vt-of>of ${TOP.xp} clearance</span></span></span></div>
         <ol class="tumblers" aria-hidden="true">${LEVELS.slice(1).map((l) => `<li data-tumbler="${l.lv}"><span class="slot"><span class="pin"></span></span><small><b>LV ${l.lv}</b>${l.name}</small></li>`).join('')}</ol>
@@ -665,7 +669,7 @@ export default {
         <p class="vt-card__gap" data-vt-gap>Level ${TOP.lv} takes ${TOP.xp} clearance.</p>
         <p class="vt-card__gap"><span class="label label--dim">Next unlock</span><br><span data-v="next">${LEVELS[1].unlock} (Level 1)</span></p>
         <button class="textlink" type="button" data-hud-open>Open your full file ${c.arrow}</button>
-      </aside>
+      </section>
       <ol class="ways rv" style="--d:.1s">
         <li class="way" data-way="files">
           <span class="way__xp">+${XP.visit + XP.read}<small>per file</small></span>

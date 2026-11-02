@@ -14,7 +14,7 @@ const priceOf = (o) => (o.kind === 'service' ? 'Quoted' : o.price + o.suffix);
 // One plain line shown under the select once a package is picked.
 const noteFor = (o) => {
   if (o.kind === 'boost') return `${KIND.boost} · ${o.run}. ${o.spend}`;
-  if (o.kind === 'plan') return `${KIND.plan} · ${o.price}${o.suffix}${o.oneMonth ? `, or ${o.oneMonth} for one month only` : ''}. ${o.spend}`;
+  if (o.kind === 'plan') return `${KIND.plan} · ${o.price}${o.suffix}${o.regular ? ` launch price (regular ${o.regular})` : ''}${o.oneMonth ? `, or ${o.oneMonth} for a single month` : ''}.${o.regular ? '' : ` ${o.spend}`}`;
   if (o.kind === 'addon') return `${KIND.addon} · ${o.run}. ${o.tagline}`;
   return `${KIND.service} · ${o.spend}`;
 };
@@ -105,8 +105,11 @@ const css = `
 .intake option,.intake optgroup{color:var(--ink);background:var(--paper)}
 .intake .field input:hover,.intake .field select:hover,.intake .field textarea:hover{border-color:var(--ink)}
 .intake .field input:focus,.intake .field select:focus,.intake .field textarea:focus{border-color:var(--ink);background-color:var(--paper);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 55%,transparent)}
+.intake .field [aria-invalid="true"]:focus{border-color:var(--signal);background-color:color-mix(in srgb,var(--signal) 9%,var(--paper));box-shadow:0 0 0 3px color-mix(in srgb,var(--signal) 30%,transparent)}
 .intake .field input::placeholder,.intake .field textarea::placeholder{color:var(--ink-mute);opacity:.72}
 .intake .field [aria-invalid="true"]{border-color:var(--signal);background-color:color-mix(in srgb,var(--signal) 9%,transparent)}
+.intake .field [aria-invalid="true"]:hover{border-color:var(--signal)}
+.intake .field [aria-invalid="true"]:focus{border-color:var(--signal);background-color:color-mix(in srgb,var(--signal) 9%,var(--paper));box-shadow:0 0 0 3px color-mix(in srgb,var(--signal) 30%,transparent)}
 .intake .field__err{color:var(--ink);font-weight:600;display:flex;gap:8px;align-items:baseline}
 .intake .field__err::before{content:"";flex:none;width:10px;height:10px;background:var(--signal);clip-path:polygon(20% 0,50% 30%,80% 0,100% 20%,70% 50%,100% 80%,80% 100%,50% 70%,20% 100%,0 80%,30% 50%,0 20%)}
 .intake .field__err:empty{display:none}
@@ -259,6 +262,9 @@ export default {
     const platformChips = [...PLATFORMS.map((p) => ({ v: p.name, icon: p.name.toLowerCase() })), { v: 'Not sure' }]
       .map((p) => `<label class="chip"><input type="radio" name="platform" value="${p.v}"><span>${p.icon ? c.icon(p.icon) : ''}${p.v}</span></label>`).join('');
     const reachChips = ['Call', 'Text', 'Email'].map((v) => `<label class="chip"><input type="radio" name="reach" value="${v}"><span>${v}</span></label>`).join('');
+    // Plain-POST fallback for when site.js fails to load: same inbox, no AJAX, lands on the thank-you page.
+    // When the engine runs it calls preventDefault and sends to formEndpoint instead.
+    const fallback = c.config.formEndpoint ? c.config.formEndpoint.replace('/ajax/', '/') : '';
     const field = (id, label, input, { req = false, hint = '' } = {}) => `
         <div class="field">
           <label for="f-${id}">${label}${req ? ' <b aria-hidden="true">*</b>' : ''}</label>
@@ -278,7 +284,7 @@ export default {
         <p class="lede">Tell us what you’re pushing and where your people are. We’ll tell you straight which package fits, or whether you need one at all.</p>
         <div class="ctas"><a class="btn btn--lg ct-down" href="#intake">Send a message ${c.arrow}</a></div>
       </div>
-      <aside class="ct-line" data-spot aria-label="Direct line">
+      <section class="ct-line" data-spot aria-label="Direct line">
         <div class="ct-line__top"><span class="label">The direct line</span><span class="label label--dim">Call or text</span></div>
         <a class="ct-line__num" href="${BIZ.phoneHref}">${BIZ.phone}</a>
         <div class="ct-line__acts">
@@ -287,7 +293,7 @@ export default {
           ${c.btn('Email', 'mailto:' + BIZ.email, 'ghost')}
         </div>
         <p class="ct-line__mail">Or write to <a href="mailto:${BIZ.email}">${BIZ.email}</a></p>
-      </aside>
+      </section>
     </div>
   </div>
 </header>
@@ -297,7 +303,7 @@ export default {
 
     <div class="intake rv" id="intake">
       <span class="intake__tab" aria-hidden="true">Intake · ${c.page.file}</span>
-      <form class="form intake__sheet" method="post" data-lead data-intake novalidate aria-labelledby="intake-h">
+      <form class="form intake__sheet" method="post"${fallback ? ` action="${fallback}"` : ''} data-lead data-intake novalidate aria-labelledby="intake-h">
         <div class="intake__head">
           <p class="label">Intake form</p>
           <h2 class="intake__h" id="intake-h">Tell us what you’re <span class="whisper">pushing.</span></h2>
@@ -340,6 +346,7 @@ export default {
         ${field('message', 'What are you pushing?', `<textarea id="f-message" name="message" rows="5" placeholder="What you sell or make, who it’s for, and any date that matters." aria-describedby="err-message"></textarea>`)}
 
         <label class="hp" aria-hidden="true">Leave this field empty <input name="_honey" tabindex="-1" autocomplete="off"></label>
+        ${fallback ? `<input type="hidden" name="_next" value="${c.config.siteUrl}/thank-you.html">` : ''}
         <div class="form__alert" data-form-alert role="alert" hidden></div>
 
         <p class="note intake__nojs"><span>JavaScript is off in this browser, so this form can’t send. Call or text <a href="${BIZ.phoneHref}">${BIZ.phone}</a> or email <a href="mailto:${BIZ.email}">${BIZ.email}</a> instead.</span></p>
@@ -397,7 +404,7 @@ export default {
     </div>
     <div class="grid grid--3 ct-doors rv">
       <a href="${c.link('packages.html#match')}"><span class="label">+${XP.quiz} clearance</span><b>Find my package</b><span>Three questions. We point you at the file that fits.</span><span class="file__open">Take the match ${c.arrow}</span></a>
-      <a href="${c.link('faq.html')}"><span class="label">Straight answers</span><b>Read the FAQ</b><span>Refunds, recaps, contracts and passwords, answered word for word.</span><span class="file__open">Open the FAQ ${c.arrow}</span></a>
+      <a href="${c.link('faq.html')}"><span class="label">Straight answers</span><b>Read the FAQ</b><span>Refunds, recaps, contracts and passwords. The refund policy is quoted word for word.</span><span class="file__open">Open the FAQ ${c.arrow}</span></a>
       <a href="${c.link('how-it-works.html')}"><span class="label">The full play</span><b>How it works</b><span>From the first message to the recap, step by step.</span><span class="file__open">See the play ${c.arrow}</span></a>
     </div>
   </div>

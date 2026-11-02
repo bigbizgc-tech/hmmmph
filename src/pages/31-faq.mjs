@@ -99,7 +99,7 @@ const css = `
 
 /* ── Groups ── */
 .faq-body{padding-top:clamp(48px,7vw,96px)}
-.faq-body.is-empty{padding-top:28px}
+.faq-body.is-empty{display:none}
 .faq-group{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.4fr);gap:clamp(28px,5vw,80px);align-items:start;padding-block:clamp(48px,6vw,84px);border-top:1px solid var(--smoke)}
 .faq-group:first-of-type{border-top:0;padding-top:0}
 .faq-group[hidden]{display:none}
@@ -129,7 +129,7 @@ const css = `
 .qa__secret{font-family:var(--f-type);font-size:14px}
 .qa__secret .hidden-mark{margin-left:6px}
 mark.hit{background:var(--gold);color:var(--void);padding:0 .08em}
-.faq-empty{display:grid;gap:14px;justify-items:start;padding:clamp(24px,4vw,40px);border:1px dashed var(--brass);max-width:720px}
+.faq-empty{display:grid;gap:14px;justify-items:start;padding:clamp(20px,3vw,32px);border:1px dashed var(--brass)}
 .faq-empty[hidden]{display:none}
 .faq-empty p:not(.label){font-size:var(--t-lede)}
 
@@ -260,6 +260,11 @@ export default {
           <input type="search" id="faq-q" data-faq-input placeholder="Try “refund”, “TikTok” or “cancel”" autocomplete="off" spellcheck="false" aria-describedby="faq-q-status">
         </div>
         <p class="faq-find__status" id="faq-q-status" data-faq-status aria-live="polite"></p>
+        <div class="faq-empty" data-faq-empty hidden>
+          <p class="label label--red">No match</p>
+          <p>Nothing on file for “<span data-faq-empty-q></span>”. Ask it straight and you’ll get a straight answer.</p>
+          ${c.btn('Ask us ' + c.arrow, 'contact.html')}
+        </div>
       </div>
       <nav class="faq-index" aria-label="FAQ sections">
         <ol>
@@ -272,11 +277,6 @@ export default {
 
 <section class="band faq-body" aria-label="Questions and answers">
   <div class="wrap" data-faq>
-    <div class="faq-empty" data-faq-empty hidden>
-      <p class="label label--red">No match</p>
-      <p>Nothing on file for “<span data-faq-empty-q></span>”. Ask it straight and you’ll get a straight answer.</p>
-      ${c.btn('Ask us ' + c.arrow, 'contact.html')}
-    </div>
     ${GROUPS.map((g, i) => `
     <section class="faq-group" id="${g.id}" data-faq-group aria-labelledby="${g.id}-h">
       <div class="faq-group__head rv">

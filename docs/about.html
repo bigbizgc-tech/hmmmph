@@ -41,6 +41,7 @@
 .ab-head__in{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(20px,4vw,56px);align-items:stretch}
 .ab-head__main{display:grid;gap:22px;align-content:end;min-width:0;padding-top:clamp(48px,7vw,96px)}
 .ab-head__title{overflow-wrap:anywhere}
+.ab-nw{white-space:nowrap}
 .ab-head__tease{font-family:var(--f-type);font-size:13.5px;letter-spacing:.06em;color:var(--ash);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
 .ab-head__tease a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--brass)}
 .ab-lamp{--cord:clamp(56px,7.5vw,112px);position:relative;min-height:clamp(440px,46vw,620px);min-width:0;pointer-events:none}
@@ -197,6 +198,7 @@
 .ab-poster__where{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-type);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);border:1px solid var(--smoke);padding:8px 12px;transition:color .2s,border-color .2s}
 .ab-poster:hover .ab-poster__where{color:var(--paper);border-color:var(--signal)}
 .ab-poster__where .ico{width:18px;height:18px}
+.ab-poster__where .ab-poster__url{text-transform:none;letter-spacing:.08em}
 .ab-poster__stamp{position:absolute;right:-14px;top:-18px;width:104px;font-size:17px;background:var(--void)}
 @media (max-width:560px){.ab-poster{transform:none;width:calc(100% - 12px)}.ab-poster__stamp{right:-6px;top:-22px;width:88px;font-size:15px}}
 
@@ -221,15 +223,15 @@
     <a class="brand brand--compact" href="index.html" aria-label="Blackout Syndicate home"><svg class="brand__cell" viewBox="0 0 83.13 122" aria-hidden="true" focusable="false"><path class="bs-void" fill="#070708" d="M2,120v-118h79.13v118z"/><path fill="currentColor" d="M0,122l0,-62.67h17v51.68h23.13c9.33,0 16.05,-1.9 20.15,-5.69c4.11,-3.79 6.35,-10.01 6.72,-18.68c0.09,-1.46 0.13,-2.77 0.13,-3.94c0,-1.17 -0.04,-2.44 -0.13,-3.81c-0.17,-4.71 -1.15,-8.43 -2.94,-11.16c-1.79,-2.73 -4.6,-4.72 -8.43,-5.97l0,-2.42l27.5,0v62.67zM40.13,68.38c2.87,0 4.94,0.86 6.21,2.59c1.27,1.73 1.91,4.65 1.91,8.78c0,1.13 0,2.23 0,3.31c0,1.09 0,2.19 0,3.32c0,2.62 -0.7,4.63 -2.09,6.03c-1.4,1.39 -3.41,2.09 -6.03,2.09h-4.38v-26.12z"/><path class="bs-paper" fill="#f2ead8" d="M0,0h83.13v60.13h-27.49v-1.37c3.71,-1.25 6.43,-3.22 8.18,-5.91c1.75,-2.69 2.78,-6.3 3.07,-10.84c0.08,-1.08 0.12,-2.16 0.12,-3.25c0,-1.08 0,-2.2 0,-3.37c0,-8.71 -2.15,-14.95 -6.44,-18.72c-4.29,-3.77 -11.1,-5.66 -20.43,-5.66h-23.13l0,49.13h-17zM40.13,27.5c2.62,0 4.63,0.59 6.03,1.78c1.39,1.19 2.09,2.89 2.09,5.1c0,1.17 0,2.34 0,3.53c0,1.19 0,2.38 0,3.59c0,3.29 -0.7,5.85 -2.09,7.66c-1.4,1.81 -3.41,2.72 -6.03,2.72h-4.38v-24.38z"/></svg></a>
     <nav class="menu" id="menu" aria-label="Main">
       <ul><li><a href="packages.html">Packages</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="work.html">The Reel</a></li><li><a href="about.html" aria-current="page">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li></ul>
-      <a class="btn btn--sm menu__cta" href="contact.html">Get seen</a>
+      <a class="btn btn--sm menu__cta" href="contact.html">Make contact</a>
     </nav>
     <div class="topbar__end">
-      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false" aria-label="Your clearance level">
-        <span class="hud__lv">LV <b data-hud-lv>0</b></span>
+      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false">
+        <span class="sr">Clearance </span><span class="hud__lv">LV <b data-hud-lv>0</b></span>
         <span class="hud__name" data-hud-name>Outsider</span>
         <span class="hud__bar" aria-hidden="true"><i data-hud-bar></i></span>
       </button>
-      <a class="btn btn--sm topbar__cta" href="contact.html">Get seen</a>
+      <a class="btn btn--sm topbar__cta" href="contact.html">Make contact</a>
       <button class="burger" type="button" data-burger aria-controls="menu" aria-expanded="false"><span class="burger__lines" aria-hidden="true"></span><span class="sr">Menu</span></button>
     </div>
   </div>
@@ -240,7 +242,7 @@
   <div class="wrap ab-head__in">
     <div class="ab-head__main">
       <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li aria-current="page">About</li></ol></nav>
-      <p class="label">File 15 · Personnel · South Bend, Indiana</p>
+      <p class="label">File 15 · Personnel · <span class="ab-nw">South Bend, Indiana</span></p>
       <h1 class="h1 ab-head__title">Who runs <span class="whisper">the Syndicate.</span></h1>
       <p class="lede"><strong>Gregory Clark. Goes by GC.</strong> A South Bend guy who built things with his hands for ten years. Now he builds reach for creators, streamers, solo businesses and local shops.</p>
       <div class="ctas">
@@ -277,15 +279,15 @@
       <ol class="ab-line rv" style="--d:.1s">
         <li><p class="label">Then</p><h3>Ten years building</h3><p>Gregory Clark spent ten years building things with his hands. Blackout Syndicate is a GC General Contracting LLC company.</p></li>
         <li><p class="label">Now</p><h3>Building reach</h3><p>Real paid ads, content and AI setup for creators, streamers, solo businesses and local shops in South Bend, Mishawaka and Elkhart.</p></li>
-        <li><p class="label">Also</p><h3>Fixing and building tech</h3><p>Websites, AI tools, computer and console repair, and PC builds. If your computer or console is giving you trouble, ask.</p></li>
-        <li><p class="label label--red">The crew</p><h3>Running Graveshift Gaming</h3><p>A gaming crew he recruits on Discord. A squad is forming for the GTA 6 launch. <a class="textlink" href="#graveshift">Meet the crew <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></p></li>
+        <li><p class="label">Also</p><h3>Websites and AI setup</h3><p>A clean site for your ads to land on, and AI assistants and automations that take the repeat work off your plate. Each one is quoted in writing before work starts.</p></li>
+        <li><p class="label label--red">The crew</p><h3>Running Graveshift Gaming</h3><p>GC’s gaming crew. It lives on Discord. <a class="textlink" href="#graveshift">Meet the crew <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></p></li>
       </ol>
     </div>
 
     <div class="ab-trades rv">
-      <div class="drawer-label"><h3 class="h3">What GC takes on</h3><span class="label label--dim">One number for all of it · (574) 213-9097</span></div>
+      <div class="drawer-label"><h3 class="h3">What GC takes on</h3><span class="label label--dim">One number for all of it · <span class="ab-nw">(574) 213-9097</span></span></div>
       <div class="ab-trades__grid">
-        <div class="ab-trade"><h4>Paid reach</h4><p>Real ads on X, YouTube, TikTok, Instagram and Facebook, from a one-time boost to a monthly plan.</p><div class="ab-trade__links"><a class="textlink" href="packages.html">Open the packages <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div></div><div class="ab-trade"><h4>Content</h4><p>A month of posts planned and written, or a system that turns every stream into a week of posts.</p><div class="ab-trade__links"><a class="textlink" href="packages/post-kit.html">30-Day Post Kit <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a><a class="textlink" href="services/creator-systems.html">Creator systems <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div></div><div class="ab-trade"><h4>AI setup</h4><p>Finding where AI honestly saves you time, then setting it up so it runs.</p><div class="ab-trade__links"><a class="textlink" href="services/ai-consulting.html">AI Consulting <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a><a class="textlink" href="services/ai-automation.html">AI Automation <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div></div><div class="ab-trade"><h4>Websites</h4><p>A clean site that works on a phone, so the people your ads reach have somewhere to land.</p><div class="ab-trade__links"><a class="textlink" href="services/website-design.html">Website Design <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div></div><div class="ab-trade"><h4>Computer and console repair</h4><p>Laptop, desktop or console acting up. Tell GC what it’s doing and get a straight answer on the fix.</p><div class="ab-trade__links"><a class="textlink" href="contact.html">Ask about a repair <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div></div><div class="ab-trade"><h4>PC builds</h4><p>A machine built for what you actually do, whether that’s streaming, gaming or work.</p><div class="ab-trade__links"><a class="textlink" href="contact.html">Ask about a build <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div></div>
+        <div class="ab-trade"><h4>Paid reach</h4><p>Real ads on X, YouTube, TikTok, Instagram and Facebook, from a one-time boost to a monthly plan.</p><div class="ab-trade__links"><a class="textlink" href="packages.html">Open the packages <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div></div><div class="ab-trade"><h4>Content</h4><p>A month of posts, planned and written. You just hit publish.</p><div class="ab-trade__links"><a class="textlink" href="packages/post-kit.html">30-Day Post Kit <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div></div><div class="ab-trade"><h4>Creator systems</h4><p>A system that turns every stream into a week of posts. Built around how you already film.</p><div class="ab-trade__links"><a class="textlink" href="services/creator-systems.html">Creator Content Systems <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div></div><div class="ab-trade"><h4>AI consulting</h4><p>Plain-English help finding where AI actually saves you time.</p><div class="ab-trade__links"><a class="textlink" href="services/ai-consulting.html">AI Consulting <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div></div><div class="ab-trade"><h4>AI automation</h4><p>The jobs you repeat every day, running on their own.</p><div class="ab-trade__links"><a class="textlink" href="services/ai-automation.html">AI Automation <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div></div><div class="ab-trade"><h4>Websites</h4><p>A clean site that works on a phone, so the people your ads reach have somewhere to land.</p><div class="ab-trade__links"><a class="textlink" href="services/website-design.html">Website Design <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div></div>
       </div>
     </div>
   </div>
@@ -302,7 +304,7 @@
     </header>
     <h3 class="classified__title" id="cl-founder">Case file: Gregory Clark</h3>
     <div class="classified__body">
-      <ul><li><strong>Name</strong> Gregory Clark</li><li><strong>Known as</strong> GC, Biz</li><li><strong>Base</strong> South Bend, Indiana</li><li><strong>Company</strong> Blackout Syndicate, a GC General Contracting LLC company</li><li><strong>Background</strong> Ten years building things with his hands</li><li><strong>Trade now</strong> Paid reach, content and AI setup for creators, streamers, solo businesses and local shops</li><li><strong>Also handles</strong> Websites, AI tools, computer and console repair, PC builds</li><li><strong>Territory</strong> South Bend, Mishawaka and Elkhart. All three on the St. Joseph River</li><li><strong>Crew</strong> Graveshift Gaming. Recruits on Discord. Squad forming for the GTA 6 launch</li><li><strong>Standing orders</strong> Every dollar accounted for. If he can’t help you, he says so</li><li><strong>Found on</strong> @BzTheG on X, @bigbizgc on TikTok, @bizgc2 on Instagram</li><li><strong>Direct line</strong> (574) 213-9097</li></ul>
+      <ul><li><strong>Name</strong> Gregory Clark</li><li><strong>Known as</strong> GC, Biz</li><li><strong>Base</strong> South Bend, Indiana</li><li><strong>Company</strong> Blackout Syndicate, a GC General Contracting LLC company</li><li><strong>Background</strong> Ten years building things with his hands</li><li><strong>Trade now</strong> Paid reach, content and AI setup for creators, streamers, solo businesses and local shops</li><li><strong>Also handles</strong> Websites, AI assistants and automations</li><li><strong>Territory</strong> South Bend, Mishawaka and Elkhart. All three on the St. Joseph River</li><li><strong>Crew</strong> Graveshift Gaming, GC’s gaming crew. Find it on Discord</li><li><strong>Standing orders</strong> Every dollar accounted for. If he can’t help you, he says so</li><li><strong>Found on</strong> @BzTheG on X, @bigbizgc on TikTok, @bizgc2 on Instagram</li><li><strong>Direct line</strong> (574) 213-9097</li></ul>
       <p>End of file. The rest you hear from him. Call or text <a href="tel:+15742139097">(574) 213-9097</a>.</p></div>
     <p class="classified__status" data-classified-status aria-live="polite"></p>
   </div>
@@ -339,7 +341,7 @@
       <p>Six lines we hold to on every job, from a $19.99 Spark to a monthly plan.</p>
     </div>
     <ol class="ab-rules rv">
-      <li><div><h3>Your OK comes first</h3><p>Nothing runs under your name until you say go. You see what runs before it runs.</p></div></li><li><div><h3>You get a recap</h3><p>When a run ends you get the numbers that matter: what was spent, how many people it reached, and the clicks or views it got.</p></div></li><li><div><h3>Price before work</h3><p>Boosts and plans have their price on the page. Quoted jobs follow the written quote you approve before work starts.</p></div></li><li><div><h3>No promised numbers</h3><p>Results depend on your content, your audience and the platform. No set number of views, likes or followers is guaranteed.</p></div></li><li><div><h3>Stay or walk</h3><p>Monthly plans run month to month. Cancel any time before your next billing date and you won’t be charged again. A month that has already started isn’t refunded.</p></div></li><li><div><h3>A local person, not a queue</h3><p>Call or text (574) 213-9097. You deal with a person in South Bend, not a ticket system.</p></div></li>
+      <li><div><h3>Your OK comes first</h3><p>Nothing runs under your name until you say go. You see what runs before it runs.</p></div></li><li><div><h3>You get a recap</h3><p>When a run ends you get the numbers that matter: what was spent, how many people it reached, and the clicks or views it got.</p></div></li><li><div><h3>Price before work</h3><p>Boosts, plans and add-ons have their price on the page. Quoted jobs follow the written quote you approve before work starts.</p></div></li><li><div><h3>No promised numbers</h3><p>Results depend on your content, your audience and the platform. No set number of views, likes or followers is guaranteed.</p></div></li><li><div><h3>Stay or walk</h3><p>Monthly plans run month to month. Cancel any time before your next billing date and you won’t be charged again. A month that has already started isn’t refunded.</p></div></li><li><div><h3>A local person answers</h3><p>Call or text (574) 213-9097. You deal with a person in South Bend.</p></div></li>
     </ol>
     <p class="ab-sign rv"><span>Signed</span><b>Gregory Clark</b></p>
   </div>
@@ -388,8 +390,8 @@
   <div class="wrap ab-gs">
     <div class="ab-gs__text rv">
       <p class="label label--red">The crew</p>
-      <h2 class="h2" id="gs-h">Graveshift Gaming. <span class="whisper">The crew, not the agency.</span></h2>
-      <p class="lede"><strong>Graveshift is GC’s gaming crew.</strong> Players recruited on Discord, and right now a squad is forming for the GTA 6 launch.</p>
+      <h2 class="h2" id="gs-h">Graveshift Gaming. <span class="whisper">GC’s crew.</span></h2>
+      <p class="lede"><strong>The gaming crew lives on Discord.</strong> Its clips are on the Reel.</p>
       <p class="muted">The crew’s clips run on the same kind of system we build for streamers. That’s <a class="textlink" href="services/creator-systems.html">Creator Content Systems <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></p>
       <div class="ctas">
         <a class="btn btn--lg" href="https://discord.gg/7UFuNZgzu" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Join on Discord</a>
@@ -398,12 +400,12 @@
     </div>
     <a class="ab-poster rv" href="https://discord.gg/7UFuNZgzu" target="_blank" rel="noopener" style="--d:.1s">
       <span class="ab-poster__sheet">
-        <span class="ab-poster__top">Now recruiting</span>
+        <span class="ab-poster__top">Join the crew</span>
         <span class="ab-poster__name">Grave<i>shift</i></span>
         <span class="ab-poster__sub">Gaming</span>
         <span class="ab-poster__rule"></span>
-        <span class="ab-poster__mission">Squad forming for the GTA 6 launch</span>
-        <span class="ab-poster__where"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Report to Discord</span>
+        <span class="ab-poster__mission">Find the crew on Discord</span>
+        <span class="ab-poster__where"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> <span class="ab-poster__url">discord.gg/7UFuNZgzu</span></span>
       </span>
       <span class="stamp ab-poster__stamp" aria-hidden="true">Open<br>call</span>
       <span class="sr">(opens Discord in a new tab)</span>
@@ -424,6 +426,7 @@
 
 <section class="nextfile band band--tight" aria-label="Next file">
   <div class="wrap">
+    <div data-jump hidden></div>
     <a class="nextfile__card" href="work.html" data-spot>
       <span class="label">Next file · File 16</span>
       <span class="nextfile__title">The Reel</span>
@@ -443,7 +446,7 @@
         
 <div class="lines">
   <div class="lines__row"><a class="lines__big" href="tel:+15742139097">(574) 213-9097</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></div>
-  <div class="lines__row"><span class="lines__mail">info@blackoutsyn.com</span><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
+  <div class="lines__row"><a class="lines__mail" href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
   <p class="lines__note">Call or text. South Bend, Mishawaka, Elkhart and anywhere online.</p>
 </div>
       </div>
@@ -460,13 +463,13 @@
     </div>
     <div class="foot__base">
       <p>© <span data-year>2026</span> Blackout Syndicate · a GC General Contracting LLC company · South Bend, Indiana</p>
-      <p class="foot__legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 20</b></button></p>
+      <p class="foot__legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 19</b></button></p>
     </div>
   </div>
 </footer>
 
 <div class="scrim" data-scrim hidden></div>
-<aside class="drawer" id="clearance" data-drawer hidden aria-labelledby="drawer-title" tabindex="-1">
+<aside class="drawer" id="clearance" data-drawer hidden role="dialog" aria-modal="true" aria-labelledby="drawer-title" tabindex="-1">
   <div class="drawer__in">
     <div class="drawer__head">
       <p class="label">Visitor file</p>

@@ -133,6 +133,7 @@
     $$('[data-mark]').forEach((m) => { if (S.marks[m.dataset.mark]) { m.classList.add('is-found'); m.setAttribute('aria-label', 'Hidden mark, already claimed'); } });
     // Never rebuild the drawer under an open "Burn it?" question.
     if (drawerOpen && !$('[data-burn-yes]', drawer)) renderDrawer();
+    document.dispatchEvent(new CustomEvent('bs:change', { detail: { xp: S.xp, lv: levelFor(S.xp).lv } }));
     renderJump();
   }
 

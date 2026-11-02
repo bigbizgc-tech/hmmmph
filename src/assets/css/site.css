@@ -473,6 +473,7 @@ main:focus { outline: none; }
 .drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 85; width: min(460px, 100%); background: var(--coal); border-left: 1px solid var(--smoke); overflow-y: auto; padding: calc(20px + env(safe-area-inset-top, 0px)) max(22px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) 22px; animation: slideIn .35s var(--ease); }
 .drawer:focus { outline: none; }
 .drawer__in { display: grid; gap: 22px; }
+[data-drawer-body] { display: grid; gap: 22px; }
 .drawer__head { display: flex; justify-content: space-between; align-items: center; }
 .drawer__x { width: 40px; height: 40px; background: none; border: 1px solid var(--smoke); font-size: 26px; line-height: 1; cursor: pointer; color: var(--paper); }
 .drawer__x:hover { border-color: var(--gold); color: var(--gold); }

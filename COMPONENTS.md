@@ -43,6 +43,7 @@ Pages without `file` (thank-you, vault, privacy, terms, 404) give no clearance f
 | `c.contactLines()` | Big phone number + email with copy buttons. |
 | `c.socialRow()` | Social links with icons. |
 | `c.icon('x')` | Brand icon SVG: x, tiktok, instagram, facebook, youtube, discord. |
+| `c.config` | The merged build config (`src/config.mjs` plus any `BS_CONFIG_OVERRIDE`). Read switches such as `c.config.showPayLinks` from here, never by importing `config.mjs`. |
 | `c.BIZ`, `c.SOCIALS`, `c.LEVELS`, `c.POLICY` (refund/billing wording: use it verbatim), `c.PLATFORMS`, `c.REEL`, `c.OFFERS`, `c.BOOSTS`, `c.PLANS`, `c.ADDONS`, `c.SERVICES`, `c.offerPath(o)` | Data. Never hard-code a price: read it from the offer. |
 
 ## CSS components (in `src/assets/css/site.css`)
@@ -70,6 +71,8 @@ Never introduce new colors or fonts. Use the tokens.
 - `.qa` FAQ: `<details class="qa"><summary>Question</summary><div><p>Answer</p></div></details>`.
 - `.textlink` for "Read more →" style links (`<a class="textlink" href="…">Text ${c.arrow}</a>`).
 - Forms: `.form`, `.form__row`, `.field` (label + input/select/textarea + `<p class="field__err" data-err-for="name"></p>`), `.chips/.chip`, `.form__alert`, `.hp` honeypot.
+- Focus rings switch to ink on `band--paper` and `.classified`, and to void on `band--gold`. Anything else on a light or gold surface needs its own `:focus-visible { outline-color: … }`.
+- A locked `.classified` body is clipped to about 11em and fades out, so long files don't become screens of black bars. Links inside a locked body leave the tab order.
 - Add `class="rv"` to section-level blocks for a reveal on scroll (only fires for things below the fold). Optional `style="--d:.1s"` delay.
 - `data-spot` on any element makes a gold searchlight follow the pointer (`--x/--y` set in px). Use for one hero-ish moment per page at most.
 
@@ -77,7 +80,8 @@ Never introduce new colors or fonts. Use the tokens.
 
 - `BS.award(kind, id, amount, label)` — kind is `seen|read|mark|quiz|lead|blackout`. Use `BS.award('quiz', '', BS.XP.quiz, 'Package match found')`.
 - `BS.track(name, params)` — X pixel event by config key (`lead`, `formSubmit`, `packageView`, `contactView`).
-- `BS.toast(main, sub, big, tone)`, `BS.state()`, `BS.level()`, `BS.open()` (opens clearance drawer), `BS.reduce` (reduced motion).
+- `BS.toast(main, sub, big, tone, href, note)`, `BS.state()`, `BS.level()`, `BS.open()` (opens clearance drawer), `BS.reduce` (reduced motion). Toasts never block taps; a toast with `href` is a link (`'#clearance'` opens the drawer).
+- Clearance is re-read from storage before every write, so several open tabs never wipe each other. Always change state through `BS.award()`, never by writing to `BS.state()`.
 - Lead form: `<form class="form" data-lead novalidate>` with fields named `name` (required), `business`, `email` (required, type=email), `phone`, `interest` (select; each option `value="spark"` and `data-slug="spark"`), `platform`, `message`, plus honeypot `<input name="_honey" class="hp" tabindex="-1" autocomplete="off">`, `<div class="form__alert" data-form-alert hidden></div>`, and `<button class="btn btn--lg" type="submit">`. The engine handles validation, sending, pixel events and redirect to thank-you.html. `?pkg=slug` preselects.
 - Thank-you: elements `[data-lead-name]`, `[data-lead-interest]`, `[data-lead-preview]` (hidden unless preview) are filled automatically.
 

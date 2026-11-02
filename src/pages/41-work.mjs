@@ -68,8 +68,8 @@ const andList = (a) => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + 
 const RECAP = [
   ['Spend', 'What the platform charged'],
   ['Reach', 'People who saw it'],
-  ['Clicks or views', 'The number that matches your goal'],
-  ['Follows', `${andList(BOOSTS.slice(1).map((o) => o.name))} and plans`],
+  ['Clicks or views', 'Whichever matches your goal'],
+  ['Follows', andList([...BOOSTS.slice(1).map((o) => o.name), 'plans'])],
 ];
 const BOOST = bySlug.boost;
 
@@ -218,12 +218,11 @@ const css = `
 .rl-board__in .label{color:var(--brass)}
 .rl-board__in b{font-family:var(--f-display);font-weight:900;font-size:clamp(40px,4.6vw,64px);line-height:.86;text-transform:uppercase;color:var(--ink)}
 .rl-board__in .ledger{width:100%;text-align:left;border-top:1.5px solid var(--ink)}
-.rl-board__in .ledger dd{max-width:60%}
-.rl-board__in>span{font-family:var(--f-type);font-size:13.5px;letter-spacing:.06em;color:var(--ink-mute)}
-.rl-board .stamp{position:absolute;right:clamp(10px,3vw,28px);bottom:clamp(10px,3vw,28px);width:116px;font-size:18px;box-shadow:inset 0 0 0 5px var(--paper-2),inset 0 0 0 6.5px var(--signal)}
-@media (min-width:901px){.rl-board{padding-bottom:clamp(96px,10vw,120px)}}
-@media (max-width:900px){.rl-board{aspect-ratio:auto;padding-bottom:140px}}
-@media (max-width:600px){.rl-board{padding:56px 22px 136px}.rl-board .stamp{width:100px;font-size:16px;right:24px;bottom:28px}}
+.rl-board__foot{display:flex;align-items:center;justify-content:space-between;gap:18px;width:100%;text-align:left;padding-top:4px}
+.rl-board__foot>span:first-child{font-family:var(--f-type);font-size:13.5px;letter-spacing:.06em;color:var(--ink-mute);max-width:26ch}
+.rl-board .stamp{flex:none;width:112px;font-size:18px;box-shadow:inset 0 0 0 5px var(--paper-2),inset 0 0 0 6.5px var(--signal)}
+@media (max-width:900px){.rl-board{aspect-ratio:auto}}
+@media (max-width:600px){.rl-board{padding:52px 22px 44px}.rl-board .stamp{width:96px;font-size:16px}}
 
 /* ── Follow ── */
 .rl-follow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
@@ -378,8 +377,7 @@ export default {
     </div>
     <div class="rl-board rv" style="--d:.1s">
       <span class="rl-board__pin" aria-hidden="true"></span><span class="rl-board__pin" aria-hidden="true"></span><span class="rl-board__pin" aria-hidden="true"></span><span class="rl-board__pin" aria-hidden="true"></span>
-      <div class="rl-board__in"><p class="label">What you get back</p><b>Every client recap</b><dl class="ledger">${RECAP.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl><span>Shared publicly only with the client’s OK.</span></div>
-      <span class="stamp" aria-hidden="true">Client<br>OK<small>Required</small></span>
+      <div class="rl-board__in"><p class="label">What you get back</p><b>Every client recap</b><dl class="ledger">${RECAP.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl><div class="rl-board__foot"><span>Shared publicly only with the client’s OK.</span><span class="stamp" aria-hidden="true">Client<br>OK<small>Required</small></span></div></div>
     </div>
   </div>
 </section>

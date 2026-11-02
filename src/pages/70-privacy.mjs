@@ -466,7 +466,7 @@ ${legalShort({
     { t: 'What stays with you', p: 'Your clearance lives in your own browser. Burn it any time.', go: 'clearance', link: 'The clearance game' },
     { t: 'What we never do', p: 'Sell your information. Or rent it, or trade it.', go: 'no-selling', link: 'No selling' },
   ],
-  fine: `Every other file on this site has blacked-out lines until you earn the clearance. This one is open to everyone, at every level.`,
+  fine: `Many files on this site hold classified blocks that open as your clearance rises. This one is open to everyone, at every level.`,
 })}
 
 ${legalBody('Privacy policy', sections)}

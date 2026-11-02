@@ -192,6 +192,9 @@
 .pb__rules .classified__body a{color:var(--ink);text-decoration-color:var(--brass);text-underline-offset:3px;font-weight:700}
 .js .pb__rules .classified.is-locked .classified__body a{text-decoration:none}
 .js .pb__rules .classified.is-locked .classified__body{max-height:9.4em;overflow:hidden;-webkit-mask-image:linear-gradient(#000 40%,transparent);mask-image:linear-gradient(#000 40%,transparent)}
+.js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status{font-size:0;gap:8px}
+.js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__status span{display:none}
+.js .pb__rules .classified.is-locked ~ .classified.is-locked .classified__body{max-height:4.6em}
 .pb__end{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 32px;padding:clamp(22px,3vw,30px);border:1px dashed var(--brass)}
 .pb__end p{color:var(--ash);max-width:56ch}
 .pb__end b{color:var(--paper);font-weight:600}
@@ -237,15 +240,15 @@
     <a class="brand brand--compact" href="index.html" aria-label="Blackout Syndicate home"><svg class="brand__cell" viewBox="0 0 83.13 122" aria-hidden="true" focusable="false"><path class="bs-void" fill="#070708" d="M2,120v-118h79.13v118z"/><path fill="currentColor" d="M0,122l0,-62.67h17v51.68h23.13c9.33,0 16.05,-1.9 20.15,-5.69c4.11,-3.79 6.35,-10.01 6.72,-18.68c0.09,-1.46 0.13,-2.77 0.13,-3.94c0,-1.17 -0.04,-2.44 -0.13,-3.81c-0.17,-4.71 -1.15,-8.43 -2.94,-11.16c-1.79,-2.73 -4.6,-4.72 -8.43,-5.97l0,-2.42l27.5,0v62.67zM40.13,68.38c2.87,0 4.94,0.86 6.21,2.59c1.27,1.73 1.91,4.65 1.91,8.78c0,1.13 0,2.23 0,3.31c0,1.09 0,2.19 0,3.32c0,2.62 -0.7,4.63 -2.09,6.03c-1.4,1.39 -3.41,2.09 -6.03,2.09h-4.38v-26.12z"/><path class="bs-paper" fill="#f2ead8" d="M0,0h83.13v60.13h-27.49v-1.37c3.71,-1.25 6.43,-3.22 8.18,-5.91c1.75,-2.69 2.78,-6.3 3.07,-10.84c0.08,-1.08 0.12,-2.16 0.12,-3.25c0,-1.08 0,-2.2 0,-3.37c0,-8.71 -2.15,-14.95 -6.44,-18.72c-4.29,-3.77 -11.1,-5.66 -20.43,-5.66h-23.13l0,49.13h-17zM40.13,27.5c2.62,0 4.63,0.59 6.03,1.78c1.39,1.19 2.09,2.89 2.09,5.1c0,1.17 0,2.34 0,3.53c0,1.19 0,2.38 0,3.59c0,3.29 -0.7,5.85 -2.09,7.66c-1.4,1.81 -3.41,2.72 -6.03,2.72h-4.38v-24.38z"/></svg></a>
     <nav class="menu" id="menu" aria-label="Main">
       <ul><li><a href="packages.html">Packages</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="work.html">The Reel</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li></ul>
-      <a class="btn btn--sm menu__cta" href="contact.html">Get seen</a>
+      <a class="btn btn--sm menu__cta" href="contact.html">Make contact</a>
     </nav>
     <div class="topbar__end">
-      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false" aria-label="Your clearance level">
-        <span class="hud__lv">LV <b data-hud-lv>0</b></span>
+      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false">
+        <span class="sr">Clearance </span><span class="hud__lv">LV <b data-hud-lv>0</b></span>
         <span class="hud__name" data-hud-name>Outsider</span>
         <span class="hud__bar" aria-hidden="true"><i data-hud-bar></i></span>
       </button>
-      <a class="btn btn--sm topbar__cta" href="contact.html">Get seen</a>
+      <a class="btn btn--sm topbar__cta" href="contact.html">Make contact</a>
       <button class="burger" type="button" data-burger aria-controls="menu" aria-expanded="false"><span class="burger__lines" aria-hidden="true"></span><span class="sr">Menu</span></button>
     </div>
   </div>
@@ -314,7 +317,7 @@
       <p class="vd__cap label label--dim" aria-hidden="true"><b data-vd-cap>Locked</b><span>·</span><span data-vd-hint>Try the door</span></p>
     </div>
     <div class="vt-hero__body">
-      <p class="lede">Behind this door: <strong>the full Syndicate Playbook</strong>, ten rules we run every push on, and <strong>a Syndicate ID</strong> with your name on it. Level 5 opens it.</p>
+      <p class="lede">Behind this door: <strong>the full Syndicate Playbook</strong>, ten rules we run every push on, and <strong>a Syndicate ID</strong> with your name on it. <span data-vt-lock-note>Level 5 opens it.</span></p>
       <p class="vt-state" id="vd-state" data-vd-state aria-live="polite"><span><b>Locked.</b> Clearance 5 required.</span></p>
       <div class="ctas">
         <a class="btn btn--lg" href="#get-in" data-vt-cta data-open="Read the playbook|#playbook">How to get in <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
@@ -332,7 +335,7 @@
       <p data-vt-intro>Level 5 takes 240 clearance. Here is every way to earn it. Your clearance lives in this browser only.</p>
     </div>
     <div class="vt-in">
-      <aside class="vt-card rv" data-visitor aria-label="Your clearance">
+      <section class="vt-card rv" data-visitor aria-label="Your clearance">
         <div class="vt-card__head"><span class="label">Your clearance</span><span class="badge badge--red" data-v="status">Uncleared</span></div>
         <div class="vt-card__lv"><b data-v="lv">0</b><span><span class="vt-card__name" data-v="name">Outsider</span><span class="vt-card__xp"><span data-v="xp">0</span> <span data-vt-of>of 240 clearance</span></span></span></div>
         <ol class="tumblers" aria-hidden="true"><li data-tumbler="1"><span class="slot"><span class="pin"></span></span><small><b>LV 1</b>Lookout</small></li><li data-tumbler="2"><span class="slot"><span class="pin"></span></span><small><b>LV 2</b>Associate</small></li><li data-tumbler="3"><span class="slot"><span class="pin"></span></span><small><b>LV 3</b>Operative</small></li><li data-tumbler="4"><span class="slot"><span class="pin"></span></span><small><b>LV 4</b>Lieutenant</small></li><li data-tumbler="5"><span class="slot"><span class="pin"></span></span><small><b>LV 5</b>Inner Circle</small></li></ol>
@@ -343,7 +346,7 @@
         <p class="vt-card__gap" data-vt-gap>Level 5 takes 240 clearance.</p>
         <p class="vt-card__gap"><span class="label label--dim">Next unlock</span><br><span data-v="next">Playbook Rule 01 on the home page (Level 1)</span></p>
         <button class="textlink" type="button" data-hud-open>Open your full file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></button>
-      </aside>
+      </section>
       <ol class="ways rv" style="--d:.1s">
         <li class="way" data-way="files">
           <span class="way__xp">+25<small>per file</small></span>
@@ -631,7 +634,7 @@
         
 <div class="lines">
   <div class="lines__row"><a class="lines__big" href="tel:+15742139097">(574) 213-9097</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></div>
-  <div class="lines__row"><span class="lines__mail">info@blackoutsyn.com</span><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
+  <div class="lines__row"><a class="lines__mail" href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
   <p class="lines__note">Call or text. South Bend, Mishawaka, Elkhart and anywhere online.</p>
 </div>
       </div>
@@ -648,13 +651,13 @@
     </div>
     <div class="foot__base">
       <p>© <span data-year>2026</span> Blackout Syndicate · a GC General Contracting LLC company · South Bend, Indiana</p>
-      <p class="foot__legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 20</b></button></p>
+      <p class="foot__legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 19</b></button></p>
     </div>
   </div>
 </footer>
 
 <div class="scrim" data-scrim hidden></div>
-<aside class="drawer" id="clearance" data-drawer hidden aria-labelledby="drawer-title" tabindex="-1">
+<aside class="drawer" id="clearance" data-drawer hidden role="dialog" aria-modal="true" aria-labelledby="drawer-title" tabindex="-1">
   <div class="drawer__in">
     <div class="drawer__head">
       <p class="label">Visitor file</p>
@@ -707,6 +710,7 @@
       if (hint) hint.textContent = s === 'open' ? (userShut ? 'Press to open' : 'Press to close') : 'Try the door';
       const w = $('[data-vt-whisper]');
       if (w) w.textContent = s === 'open' ? 'You’re in.' : 'Inner Circle only.';
+      const ln = $('[data-vt-lock-note]'); if (ln) ln.hidden = s === 'open';
       $$('[data-vt-cta]').forEach((a) => { const o = s === 'open' ? a.dataset.open : a.dataset.closed; if (o) { const [t, h] = o.split('|'); a.innerHTML = t + ' ' + ARW; a.setAttribute('href', h); } });
     }
     function settle() {
@@ -787,7 +791,7 @@
       e.preventDefault();
       const inp = $('input', say), out = $('[data-sayit-msg]'), v = inp.value.toLowerCase().replace(/[^a-z]/g, '');
       if (v === 'blackout' || v === 'blackoutsyndicate') {
-        inp.value = ''; inp.blur();
+        inp.value = ''; say.querySelector('button').focus();
         'blackout'.split('').forEach((k) => document.body.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true })));
         const veil = $('[data-veil]'), dark = veil && !veil.hidden;
         out.textContent = dark ? 'Lights out. Say it again to bring them back.' : 'Lights back on.';
@@ -889,7 +893,7 @@
     field(636, 'TERRITORY', 'SOUTH BEND, IN');
     // seal or provisional stamp
     if (inner) {
-      g.save(); g.translate(1050, 600); g.rotate(-0.2);
+      g.save(); g.translate(1030, 590); g.rotate(-0.2);
       g.strokeStyle = C.gold; g.lineWidth = 3.5; g.beginPath(); g.arc(0, 0, 84, 0, Math.PI * 2); g.stroke();
       g.lineWidth = 1.2; g.beginPath(); g.arc(0, 0, 74, 0, Math.PI * 2); g.stroke(); g.beginPath(); g.arc(0, 0, 50, 0, Math.PI * 2); g.stroke();
       g.fillStyle = C.gold; g.font = '700 14px ' + F.type; arc('INNER CIRCLE', 0, 0, 62, false, 3); arc('BLACKOUT SYNDICATE', 0, 0, 62, true, 1.6);
@@ -897,7 +901,7 @@
       g.fillStyle = C.hi; g.font = '900 30px ' + F.display; g.textAlign = 'center'; g.fillText('LV 5', 0, 30); g.textAlign = 'left';
       g.restore();
     } else {
-      g.save(); g.translate(1046, 614); g.rotate(-0.21); g.globalAlpha = .92;
+      g.save(); g.translate(1012, 588); g.rotate(-0.21); g.globalAlpha = .92;
       g.strokeStyle = C.signal; g.lineWidth = 4; rr(-112, -46, 224, 92, 8); g.stroke();
       g.lineWidth = 1.5; rr(-103, -37, 206, 74, 4); g.stroke();
       g.fillStyle = C.signal; g.font = '900 40px ' + F.display; g.textAlign = 'center'; g.fillText('PROVISIONAL', 0, 7);

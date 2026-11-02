@@ -246,6 +246,7 @@ const css = `
 .ab-poster__where{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-type);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);border:1px solid var(--smoke);padding:8px 12px;transition:color .2s,border-color .2s}
 .ab-poster:hover .ab-poster__where{color:var(--paper);border-color:var(--signal)}
 .ab-poster__where .ico{width:18px;height:18px}
+.ab-poster__where .ab-poster__url{text-transform:none;letter-spacing:.08em}
 .ab-poster__stamp{position:absolute;right:-14px;top:-18px;width:104px;font-size:17px;background:var(--void)}
 @media (max-width:560px){.ab-poster{transform:none;width:calc(100% - 12px)}.ab-poster__stamp{right:-6px;top:-22px;width:88px;font-size:15px}}
 
@@ -502,7 +503,7 @@ export default {
         <span class="ab-poster__sub">Gaming</span>
         <span class="ab-poster__rule"></span>
         <span class="ab-poster__mission">Find the crew on Discord</span>
-        <span class="ab-poster__where">${c.icon('discord')} ${DISCORD.url.replace(/^https?:\/\//, '')}</span>
+        <span class="ab-poster__where">${c.icon('discord')} <span class="ab-poster__url">${DISCORD.url.replace(/^https?:\/\//, '')}</span></span>
       </span>
       <span class="stamp ab-poster__stamp" aria-hidden="true">Open<br>call</span>
       <span class="sr">(opens Discord in a new tab)</span>

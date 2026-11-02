@@ -42,6 +42,13 @@ Then rebuild: `npm run build` (or `node build.mjs`). That rewrites `docs/`.
 
 If you'd rather track the conversion by URL, set the Lead event in Events Manager to "page URL contains `thank-you`". The page only loads after a successful form send.
 
+How the Lead conversion is counted: after a successful send the form goes to `thank-you.html?sent=<token>`. The page fires
+`lead` once per send (with the token as `conversion_id`, so X can de-duplicate), then drops `?sent=` from the address bar,
+so a reload never counts twice. It still counts when a browser blocks site storage.
+
+The build warns you if `xPixelId` is set but `xEvents.lead` is empty (the conversion would never fire), and it fails if
+`previewMode` is left on for a `docs/` build (the form would not send leads).
+
 ### The contact form
 
 The form posts to `formEndpoint`. The default is FormSubmit, which needs no account:
@@ -52,13 +59,23 @@ The form posts to `formEndpoint`. The default is FormSubmit, which needs no acco
 4. Every message after that lands in that inbox, and the visitor goes to the thank-you page.
 
 To use Formspree, Basin or anything else that accepts a JSON POST, paste its endpoint instead. If a send fails, the visitor
-sees your phone number and email plus a copy of their message, so no lead is lost.
+sees a tap-to-call link and an email link that opens with their message already filled in, plus a copy of the message, so
+no lead is lost. The phone and email come from `BIZ` in `src/data/business.mjs`.
+
+Each lead email also says where the visitor came from when it is known: `source` (the X click ID `twclid` and any
+`utm_source`, `utm_medium`, `utm_campaign`, `utm_content` tags from the first page they landed on), `landing` (that page)
+and `last_package` (the last package file they opened). Tag your X ad links with UTM tags to see which ad sent each lead.
 
 ### Checkout links
 
 `showPayLinks` is **off**. Every package's main button is "Claim it", which opens the contact form with that package selected.
 This works no matter what the payment processor is doing. Turn it on once checkout is confirmed working, and the one-time
 packages also get a "Pay online" button pointing at the matching store product page.
+
+**Before turning it on**, replace each package's `store` link in `src/data/offers.mjs`. They still point at the old Wix
+product pages (`/product-page/...`), which disappear once the domain moves off Wix. The build also writes `docs/_redirects`
+(used by Netlify and Cloudflare Pages) so those old Wix product addresses, if anyone shared or bookmarked them, land on the
+matching new package page with a 301. GitHub Pages ignores that file.
 
 ## Editing prices and packages
 
@@ -98,6 +115,10 @@ confirmed working.
 | 3 | Operative (110) | How a push is actually aimed (How it works) |
 | 4 | Lieutenant (170) | The founder's full file (About) |
 | 5 | Inner Circle (240) | The Vault: the full Syndicate Playbook and a Syndicate ID card |
+
+When a level opens, its reward declassifies only when the visitor scrolls to it, the level-up toast links straight to it,
+and the bottom of every page shows a "Just declassified" card until they have read it. Reading all the files earns the
+Archive seal. Each level's `href` and `cl` in `LEVELS` say where its reward lives; the build checks those links.
 
 Progress is saved only in the visitor's own browser. Redacted text stays in the page for screen readers and search engines;
 the redaction is visual only.

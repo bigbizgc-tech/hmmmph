@@ -103,7 +103,7 @@ const js = `
       const unsure = !lead.slug || lead.slug === 'unsure';
       set('[data-lead-interest]', unsure ? 'file' : label.split(' · ')[0] + ' file');
       set('[data-slip-from]', lead.name || 'You');
-      set('[data-slip-re]', unsure ? 'Help me pick' : label);
+      set('[data-slip-re]', unsure ? 'Help me pick' : label.split(' · ')[0]);
       const how = { Call: 'with a call', Text: 'by text', Email: 'by email' }[read('bs2.reach')];
       if (how) {
         set('[data-lead-reach]', how);
@@ -196,13 +196,13 @@ export default {
         <h2 class="h2" id="wait-h">Go <span class="whisper">deeper.</span></h2>
         <p data-xp-line>Sending the form is worth <b>+${XP.lead} clearance</b>. Spend it on the files below.</p>
       </div>
-      <aside class="ty-clear" data-visitor aria-label="Your clearance">
+      <section class="ty-clear" data-visitor aria-label="Your clearance">
         <div class="ty-clear__head"><span class="label">Your clearance</span><span class="badge badge--gold" data-v="status">Uncleared</span></div>
         <div class="ty-clear__lv"><b data-v="lv">0</b><span data-v="name">${LEVELS[0].name}</span></div>
         <div class="meter" aria-hidden="true"><i data-v="bar"></i></div>
         <p class="ty-clear__next"><span class="label label--dim">Next unlock</span><span data-v="next">${LEVELS[1].unlock} (Level 1)</span></p>
         <button class="textlink" type="button" data-hud-open>See every file ${c.arrow}</button>
-      </aside>
+      </section>
     </div>
     <div class="grid grid--4 ty-doors rv">
       <a class="file" href="${c.link('index.html#cl-rule-01')}" data-spot data-door="1">

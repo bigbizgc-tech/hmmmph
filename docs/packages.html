@@ -91,6 +91,7 @@
 .pk-ctl button:hover:not([disabled]){color:var(--paper);border-color:var(--gold)}
 .pk-ctl button[disabled]{opacity:.35;cursor:default}
 .pk-ctl button[hidden]{display:none}
+@media (max-width:560px){.pk-quiz__top{flex-wrap:nowrap}.pk-segs i{width:22px}.pk-prog{gap:10px}.pk-prog__t{font-size:11.5px;letter-spacing:.1em}}
 .pk-q{display:grid;gap:20px}
 .pk-q[hidden]{display:none}
 .pk-q__title{font-family:var(--f-display);font-weight:900;font-size:clamp(36px,4.2vw,56px);line-height:.9;text-transform:uppercase}
@@ -270,15 +271,15 @@
     <a class="brand brand--compact" href="index.html" aria-label="Blackout Syndicate home"><svg class="brand__cell" viewBox="0 0 83.13 122" aria-hidden="true" focusable="false"><path class="bs-void" fill="#070708" d="M2,120v-118h79.13v118z"/><path fill="currentColor" d="M0,122l0,-62.67h17v51.68h23.13c9.33,0 16.05,-1.9 20.15,-5.69c4.11,-3.79 6.35,-10.01 6.72,-18.68c0.09,-1.46 0.13,-2.77 0.13,-3.94c0,-1.17 -0.04,-2.44 -0.13,-3.81c-0.17,-4.71 -1.15,-8.43 -2.94,-11.16c-1.79,-2.73 -4.6,-4.72 -8.43,-5.97l0,-2.42l27.5,0v62.67zM40.13,68.38c2.87,0 4.94,0.86 6.21,2.59c1.27,1.73 1.91,4.65 1.91,8.78c0,1.13 0,2.23 0,3.31c0,1.09 0,2.19 0,3.32c0,2.62 -0.7,4.63 -2.09,6.03c-1.4,1.39 -3.41,2.09 -6.03,2.09h-4.38v-26.12z"/><path class="bs-paper" fill="#f2ead8" d="M0,0h83.13v60.13h-27.49v-1.37c3.71,-1.25 6.43,-3.22 8.18,-5.91c1.75,-2.69 2.78,-6.3 3.07,-10.84c0.08,-1.08 0.12,-2.16 0.12,-3.25c0,-1.08 0,-2.2 0,-3.37c0,-8.71 -2.15,-14.95 -6.44,-18.72c-4.29,-3.77 -11.1,-5.66 -20.43,-5.66h-23.13l0,49.13h-17zM40.13,27.5c2.62,0 4.63,0.59 6.03,1.78c1.39,1.19 2.09,2.89 2.09,5.1c0,1.17 0,2.34 0,3.53c0,1.19 0,2.38 0,3.59c0,3.29 -0.7,5.85 -2.09,7.66c-1.4,1.81 -3.41,2.72 -6.03,2.72h-4.38v-24.38z"/></svg></a>
     <nav class="menu" id="menu" aria-label="Main">
       <ul><li><a href="packages.html" aria-current="page">Packages</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="work.html">The Reel</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li></ul>
-      <a class="btn btn--sm menu__cta" href="contact.html">Get seen</a>
+      <a class="btn btn--sm menu__cta" href="contact.html">Make contact</a>
     </nav>
     <div class="topbar__end">
-      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false" aria-label="Your clearance level">
-        <span class="hud__lv">LV <b data-hud-lv>0</b></span>
+      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false">
+        <span class="sr">Clearance </span><span class="hud__lv">LV <b data-hud-lv>0</b></span>
         <span class="hud__name" data-hud-name>Outsider</span>
         <span class="hud__bar" aria-hidden="true"><i data-hud-bar></i></span>
       </button>
-      <a class="btn btn--sm topbar__cta" href="contact.html">Get seen</a>
+      <a class="btn btn--sm topbar__cta" href="contact.html">Make contact</a>
       <button class="burger" type="button" data-burger aria-controls="menu" aria-expanded="false"><span class="burger__lines" aria-hidden="true"></span><span class="sr">Menu</span></button>
     </div>
   </div>
@@ -402,7 +403,7 @@
       <div>
         <p class="label">Drawer 01 · 3 files</p>
         <h2 class="h2 pk-h2" id="boosts-h">One-time boosts. <span class="whisper">No contract.</span></h2>
-        <p>One push for one moment. Pick the size, point it at your post, page, channel or site, and we run a real paid placement on one platform through its own ad tools. Our target is live within 24 hours of payment.</p>
+        <p>One push for one moment. Pick the size, point it at your post, page, channel or site, and we run a real paid placement on one platform through its own ad tools. Our target is live within 24 hours of payment. Platform ad review can take longer.</p>
       </div>
       <a class="textlink" href="#compare-boosts">Compare the three <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
     </div>
@@ -458,7 +459,7 @@
           </tbody>
         </table>
       </div>
-      <p class="pk-policy"><b>Refunds</b>Cancel before your ad is set up and you get a full refund. Once ad money has been paid to a platform, that part can’t be returned. If we don’t deliver the run, you get the setup part back too.</p>
+      <p class="pk-policy"><b>Refunds</b>Cancel before your ad is set up and you get a full refund. Ad money the platform has already spent can’t be returned. If we don’t deliver the run, you get back the setup part and any ad money the platform didn’t spend.</p>
       <div class="pk-compare__foot">
         <p class="pk-seal"><span class="pk-seal__tag">Sealed</span><span>Each file has a sealed page with the math behind its price. It opens at Clearance 2: Associate.</span></p>
         <a class="textlink" href="packages/spark.html">Start with File 01: Spark <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
@@ -487,7 +488,7 @@
     <span class="price">$300<small>/mo</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
-  <span class="file__note">One month only: $450, no commitment</span>
+  <span class="file__note">One month only: $450, billed once</span>
 </a>
 <a class="file" href="packages/overdrive.html" data-spot>
   <span class="file__tab">File 05</span>
@@ -498,7 +499,7 @@
     <span class="price">$400<small>/mo</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
-  <span class="file__note">One month only: $550, no commitment</span>
+  <span class="file__note">One month only: $550, billed once</span>
 </a>
 <a class="file file--flag" href="packages/total-blackout.html" data-spot>
   <span class="file__tab">File 06</span>
@@ -509,7 +510,7 @@
     <span class="price">$500<small>/mo</small></span>
     <span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span>
   </span>
-  <span class="file__note">One month only: $650, no commitment</span>
+  <span class="file__note">One month only: $650, billed once</span>
 </a></div>
 
     <div class="pk-compare rv" id="compare-plans">
@@ -519,8 +520,8 @@
           <caption class="sr">Surge, Overdrive and Total Blackout compared: monthly price, regular price, one month only price, and what each plan includes.</caption>
           <thead><tr><td><span class="sr">Detail</span></td><th scope="col"><a href="packages/surge.html"><span>File 04</span><b>Surge</b><span>Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span></a></th><th scope="col"><a href="packages/overdrive.html"><span>File 05</span><b>Overdrive</b><span>Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span></a></th><th scope="col" class="pk-flag"><a href="packages/total-blackout.html"><span>File 06 · Flagship</span><b>Total Blackout</b><span>Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span></a></th></tr></thead>
           <tbody>
-            <tr><th scope="row">Monthly price</th><td><span class="pk-num">$300<small>/mo</small></span><span class="pk-sub">Month to month</span></td><td><span class="pk-tag">Launch price</span><span class="pk-num">$400<small>/mo</small></span><span class="pk-sub">Locked in while you stay</span></td><td class="pk-flag"><span class="pk-tag">Launch price</span><span class="pk-num">$500<small>/mo</small></span><span class="pk-sub">Locked in while you stay</span></td></tr>
-            <tr><th scope="row">Regular price</th><td><span class="pk-none" aria-hidden="true"></span><span class="sr">Not included</span></td><td>$650/mo<span class="pk-sub">What new clients pay after the launch</span></td><td class="pk-flag">$800/mo<span class="pk-sub">What new clients pay after the launch</span></td></tr>
+            <tr><th scope="row">Monthly price</th><td><span class="pk-num">$300<small>/mo</small></span><span class="pk-sub">Month to month</span></td><td><span class="pk-tag">Launch price</span><span class="pk-num">$400<small>/mo</small></span><span class="pk-sub">Locked in while you stay</span></td><td class="pk-flag"><span class="pk-tag">Launch price</span><span class="pk-num">$500<small>/mo</small></span><span class="pk-sub">Month to month</span></td></tr>
+            <tr><th scope="row">Regular price</th><td><span class="pk-none" aria-hidden="true"></span><span class="sr">Not included</span></td><td>$650/mo<span class="pk-sub">What new clients pay after the launch</span></td><td class="pk-flag">$800/mo</td></tr>
             <tr><th scope="row">One month only</th><td>$450<span class="pk-sub">No commitment</span></td><td>$550<span class="pk-sub">No commitment</span></td><td class="pk-flag">$650<span class="pk-sub">No commitment</span></td></tr>
             <tr><th scope="row">Paid ads</th><td>Every month on up to 2 platforms. About $150 a month goes into the ads</td><td>Everything in Surge</td><td class="pk-flag">Paid promotion through the platforms your people use</td></tr>
             <tr><th scope="row">Posting</th><td><span class="pk-none" aria-hidden="true"></span><span class="sr">Not included</span></td><td>Automatic posting set up on your accounts</td><td class="pk-flag">AI-made posts and promos for your pages</td></tr>
@@ -640,7 +641,7 @@
     <div class="pk-final__main">
       <p class="label">Make contact</p>
       <h2 id="pk-final-h">Still<br>deciding?</h2>
-      <p>Tell us what you’re pushing. We’ll tell you straight which file fits, or whether you need one at all.</p>
+      <p>Tell us what you’re pushing and when. We’ll point you at one file, or tell you to keep your money.</p>
       <div class="ctas"><a class="btn btn--lg" href="contact.html">Make contact <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a><a class="btn btn--ghost btn--lg" href="#match">Find my file</a></div>
     </div>
     <div class="pk-final__side">
@@ -654,6 +655,7 @@
 
 <section class="nextfile band band--tight" aria-label="Next file">
   <div class="wrap">
+    <div data-jump hidden></div>
     <a class="nextfile__card" href="packages/spark.html" data-spot>
       <span class="label">Next file · File 01</span>
       <span class="nextfile__title">Spark</span>
@@ -673,7 +675,7 @@
         
 <div class="lines">
   <div class="lines__row"><a class="lines__big" href="tel:+15742139097">(574) 213-9097</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></div>
-  <div class="lines__row"><span class="lines__mail">info@blackoutsyn.com</span><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
+  <div class="lines__row"><a class="lines__mail" href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
   <p class="lines__note">Call or text. South Bend, Mishawaka, Elkhart and anywhere online.</p>
 </div>
       </div>
@@ -690,13 +692,13 @@
     </div>
     <div class="foot__base">
       <p>© <span data-year>2026</span> Blackout Syndicate · a GC General Contracting LLC company · South Bend, Indiana</p>
-      <p class="foot__legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 20</b></button></p>
+      <p class="foot__legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 19</b></button></p>
     </div>
   </div>
 </footer>
 
 <div class="scrim" data-scrim hidden></div>
-<aside class="drawer" id="clearance" data-drawer hidden aria-labelledby="drawer-title" tabindex="-1">
+<aside class="drawer" id="clearance" data-drawer hidden role="dialog" aria-modal="true" aria-labelledby="drawer-title" tabindex="-1">
   <div class="drawer__in">
     <div class="drawer__head">
       <p class="label">Visitor file</p>

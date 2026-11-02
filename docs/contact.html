@@ -120,8 +120,11 @@
 .intake option,.intake optgroup{color:var(--ink);background:var(--paper)}
 .intake .field input:hover,.intake .field select:hover,.intake .field textarea:hover{border-color:var(--ink)}
 .intake .field input:focus,.intake .field select:focus,.intake .field textarea:focus{border-color:var(--ink);background-color:var(--paper);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 55%,transparent)}
+.intake .field [aria-invalid="true"]:focus{border-color:var(--signal);background-color:color-mix(in srgb,var(--signal) 9%,var(--paper));box-shadow:0 0 0 3px color-mix(in srgb,var(--signal) 30%,transparent)}
 .intake .field input::placeholder,.intake .field textarea::placeholder{color:var(--ink-mute);opacity:.72}
 .intake .field [aria-invalid="true"]{border-color:var(--signal);background-color:color-mix(in srgb,var(--signal) 9%,transparent)}
+.intake .field [aria-invalid="true"]:hover{border-color:var(--signal)}
+.intake .field [aria-invalid="true"]:focus{border-color:var(--signal);background-color:color-mix(in srgb,var(--signal) 9%,var(--paper));box-shadow:0 0 0 3px color-mix(in srgb,var(--signal) 30%,transparent)}
 .intake .field__err{color:var(--ink);font-weight:600;display:flex;gap:8px;align-items:baseline}
 .intake .field__err::before{content:"";flex:none;width:10px;height:10px;background:var(--signal);clip-path:polygon(20% 0,50% 30%,80% 0,100% 20%,70% 50%,100% 80%,80% 100%,50% 70%,20% 100%,0 80%,30% 50%,0 20%)}
 .intake .field__err:empty{display:none}
@@ -180,15 +183,15 @@
     <a class="brand brand--compact" href="index.html" aria-label="Blackout Syndicate home"><svg class="brand__cell" viewBox="0 0 83.13 122" aria-hidden="true" focusable="false"><path class="bs-void" fill="#070708" d="M2,120v-118h79.13v118z"/><path fill="currentColor" d="M0,122l0,-62.67h17v51.68h23.13c9.33,0 16.05,-1.9 20.15,-5.69c4.11,-3.79 6.35,-10.01 6.72,-18.68c0.09,-1.46 0.13,-2.77 0.13,-3.94c0,-1.17 -0.04,-2.44 -0.13,-3.81c-0.17,-4.71 -1.15,-8.43 -2.94,-11.16c-1.79,-2.73 -4.6,-4.72 -8.43,-5.97l0,-2.42l27.5,0v62.67zM40.13,68.38c2.87,0 4.94,0.86 6.21,2.59c1.27,1.73 1.91,4.65 1.91,8.78c0,1.13 0,2.23 0,3.31c0,1.09 0,2.19 0,3.32c0,2.62 -0.7,4.63 -2.09,6.03c-1.4,1.39 -3.41,2.09 -6.03,2.09h-4.38v-26.12z"/><path class="bs-paper" fill="#f2ead8" d="M0,0h83.13v60.13h-27.49v-1.37c3.71,-1.25 6.43,-3.22 8.18,-5.91c1.75,-2.69 2.78,-6.3 3.07,-10.84c0.08,-1.08 0.12,-2.16 0.12,-3.25c0,-1.08 0,-2.2 0,-3.37c0,-8.71 -2.15,-14.95 -6.44,-18.72c-4.29,-3.77 -11.1,-5.66 -20.43,-5.66h-23.13l0,49.13h-17zM40.13,27.5c2.62,0 4.63,0.59 6.03,1.78c1.39,1.19 2.09,2.89 2.09,5.1c0,1.17 0,2.34 0,3.53c0,1.19 0,2.38 0,3.59c0,3.29 -0.7,5.85 -2.09,7.66c-1.4,1.81 -3.41,2.72 -6.03,2.72h-4.38v-24.38z"/></svg></a>
     <nav class="menu" id="menu" aria-label="Main">
       <ul><li><a href="packages.html">Packages</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="work.html">The Reel</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html" aria-current="page">Contact</a></li></ul>
-      <a class="btn btn--sm menu__cta" href="contact.html">Get seen</a>
+      <a class="btn btn--sm menu__cta" href="contact.html">Make contact</a>
     </nav>
     <div class="topbar__end">
-      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false" aria-label="Your clearance level">
-        <span class="hud__lv">LV <b data-hud-lv>0</b></span>
+      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false">
+        <span class="sr">Clearance </span><span class="hud__lv">LV <b data-hud-lv>0</b></span>
         <span class="hud__name" data-hud-name>Outsider</span>
         <span class="hud__bar" aria-hidden="true"><i data-hud-bar></i></span>
       </button>
-      <a class="btn btn--sm topbar__cta" href="contact.html">Get seen</a>
+      <a class="btn btn--sm topbar__cta" href="contact.html">Make contact</a>
       <button class="burger" type="button" data-burger aria-controls="menu" aria-expanded="false"><span class="burger__lines" aria-hidden="true"></span><span class="sr">Menu</span></button>
     </div>
   </div>
@@ -205,7 +208,7 @@
         <p class="lede">Tell us what you’re pushing and where your people are. We’ll tell you straight which package fits, or whether you need one at all.</p>
         <div class="ctas"><a class="btn btn--lg ct-down" href="#intake">Send a message <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div>
       </div>
-      <aside class="ct-line" data-spot aria-label="Direct line">
+      <section class="ct-line" data-spot aria-label="Direct line">
         <div class="ct-line__top"><span class="label">The direct line</span><span class="label label--dim">Call or text</span></div>
         <a class="ct-line__num" href="tel:+15742139097">(574) 213-9097</a>
         <div class="ct-line__acts">
@@ -214,7 +217,7 @@
           <a class="btn btn--ghost" href="mailto:info@blackoutsyn.com">Email</a>
         </div>
         <p class="ct-line__mail">Or write to <a href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a></p>
-      </aside>
+      </section>
     </div>
   </div>
 </header>
@@ -224,7 +227,7 @@
 
     <div class="intake rv" id="intake">
       <span class="intake__tab" aria-hidden="true">Intake · File 17</span>
-      <form class="form intake__sheet" method="post" data-lead data-intake novalidate aria-labelledby="intake-h">
+      <form class="form intake__sheet" method="post" action="https://formsubmit.co/info@blackoutsyn.com" data-lead data-intake novalidate aria-labelledby="intake-h">
         <div class="intake__head">
           <p class="label">Intake form</p>
           <h2 class="intake__h" id="intake-h">Tell us what you’re <span class="whisper">pushing.</span></h2>
@@ -276,7 +279,7 @@
           <select id="f-interest" name="interest" required data-msg="Pick a package, or choose Not sure yet." aria-describedby="pick-note err-interest">
             <option value="">Choose one</option>
             <option value="unsure" data-slug="unsure">Not sure yet, help me pick</option>
-            <optgroup label="One-time boosts"><option value="spark" data-slug="spark" data-name="Spark" data-note="One-time boost · 3-day run. About $10 of your $19.99 buys the ad itself." data-href="packages/spark.html">Spark · $19.99</option><option value="boost" data-slug="boost" data-name="Boost" data-note="One-time boost · 5-day run. About $25 of your $49.99 buys the ad itself." data-href="packages/boost.html">Boost · $49.99</option><option value="blitz" data-slug="blitz" data-name="Blitz" data-note="One-time boost · 7-day run. About $50 of your $99.99 buys the ad itself." data-href="packages/blitz.html">Blitz · $99.99</option></optgroup><optgroup label="Monthly plans"><option value="surge" data-slug="surge" data-name="Surge" data-note="Monthly plan · $300/mo, or $450 for one month only. About $150 a month goes into the ads themselves." data-href="packages/surge.html">Surge · $300/mo</option><option value="overdrive" data-slug="overdrive" data-name="Overdrive" data-note="Monthly plan · $400/mo, or $550 for one month only. Launch price: $400 a month, locked in while you stay. Regular price is $650 a month." data-href="packages/overdrive.html">Overdrive · $400/mo</option><option value="total-blackout" data-slug="total-blackout" data-name="Total Blackout" data-note="Monthly plan · $500/mo, or $650 for one month only. Launch price: $500 a month. Regular price is $800 a month. Cancel any time." data-href="packages/total-blackout.html">Total Blackout · $500/mo</option></optgroup><optgroup label="Add-ons"><option value="post-kit" data-slug="post-kit" data-name="30-Day Post Kit" data-note="Add-on · Delivered in 2 business days. A month of posts, planned and written. You just hit publish." data-href="packages/post-kit.html">30-Day Post Kit · $19.99</option><option value="profile-fix" data-slug="profile-fix" data-name="Profile Fix" data-note="Add-on · One-time cleanup. Clean up your page before the ads send people to it." data-href="packages/profile-fix.html">Profile Fix · $49.99</option></optgroup><optgroup label="Built to order"><option value="website-design" data-slug="website-design" data-name="Website Design" data-note="Built to order · Quoted per job after a short call. You know the price before work starts." data-href="services/website-design.html">Website Design · Quoted</option><option value="ai-consulting" data-slug="ai-consulting" data-name="AI Consulting" data-note="Built to order · Quoted per job. You know the price before we start." data-href="services/ai-consulting.html">AI Consulting · Quoted</option><option value="ai-automation" data-slug="ai-automation" data-name="AI Automation" data-note="Built to order · Quoted per job. You know the price before we build." data-href="services/ai-automation.html">AI Automation · Quoted</option><option value="creator-systems" data-slug="creator-systems" data-name="Creator Content Systems" data-note="Built to order · Quoted per job. You know the price before we build." data-href="services/creator-systems.html">Creator Content Systems · Quoted</option></optgroup>
+            <optgroup label="One-time boosts"><option value="spark" data-slug="spark" data-name="Spark" data-note="One-time boost · 3-day run. About $10 of your $19.99 buys the ad itself." data-href="packages/spark.html">Spark · $19.99</option><option value="boost" data-slug="boost" data-name="Boost" data-note="One-time boost · 5-day run. About $25 of your $49.99 buys the ad itself." data-href="packages/boost.html">Boost · $49.99</option><option value="blitz" data-slug="blitz" data-name="Blitz" data-note="One-time boost · 7-day run. About $50 of your $99.99 buys the ad itself." data-href="packages/blitz.html">Blitz · $99.99</option></optgroup><optgroup label="Monthly plans"><option value="surge" data-slug="surge" data-name="Surge" data-note="Monthly plan · $300/mo, or $450 for a single month. About $150 a month goes into the ads themselves." data-href="packages/surge.html">Surge · $300/mo</option><option value="overdrive" data-slug="overdrive" data-name="Overdrive" data-note="Monthly plan · $400/mo launch price (regular $650/mo), or $550 for a single month." data-href="packages/overdrive.html">Overdrive · $400/mo</option><option value="total-blackout" data-slug="total-blackout" data-name="Total Blackout" data-note="Monthly plan · $500/mo launch price (regular $800/mo), or $650 for a single month." data-href="packages/total-blackout.html">Total Blackout · $500/mo</option></optgroup><optgroup label="Add-ons"><option value="post-kit" data-slug="post-kit" data-name="30-Day Post Kit" data-note="Add-on · Delivered in 2 business days. A month of posts, planned and written. You just hit publish." data-href="packages/post-kit.html">30-Day Post Kit · $19.99</option><option value="profile-fix" data-slug="profile-fix" data-name="Profile Fix" data-note="Add-on · One-time cleanup. Clean up your page before the ads send people to it." data-href="packages/profile-fix.html">Profile Fix · $49.99</option></optgroup><optgroup label="Built to order"><option value="website-design" data-slug="website-design" data-name="Website Design" data-note="Built to order · Quoted per job after a short call. You know the price before work starts." data-href="services/website-design.html">Website Design · Quoted</option><option value="ai-consulting" data-slug="ai-consulting" data-name="AI Consulting" data-note="Built to order · Quoted per job. You know the price before we start." data-href="services/ai-consulting.html">AI Consulting · Quoted</option><option value="ai-automation" data-slug="ai-automation" data-name="AI Automation" data-note="Built to order · Quoted per job. You know the price before we build." data-href="services/ai-automation.html">AI Automation · Quoted</option><option value="creator-systems" data-slug="creator-systems" data-name="Creator Content Systems" data-note="Built to order · Quoted per job. You know the price before we build." data-href="services/creator-systems.html">Creator Content Systems · Quoted</option></optgroup>
           </select>
           <p class="field__hint intake__pick" id="pick-note" data-pick data-match="packages.html#match" aria-live="polite">Not sure? Choose <b>Not sure yet</b> and we’ll help you pick. Every package has its own <a href="packages.html">file</a> if you want to read first.</p>
           <p class="field__err" id="err-interest" data-err-for="interest"></p>
@@ -303,6 +306,7 @@
         </div>
 
         <label class="hp" aria-hidden="true">Leave this field empty <input name="_honey" tabindex="-1" autocomplete="off"></label>
+        <input type="hidden" name="_next" value="https://www.blackoutsyn.com/thank-you.html">
         <div class="form__alert" data-form-alert role="alert" hidden></div>
 
         <p class="note intake__nojs"><span>JavaScript is off in this browser, so this form can’t send. Call or text <a href="tel:+15742139097">(574) 213-9097</a> or email <a href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a> instead.</span></p>
@@ -331,7 +335,7 @@
         
 <div class="lines">
   <div class="lines__row"><a class="lines__big" href="tel:+15742139097">(574) 213-9097</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></div>
-  <div class="lines__row"><span class="lines__mail">info@blackoutsyn.com</span><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
+  <div class="lines__row"><a class="lines__mail" href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
   <p class="lines__note">Call or text. South Bend, Mishawaka, Elkhart and anywhere online.</p>
 </div>
         <p class="label label--dim ct-follow">Follow the Syndicate</p>
@@ -365,7 +369,7 @@
     </div>
     <div class="grid grid--3 ct-doors rv">
       <a href="packages.html#match"><span class="label">+30 clearance</span><b>Find my package</b><span>Three questions. We point you at the file that fits.</span><span class="file__open">Take the match <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span></a>
-      <a href="faq.html"><span class="label">Straight answers</span><b>Read the FAQ</b><span>Refunds, recaps, contracts and passwords, answered word for word.</span><span class="file__open">Open the FAQ <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span></a>
+      <a href="faq.html"><span class="label">Straight answers</span><b>Read the FAQ</b><span>Refunds, recaps, contracts and passwords. The refund policy is quoted word for word.</span><span class="file__open">Open the FAQ <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span></a>
       <a href="how-it-works.html"><span class="label">The full play</span><b>How it works</b><span>From the first message to the recap, step by step.</span><span class="file__open">See the play <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span></a>
     </div>
   </div>
@@ -374,6 +378,7 @@
 
 <section class="nextfile band band--tight" aria-label="Next file">
   <div class="wrap">
+    <div data-jump hidden></div>
     <a class="nextfile__card" href="vault.html" data-spot>
       <span class="label">Next file</span>
       <span class="nextfile__title">The Vault</span>
@@ -393,7 +398,7 @@
         
 <div class="lines">
   <div class="lines__row"><a class="lines__big" href="tel:+15742139097">(574) 213-9097</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></div>
-  <div class="lines__row"><span class="lines__mail">info@blackoutsyn.com</span><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
+  <div class="lines__row"><a class="lines__mail" href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
   <p class="lines__note">Call or text. South Bend, Mishawaka, Elkhart and anywhere online.</p>
 </div>
       </div>
@@ -410,13 +415,13 @@
     </div>
     <div class="foot__base">
       <p>© <span data-year>2026</span> Blackout Syndicate · a GC General Contracting LLC company · South Bend, Indiana</p>
-      <p class="foot__legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 20</b></button></p>
+      <p class="foot__legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 19</b></button></p>
     </div>
   </div>
 </footer>
 
 <div class="scrim" data-scrim hidden></div>
-<aside class="drawer" id="clearance" data-drawer hidden aria-labelledby="drawer-title" tabindex="-1">
+<aside class="drawer" id="clearance" data-drawer hidden role="dialog" aria-modal="true" aria-labelledby="drawer-title" tabindex="-1">
   <div class="drawer__in">
     <div class="drawer__head">
       <p class="label">Visitor file</p>

@@ -36,27 +36,68 @@
 <script src="../assets/js/config.js"></script>
 
 <style>
-.offer-head__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:clamp(28px,5vw,72px);align-items:end}
-@media (max-width:900px){.offer-head__grid{grid-template-columns:1fr}}
+.offer-head__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:clamp(28px,5vw,72px);align-items:start}
+@media (max-width:900px){.offer-head__grid{grid-template-columns:minmax(0,1fr)}}
 .offer-head__main{display:grid;gap:22px;min-width:0}
 .offer-head__name{overflow-wrap:anywhere}
-.offer-card{background:var(--coal);border:1px solid var(--smoke);padding:24px 22px;display:grid;gap:16px;position:relative;min-width:0}
+.offer-head__name--long{font-size:clamp(56px,8vw,118px)}
+.offer-card{background:var(--coal);border:1px solid var(--smoke);padding:24px 22px;display:grid;gap:16px;position:relative;min-width:0;margin-top:2px}
 .offer-card::before{content:"";position:absolute;inset:-1px -1px auto auto;width:30px;height:30px;border-top:2px solid var(--gold);border-right:2px solid var(--gold)}
 .offer-card__top{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .offer-card__price{font-size:clamp(52px,6vw,74px)}
-.offer-card .stamp{width:118px;font-size:19px;flex:none}
+.offer-card__price--quote{text-transform:uppercase;font-size:clamp(40px,4.4vw,56px)}
+.offer-card .stamp{width:126px;padding:20px;font-size:18px;flex:none}
+.offer-card .stamp small{font-size:8px;letter-spacing:.08em;max-width:8em}
+@media (max-width:380px){.offer-card__price{font-size:46px}.offer-card .stamp{width:106px;padding:15px;font-size:15px}.offer-card .stamp small{font-size:7px}}
 .offer-card__spend{font-size:14.5px;color:var(--ash);border-top:1px dashed var(--smoke);padding-top:14px}
+@media (max-width:560px){.offer-head .btn,.claim .btn{white-space:normal;text-align:center;max-width:100%;line-height:1.05}.offer-head .btn--lg,.claim .btn--lg{font-size:21px;padding:17px 22px 16px}}
+
+.offer-what{display:grid;gap:18px;align-content:start;min-width:0}
+.offer-what .lede{max-width:56ch}
+.offer-money,.offer-rate{display:grid;gap:10px;padding-top:18px;border-top:1px dashed var(--smoke);max-width:56ch}
+.offer-money__bar{position:relative;height:12px;background:var(--smoke);overflow:hidden}
+.offer-money__bar i{position:absolute;inset:0 auto 0 0;width:var(--w);background:linear-gradient(90deg,var(--brass),var(--gold-hi))}
+.offer-money__key{display:flex;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;font-size:15px;color:var(--ash)}
+.offer-money__key b{display:block;font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1;letter-spacing:.02em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.offer-money__key span:last-child{text-align:right}
+.offer-money__key span:last-child b{color:var(--paper)}
+.offer-rate__row{display:flex;align-items:baseline;gap:8px 20px;flex-wrap:wrap}
+.offer-rate .price{font-size:clamp(52px,5.4vw,68px)}
+.offer-rate__was{font-family:var(--f-display);font-weight:800;font-size:30px;line-height:1;color:var(--ash);text-decoration:line-through;text-decoration-color:var(--signal);text-decoration-thickness:2px}
+.offer-rate__note{font-size:15px;color:var(--ash)}
+
+.offer-paper .panel{background:var(--paper-2);border-color:rgba(23,20,15,.18)}
+.offer-paper .steps{background:rgba(23,20,15,.18);border-color:rgba(23,20,15,.18)}
+.offer-paper .steps>li{background:var(--paper)}
+.offer-paper .steps>li:hover{background:var(--paper-2)}
+.offer-paper .steps>li::before{-webkit-text-stroke-color:var(--brass)}
+.offer-paper .steps>li:hover::before{color:var(--brass)}
+.offer-paper .steps p{color:var(--ink-mute)}
+
+.offer-fit--lean{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:start}
+@media (max-width:640px){.offer-fit--lean{grid-template-columns:minmax(0,1fr)}}
+#faq-h .whisper{display:block;white-space:nowrap;margin-top:.08em}
+
 .claim{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);padding:clamp(28px,4.5vw,56px);border:1px solid var(--gold);background:linear-gradient(160deg,#211a0d,var(--coal) 60%);align-items:start}
-@media (max-width:860px){.claim{grid-template-columns:1fr}}
+@media (max-width:860px){.claim{grid-template-columns:minmax(0,1fr)}}
 .claim__main{display:grid;gap:20px;min-width:0}
 .claim__side{display:grid;gap:12px;min-width:0}
 .claim__price{font-size:clamp(64px,8vw,104px)}
+.claim__path{gap:10px;font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1.05;text-transform:uppercase;letter-spacing:.02em}
 .ladder{display:grid;gap:6px;margin-top:14px;padding:18px;border:1px solid var(--smoke);background:var(--void);text-decoration:none;color:var(--paper);transition:border-color .3s}
-.ladder:hover{border-color:var(--gold)}
+a.ladder:hover{border-color:var(--gold)}
 .ladder b{font-family:var(--f-display);font-weight:900;font-size:36px;line-height:.9;text-transform:uppercase}
 .ladder span:not(.label):not(.file__open){color:var(--ash);font-size:15px}
+.ladder--list ul{list-style:none;display:grid}
+.ladder--list li+li{border-top:1px solid var(--smoke)}
+.ladder--list a{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:baseline;gap:12px;padding:11px 0 10px;color:var(--paper);text-decoration:none}
+.ladder--list a b{font-size:28px;line-height:.95;transition:color .2s}
+.ladder--list a span{font-family:var(--f-type);font-size:13px;letter-spacing:.08em;white-space:nowrap}
+.ladder--list a .arw{width:16px;height:16px;color:var(--gold);transition:transform .25s var(--ease)}
+.ladder--list a:hover b{color:var(--gold-hi)}
+.ladder--list a:hover .arw{transform:translateX(4px)}
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"AI Consulting","description":"AI Consulting is a sit-down about your week, not a sales pitch. We look at what eats your time, find the parts AI can honestly handle, and set them up with you. I come to you, set it up, and you walk away with it running.","provider":{"@type":"LocalBusiness","name":"Blackout Syndicate","telephone":"+1-574-213-9097","address":{"@type":"PostalAddress","addressLocality":"South Bend","addressRegion":"IN","addressCountry":"US"}},"areaServed":["South Bend, IN","Mishawaka, IN","Elkhart, IN"],"url":"https://www.blackoutsyn.com/services/ai-consulting.html"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"AI Consulting","description":"AI Consulting is a sit-down about your week. We look at what eats your time, find the parts AI can honestly handle, and set them up with you. We come to you around South Bend, Mishawaka and Elkhart, and you walk away with it running.","provider":{"@type":"LocalBusiness","name":"Blackout Syndicate","telephone":"+1-574-213-9097","address":{"@type":"PostalAddress","addressLocality":"South Bend","addressRegion":"IN","addressCountry":"US"}},"areaServed":["South Bend, IN","Mishawaka, IN","Elkhart, IN"],"url":"https://www.blackoutsyn.com/services/ai-consulting.html"}</script>
 </head>
 <body data-path="services/ai-consulting.html" data-root="../" data-kind="service" data-offer="ai-consulting">
 <a class="skip" href="#main">Skip to content</a>
@@ -68,15 +109,15 @@
     <a class="brand brand--compact" href="../index.html" aria-label="Blackout Syndicate home"><svg class="brand__cell" viewBox="0 0 83.13 122" aria-hidden="true" focusable="false"><path class="bs-void" fill="#070708" d="M2,120v-118h79.13v118z"/><path fill="currentColor" d="M0,122l0,-62.67h17v51.68h23.13c9.33,0 16.05,-1.9 20.15,-5.69c4.11,-3.79 6.35,-10.01 6.72,-18.68c0.09,-1.46 0.13,-2.77 0.13,-3.94c0,-1.17 -0.04,-2.44 -0.13,-3.81c-0.17,-4.71 -1.15,-8.43 -2.94,-11.16c-1.79,-2.73 -4.6,-4.72 -8.43,-5.97l0,-2.42l27.5,0v62.67zM40.13,68.38c2.87,0 4.94,0.86 6.21,2.59c1.27,1.73 1.91,4.65 1.91,8.78c0,1.13 0,2.23 0,3.31c0,1.09 0,2.19 0,3.32c0,2.62 -0.7,4.63 -2.09,6.03c-1.4,1.39 -3.41,2.09 -6.03,2.09h-4.38v-26.12z"/><path class="bs-paper" fill="#f2ead8" d="M0,0h83.13v60.13h-27.49v-1.37c3.71,-1.25 6.43,-3.22 8.18,-5.91c1.75,-2.69 2.78,-6.3 3.07,-10.84c0.08,-1.08 0.12,-2.16 0.12,-3.25c0,-1.08 0,-2.2 0,-3.37c0,-8.71 -2.15,-14.95 -6.44,-18.72c-4.29,-3.77 -11.1,-5.66 -20.43,-5.66h-23.13l0,49.13h-17zM40.13,27.5c2.62,0 4.63,0.59 6.03,1.78c1.39,1.19 2.09,2.89 2.09,5.1c0,1.17 0,2.34 0,3.53c0,1.19 0,2.38 0,3.59c0,3.29 -0.7,5.85 -2.09,7.66c-1.4,1.81 -3.41,2.72 -6.03,2.72h-4.38v-24.38z"/></svg></a>
     <nav class="menu" id="menu" aria-label="Main">
       <ul><li><a href="../packages.html" aria-current="page">Packages</a></li><li><a href="../how-it-works.html">How it works</a></li><li><a href="../work.html">The Reel</a></li><li><a href="../about.html">About</a></li><li><a href="../faq.html">FAQ</a></li><li><a href="../contact.html">Contact</a></li></ul>
-      <a class="btn btn--sm menu__cta" href="../contact.html">Get seen</a>
+      <a class="btn btn--sm menu__cta" href="../contact.html">Make contact</a>
     </nav>
     <div class="topbar__end">
-      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false" aria-label="Your clearance level">
-        <span class="hud__lv">LV <b data-hud-lv>0</b></span>
+      <button class="hud" type="button" data-hud aria-controls="clearance" aria-expanded="false">
+        <span class="sr">Clearance </span><span class="hud__lv">LV <b data-hud-lv>0</b></span>
         <span class="hud__name" data-hud-name>Outsider</span>
         <span class="hud__bar" aria-hidden="true"><i data-hud-bar></i></span>
       </button>
-      <a class="btn btn--sm topbar__cta" href="../contact.html">Get seen</a>
+      <a class="btn btn--sm topbar__cta" href="../contact.html">Make contact</a>
       <button class="burger" type="button" data-burger aria-controls="menu" aria-expanded="false"><span class="burger__lines" aria-hidden="true"></span><span class="sr">Menu</span></button>
     </div>
   </div>
@@ -89,26 +130,26 @@
     <div class="offer-head__grid">
       <div class="offer-head__main">
         <p class="label">File 10 · Built to order</p>
-        <h1 class="h1 offer-head__name">AI Consulting</h1>
+        <h1 class="h1 offer-head__name offer-head__name--long">AI Consulting</h1>
         <p class="lede">Plain-English help finding where AI actually saves you time.</p>
         <div class="ctas">
-          <a class="btn btn--lg" href="../contact.html?pkg=ai-consulting">Get a AI Consulting quote <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
+          <a class="btn btn--lg" href="../contact.html?pkg=ai-consulting">Get my quote <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
           <a class="btn btn--ghost btn--lg" href="tel:+15742139097">Call (574) 213-9097</a>
         </div>
       </div>
       <aside class="offer-card" aria-label="AI Consulting at a glance">
         <div class="offer-card__top">
-          <div class="price offer-card__price">Quoted</div>
-          <div class="stamp stamp--gold is-slam" aria-hidden="true">Quoted<br>Per job<small>Price before work</small></div>
+          <div class="price offer-card__price offer-card__price--quote">By quote<span class="sr">. Price in writing before work starts.</span></div>
+          <div class="stamp stamp--gold is-slam" aria-hidden="true">Price<br>In writing<small>Before work starts</small></div>
         </div>
         <dl class="ledger">
           <div><dt>Type</dt><dd>Built to order</dd></div>
-          <div><dt>Run</dt><dd>Quoted per job</dd></div>
+          <div><dt>Starts with</dt><dd>Short call</dd></div>
           <div><dt>Best for</dt><dd>Owners curious about AI but short on time</dd></div>
           
           
         </dl>
-        <p class="offer-card__spend">Quoted per job. You know the price before we start.</p>
+        
       </aside>
     </div>
   </div>
@@ -116,10 +157,11 @@
 
 <section class="band" aria-labelledby="what-h">
   <div class="wrap split split--wide">
-    <div class="prose rv">
+    <div class="offer-what rv">
       <p class="label">What it is</p>
-      <h2 class="h2" id="what-h">The <span class="whisper">short version.</span></h2>
-      <p class="lede">AI Consulting is a sit-down about your week, not a sales pitch. We look at what eats your time, find the parts AI can honestly handle, and set them up with you. I come to you, set it up, and you walk away with it running.</p>
+      <h2 class="h2" id="what-h">What we <span class="whisper">build.</span></h2>
+      <p class="lede">AI Consulting is a sit-down about your week. We look at what eats your time, find the parts AI can honestly handle, and set them up with you. We come to you around South Bend, Mishawaka and Elkhart, and you walk away with it running.</p>
+      
       
     </div>
     <div class="panel rv" style="--d:.1s">
@@ -129,33 +171,33 @@
   </div>
 </section>
 
-<section class="band band--coal" aria-labelledby="run-h">
+<section class="band band--paper offer-paper" aria-labelledby="run-h">
   <div class="wrap">
-    <div class="band__head rv"><p class="label">How it runs</p><h2 class="h2" id="run-h">From hello <span class="whisper">to live.</span></h2></div>
+    <div class="band__head rv"><p class="label">How it runs</p><h2 class="h2" id="run-h">From call <span class="whisper">to handoff.</span></h2></div>
     <ol class="steps rv" style="--n:4"><li><h3>Short call</h3><p>What your week looks like and what you wish ran itself.</p></li><li><h3>Written quote</h3><p>What we will set up and what it costs.</p></li><li><h3>Set it up together</h3><p>In person or on a call. You see every step.</p></li><li><h3>Walk away with it running</h3><p>Plus notes so you can keep using it.</p></li></ol>
   </div>
 </section>
 
 <section class="band" aria-labelledby="fit-h">
   <div class="wrap">
-    <div class="band__head rv"><p class="label">Straight talk</p><h2 class="h2" id="fit-h">Is this <span class="whisper">your file?</span></h2></div>
-    <div class="grid grid--2 rv">
+    <div class="band__head rv"><p class="label">Straight talk</p><h2 class="h2" id="fit-h">Is this <span class="whisper">your job?</span></h2></div>
+    <div class="grid grid--2 rv offer-fit--lean">
       <div class="panel"><p class="label">It’s for you if</p><ul class="ticks"><li>You keep hearing about AI and don’t know where to start</li><li>You do the same tasks every single day</li><li>You want someone local you can actually talk to</li></ul></div>
       <div class="panel"><p class="label label--red">It’s not for you if</p><ul class="ticks ticks--no"><li>You already know exactly what to automate. Go straight to AI Automation</li></ul></div>
     </div>
   </div>
 </section>
 
-<section class="band band--flush-top" aria-label="Classified">
+<section class="band band--flush-top" aria-label="Bonus file">
   <div class="wrap wrap--narrow">
     
-<section class="classified" data-classified="math-ai-consulting" data-level="2" aria-labelledby="cl-math-ai-consulting">
+<section class="classified" data-classified="math-ai-consulting" data-level="2" data-bypass aria-labelledby="cl-math-ai-consulting">
   <div class="classified__sheet">
     <header class="classified__head">
       <span class="classified__stamp">Classified</span>
       <span class="label">Clearance 2 · Associate</span>
     </header>
-    <h3 class="classified__title" id="cl-math-ai-consulting">Before you call: the AI Consulting file</h3>
+    <h3 class="classified__title" id="cl-math-ai-consulting">Bonus file: before you call about AI Consulting</h3>
     <div class="classified__body"><ul><li>Quoted in writing before we start.</li><li>Before the call, write down the five tasks you repeat most in a normal week. That list is where the time savings hide.</li><li>If AI is the wrong tool for a job, you will hear that too.</li></ul></div>
     <p class="classified__status" data-classified-status aria-live="polite"></p>
   </div>
@@ -181,13 +223,12 @@
         <p class="label">File 10 · AI Consulting</p>
         <h2 class="h2" id="claim-h">Get the quote.</h2>
         <p class="lede">Tell us what you need. You get a written price before any work starts.</p>
-        <div class="ctas"><a class="btn btn--lg" href="../contact.html?pkg=ai-consulting">Get a AI Consulting quote <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div>
+        <div class="ctas"><a class="btn btn--lg" href="../contact.html?pkg=ai-consulting">Get my quote <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></div>
         <p class="small muted">Or call or text <a href="tel:+15742139097" style="color:var(--gold)">(574) 213-9097</a>.</p>
       </div>
       <div class="claim__side">
-        <div class="price claim__price">Quoted</div>
-        <p class="label label--dim">Price before work starts</p>
-        <a class="ladder" href="../services/ai-automation.html"><span class="label">Next step up · File 11</span><b>AI Automation</b><span>Know what you want automated? AI Automation builds it.</span><span class="file__open">Open file <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></span></a>
+        <p class="label label--dim">Price before work starts</p><ol class="ticks claim__path"><li>Short call</li><li>Written quote</li><li>Set it up together</li><li>Walk away with it running</li></ol>
+        <div class="ladder ladder--list"><span class="label">Also in this drawer</span><ul><li><a href="../services/website-design.html"><b>Website Design</b><span>File 09</span><svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></li><li><a href="../services/ai-automation.html"><b>AI Automation</b><span>File 11</span><svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></li><li><a href="../services/creator-systems.html"><b>Creator Content Systems</b><span>File 12</span><svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></li></ul></div>
       </div>
     </div>
   </div>
@@ -196,6 +237,7 @@
 
 <section class="nextfile band band--tight" aria-label="Next file">
   <div class="wrap">
+    <div data-jump hidden></div>
     <a class="nextfile__card" href="../services/ai-automation.html" data-spot>
       <span class="label">Next file · File 11</span>
       <span class="nextfile__title">AI Automation</span>
@@ -215,7 +257,7 @@
         
 <div class="lines">
   <div class="lines__row"><a class="lines__big" href="tel:+15742139097">(574) 213-9097</a><button class="copy" type="button" data-copy="(574) 213-9097">Copy</button></div>
-  <div class="lines__row"><span class="lines__mail">info@blackoutsyn.com</span><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
+  <div class="lines__row"><a class="lines__mail" href="mailto:info@blackoutsyn.com">info@blackoutsyn.com</a><button class="copy" type="button" data-copy="info@blackoutsyn.com">Copy</button></div>
   <p class="lines__note">Call or text. South Bend, Mishawaka, Elkhart and anywhere online.</p>
 </div>
       </div>
@@ -232,13 +274,13 @@
     </div>
     <div class="foot__base">
       <p>© <span data-year>2026</span> Blackout Syndicate · a GC General Contracting LLC company · South Bend, Indiana</p>
-      <p class="foot__legal"><a href="../privacy.html">Privacy</a><a href="../terms.html">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 20</b></button></p>
+      <p class="foot__legal"><a href="../privacy.html">Privacy</a><a href="../terms.html">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / 19</b></button></p>
     </div>
   </div>
 </footer>
 
 <div class="scrim" data-scrim hidden></div>
-<aside class="drawer" id="clearance" data-drawer hidden aria-labelledby="drawer-title" tabindex="-1">
+<aside class="drawer" id="clearance" data-drawer hidden role="dialog" aria-modal="true" aria-labelledby="drawer-title" tabindex="-1">
   <div class="drawer__in">
     <div class="drawer__head">
       <p class="label">Visitor file</p>
