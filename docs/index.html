@@ -42,16 +42,22 @@
 .hero__sky{position:absolute;inset:0;width:100%;height:100%;z-index:-2;display:block}
 .hero__in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:clamp(28px,4vw,64px);align-items:end;padding-block:clamp(28px,4vw,56px) clamp(40px,5vw,72px)}
 .hero__main{display:grid;gap:clamp(20px,2.6vw,30px);min-width:0}
-.hero__title{margin:0;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(104px,min(36vw,27vh),288px);line-height:.8;letter-spacing:-.012em}
-.hero__stack{display:grid;--x:30%;--y:50%}
-.hero__stack>span{grid-area:1/1}
-.hero__dark{color:transparent;-webkit-text-stroke:2px rgba(242,234,216,.5)}
-.hero__lit{color:var(--gold-hi);text-shadow:0 0 42px rgba(243,212,138,.38);-webkit-mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%);mask-image:radial-gradient(clamp(150px,22vw,330px) circle at var(--x) var(--y),#000 0 34%,transparent 74%)}
-.no-js .hero__lit{-webkit-mask-image:none;mask-image:none}
-.hero__whisper{display:block;font-family:var(--f-serif);font-style:italic;font-weight:500;text-transform:none;font-size:clamp(24px,3.4vw,46px);letter-spacing:0;color:var(--gold);line-height:1;margin-top:.3em}
+.hero__title{margin:0;font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(72px,min(11vw,17vh),164px);line-height:.86;letter-spacing:-.006em;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .2em}
+.hero__get{color:var(--paper)}
+.hero__seen{position:relative;display:inline-block;color:var(--gold-hi)}
+.hero__seen::after{content:"";position:absolute;left:.02em;right:.04em;bottom:-.1em;height:max(3px,.045em);background:var(--gold);opacity:.85}
+.hero__bar{position:absolute;inset:.04em -.06em .02em -.05em;background:var(--paper);transform-origin:100% 50%;transform:scaleX(0);pointer-events:none}
+.js .hero__bar{animation:heroBar 1.05s var(--snap) .4s both}
+@keyframes heroBar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.hero__pitch{font-family:var(--f-body);font-weight:700;font-size:clamp(21px,2.3vw,30px);line-height:1.2;letter-spacing:-.01em;color:var(--paper);max-width:28ch;text-wrap:balance}
+.hero__facts{list-style:none;display:flex;flex-wrap:wrap;align-items:center;gap:10px 0;font-family:var(--f-type);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--ash)}
+.hero__facts li{display:flex;align-items:center}
+.hero__facts li+li::before{content:"";width:5px;height:5px;background:var(--brass);margin:0 14px;transform:rotate(45deg)}
+.hero__facts b{color:var(--gold);font-weight:700}
+.hero__facts a{color:var(--paper);text-decoration:none;border-bottom:1px solid var(--brass);white-space:nowrap}
+.hero__facts a:hover{color:var(--gold-hi)}
+@media (max-width:560px){.hero__facts{flex-direction:column;align-items:flex-start;gap:7px}.hero__facts li::before,.hero__facts li+li::before{content:"";width:5px;height:5px;background:var(--brass);margin:0 12px 0 1px;transform:rotate(45deg)}}
 .hero .lede{max-width:52ch}
-.hero__call{font-family:var(--f-type);font-size:14px;letter-spacing:.08em;color:var(--ash)}
-.hero__call a{color:var(--paper);text-decoration:none;border-bottom:1px solid var(--brass);white-space:nowrap}
 .visitor{background:color-mix(in srgb,var(--coal) 88%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid var(--smoke);padding:22px 20px 20px;display:grid;gap:14px;position:relative;min-width:0}
 .visitor::before{content:"";position:absolute;inset:-1px -1px auto auto;width:30px;height:30px;border-top:2px solid var(--gold);border-right:2px solid var(--gold)}
 .visitor__head{display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -177,14 +183,19 @@
   <canvas class="hero__sky" data-sky aria-hidden="true"></canvas>
   <div class="wrap hero__in">
     <div class="hero__main">
-      <p class="label">File 00 · South Bend · Mishawaka · Elkhart</p>
-      <h1 class="hero__title"><span class="sr">Get seen.</span><span class="hero__stack" data-spot-layer aria-hidden="true"><span class="hero__dark">Get<br>Seen.</span><span class="hero__lit">Get<br>Seen.</span></span><span class="hero__whisper">You’ve been in the dark long enough.</span></h1>
-      <p class="lede"><strong>Real ads. Real people. No bots.</strong> We put paid reach behind creators, streamers, solo businesses and local shops, on the feeds your people already scroll.</p>
+      <p class="label">File 00 · Paid social ads · South Bend · Mishawaka · Elkhart</p>
+      <h1 class="hero__title"><span class="hero__get">Get</span> <span class="hero__seen">Seen.<span class="hero__bar" aria-hidden="true"></span></span></h1>
+      <p class="hero__pitch">Paid social ads for South Bend shops, creators and streamers.</p>
+      <p class="lede"><strong>Real ads. Real people. No bots.</strong> We buy real placements through each platform’s own ad tools, aim them at your people, and show you what every dollar did.</p>
+      <ul class="hero__facts">
+        <li>Boosts from&nbsp;<b>$19.99</b></li>
+        <li>No contract on boosts</li>
+        <li>Call or text&nbsp;<a href="tel:+15742139097">(574) 213-9097</a></li>
+      </ul>
       <div class="ctas">
         <a class="btn btn--lg" href="packages.html">See packages and prices <svg class="arw" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
         <a class="btn btn--ghost btn--lg" href="packages.html#match">Find my package</a>
       </div>
-      <p class="hero__call">Rather talk? Call or text <a href="tel:+15742139097">(574) 213-9097</a></p>
     </div>
     <aside class="visitor" data-visitor aria-label="Your visitor file">
       <div class="visitor__head"><span class="label">Visitor file</span><span class="badge badge--red" data-v="status">Uncleared</span></div>
@@ -644,6 +655,31 @@
     const cs = hero.style; const px = parseFloat(cs.getPropertyValue('--x')), py = parseFloat(cs.getPropertyValue('--y'));
     return [isNaN(px) ? W * .3 : px * D, isNaN(py) ? H * .45 : py * D];
   }
+  // v1's searchlights, back: three beams rise from behind the city. The centre one swings to the visitor's
+  // pointer (or the drifting light when nobody is pointing); the outer two sweep on their own.
+  const BEAMS = [[.15, .75, 1.15], [.5, 1, 0], [.86, .8, .8]];
+  let aimA = -Math.PI / 2;
+  function beams(t, lx, ly){
+    const len = Math.hypot(W, H) * 1.2, sy = gy - 2 * D;
+    g.save(); g.globalCompositeOperation = 'lighter';
+    BEAMS.forEach(([fx, str, sp], k) => {
+      const sx = W * fx; let a;
+      if (k === 1) { const want = Math.min(-.22, Math.max(-Math.PI + .22, Math.atan2(ly - sy, lx - sx))); aimA += (want - aimA) * (reduce ? 1 : .07); a = aimA; }
+      else a = -Math.PI / 2 + (reduce ? (k ? .36 : -.4) : Math.sin(t * .00034 * sp + k * 2.1) * .48);
+      const col = k === 1 ? GOLD : PAPER, ca = Math.cos(a), sa = Math.sin(a);
+      for (const [spread, alpha] of [[k === 1 ? .2 : .14, .05], [k === 1 ? .075 : .055, .21]]) {
+        const gr = g.createLinearGradient(sx, sy, sx + ca * len, sy + sa * len);
+        gr.addColorStop(0, 'rgba(' + col + ',' + (alpha * str).toFixed(3) + ')');
+        gr.addColorStop(.5, 'rgba(' + col + ',' + (alpha * str * .32).toFixed(3) + ')');
+        gr.addColorStop(1, 'rgba(' + col + ',0)');
+        g.fillStyle = gr; g.beginPath(); g.moveTo(sx, sy);
+        g.lineTo(sx + Math.cos(a - spread) * len, sy + Math.sin(a - spread) * len);
+        g.lineTo(sx + Math.cos(a + spread) * len, sy + Math.sin(a + spread) * len);
+        g.closePath(); g.fill();
+      }
+    });
+    g.restore();
+  }
   function draw(t){
     g.clearRect(0, 0, W, H);
     const [lx, ly] = lightPos(), R = Math.max(W, H) * 0.28, RL = R * 1.25;
@@ -654,7 +690,8 @@
       if (a <= 0.02) continue;
       g.fillStyle = 'rgba(' + GOLD + ',' + (a * .75).toFixed(3) + ')'; g.beginPath(); g.arc(m.x, m.y, m.r, 0, 6.283); g.fill();
     }
-    // the city in black, then gold windows wherever the beam reaches
+    beams(t, lx, ly);
+    // the city in black (it hides the searchlights' bases), then gold windows wherever the light reaches
     g.drawImage(st, 0, bt);
     g.fillStyle = 'rgb(' + GOLD + ')';
     const nw = wins.length / 5; let i = 0, j = nw;
