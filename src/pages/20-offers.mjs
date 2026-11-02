@@ -1,5 +1,5 @@
 // One dedicated page per package and per built-to-order service (12 pages).
-import { OFFERS, offerPath, bySlug } from '../data/offers.mjs';
+import { OFFERS, offerPath, bySlug, pricesOn, offerFor } from '../data/offers.mjs';
 import { BIZ, LEVELS } from '../data/business.mjs';
 
 // The "Next file" reading path. The story pages sit between the packages so the payoff comes late:
@@ -55,6 +55,14 @@ const times = (r) => (r === 2 ? 'double' : `${WORDS[r] || +r.toFixed(1)} times`)
 const lockedIn = (o) => o.lockIn ?? /locked in/i.test([o.spend, ...(o.includes || [])].join(' '));
 
 const S = bySlug;
+// "Why not hit Promote yourself?": the same answer with prices on or off.
+const DIY = {
+  spark: (o) => `<strong>Why not hit Promote yourself?</strong> You can. With ${o.name} we set the ad up in the platform’s own ad tools, aim it at your area or the audience you name, add the ${S['post-kit'].name}, and send you a recap of spend, reach, and clicks or views.`,
+  boost: (o) => `<strong>Why not hit Promote yourself?</strong> You can. With ${o.name} we set the ad up in the platform’s own ad tools, aim it at your area or the people you name, and send you a recap of spend, reach, clicks or views, and follows.`,
+  blitz: (o) => `<strong>Why not hit Promote yourself?</strong> You can. With ${o.name} we set the ad up in the platform’s own ad tools, aim it at your area or the audience you name, and send you a recap of spend, reach, clicks or views, and follows.`,
+  surge: (o) => `<strong>Why not hit Promote yourself?</strong> You can. With ${o.name} we run the ads on up to 2 platforms, check and adjust the aim every month as the numbers come in, and send you a monthly recap of spend, reach, clicks or views, and follows.`,
+};
+const LEARN = 'Platforms spend the first part of any run learning who responds. That is one reason longer runs tend to get more out of each dollar.';
 const planMath = (o, below, adds) => {
   const save = num(o.regular) - num(o.price);
   const single = num(o.oneMonth) - num(o.price);
@@ -73,29 +81,29 @@ const MATH = {
     `${o.price} total. About <strong>${money(adOf(o))} buys the ad</strong>, the rest covers setup, aiming it and your recap.`,
     `Over a ${o.run} that is about <strong>${money(adOf(o) / daysOf(o))} a day</strong> of real ad money.`,
     `The ${S['post-kit'].name} is included. On its own it costs ${S['post-kit'].price}${num(S['post-kit'].price) >= num(o.price) ? ', so the push is the bonus' : ''}.`,
-    'Platforms spend the first part of any run learning who responds. That is one reason longer runs tend to get more out of each dollar.',
-    `<strong>Why not hit Promote yourself?</strong> You can. With ${o.name} we set the ad up in the platform’s own ad tools, aim it at your area or the audience you name, add the ${S['post-kit'].name}, and send you a recap of spend, reach, and clicks or views.`,
+    LEARN,
+    DIY.spark(o),
   ],
   boost: (o) => [
     `${o.price} total. About <strong>${money(adOf(o))} buys the ad</strong>: ${times(adOf(o) / adOf(S.spark))} what ${S.spark.name} puts in.`,
     `Over a ${o.run} that is about <strong>${money(adOf(o) / daysOf(o))} a day</strong> of ad money.`,
     `On TikTok the same ${money(adOf(o))} runs as a one-day burst, so it lands hard on the day that counts.`,
     `If you already ran a ${S.spark.name}, ${o.name} is the cheapest real step up.`,
-    `<strong>Why not hit Promote yourself?</strong> You can. With ${o.name} we set the ad up in the platform’s own ad tools, aim it at your area or the people you name, and send you a recap of spend, reach, clicks or views, and follows.`,
+    DIY.boost(o),
   ],
   blitz: (o) => [
     `${o.price} total. About <strong>${money(adOf(o))} buys the ad</strong>: ${times(adOf(o) / adOf(S.boost))} ${S.boost.name}, ${times(adOf(o) / adOf(S.spark))} ${S.spark.name}.`,
     `Over a ${o.run} that is about <strong>${money(adOf(o) / daysOf(o))} a day</strong> of ad money on one platform.`,
     `Three ${o.name}es cost ${money(3 * num(o.price))}. ${S.surge.name} is ${S.surge.price} a month and never restarts from zero.`,
     'Book it at least a week before your date so the whole run lands before the doors open.',
-    `<strong>Why not hit Promote yourself?</strong> You can. With ${o.name} we set the ad up in the platform’s own ad tools, aim it at your area or the audience you name, and send you a recap of spend, reach, clicks or views, and follows.`,
+    DIY.blitz(o),
   ],
   surge: (o) => [
     `${o.price} a month. About <strong>${money(adOf(o))} a month goes into the ads</strong> across up to 2 platforms.`,
     `That works out to roughly <strong>${money(adOf(o) / 30)} a day</strong> of ad money, every day of the month.`,
     `One month only costs ${o.oneMonth}. Staying month to month at ${o.price} costs ${money(num(o.oneMonth) - num(o.price))} a month less.`,
     `Three ${S.blitz.name}es would cost ${money(3 * num(S.blitz.price))} for ${3 * daysOf(S.blitz)} days on one platform. ${o.name} covers the whole month on two.`,
-    `<strong>Why not hit Promote yourself?</strong> You can. With ${o.name} we run the ads on up to 2 platforms, check and adjust the aim every month as the numbers come in, and send you a monthly recap of spend, reach, clicks or views, and follows.`,
+    DIY.surge(o),
   ],
   overdrive: (o) => planMath(o, S.surge, 'buys automatic posting plus AI tools'),
   'total-blackout': (o) => planMath(o, S.overdrive, 'adds the customer-answering AI assistant and a clean web page'),
@@ -119,6 +127,52 @@ const MATH = {
   'creator-systems': () => ['Quoted in writing before we build.', 'One stream can feed a week of short posts. The system is what makes that happen without filming more.', 'Pair it with a Boost when a clip takes off, and put money behind the thing that is already working.'],
 };
 
+// showPrices false: the bonus file keeps its place and its math-<slug> id (the clearance ladder links
+// to it) as field notes, built only from lines with no price, no ad-money figure and no price comparison.
+// Built-to-order files have no price in their bonus file, so they keep MATH.
+const NOTES = {
+  spark: (o) => [
+    `The ${S['post-kit'].name} comes with it: a 30-day calendar and 12 captions, so new visitors land on a page that’s alive.`,
+    LEARN,
+    DIY.spark(o),
+  ],
+  boost: (o) => [
+    `A ${o.run} with more ad money behind it than ${S.spark.name}. If you already ran a ${S.spark.name}, this is the next step up.`,
+    'On TikTok it runs as a one-day burst, so it lands hard on the day that counts.',
+    DIY.boost(o),
+  ],
+  blitz: (o) => [
+    `A full ${o.run} on one platform, so the money isn’t spread thin.`,
+    'Book it at least a week before your date so the whole run lands before the doors open.',
+    DIY.blitz(o),
+  ],
+  surge: (o) => [
+    'The ads run every month on up to 2 platforms, so you never start cold.',
+    `A ${S.blitz.name} is one week on one platform. ${o.name} covers the whole month on two.`,
+    DIY.surge(o),
+  ],
+  overdrive: (o) => [
+    `Everything in ${S.surge.name} keeps running: paid ads every month on up to 2 platforms and a monthly recap.`,
+    `On top of that, ${o.name} sets up automatic posting on your accounts and AI tools for the repeat work in your business.`,
+    'Nothing goes out under your name that you haven’t seen.',
+  ],
+  'total-blackout': (o) => [
+    `Everything in ${S.overdrive.name} keeps running: the ads, automatic posting and AI tools.`,
+    `On top of that, ${o.name} adds an AI assistant that answers customers and captures their contact info, plus a clean web page with your hours, location and contact.`,
+    'You don’t need a website already. The web page is part of the plan.',
+  ],
+  'post-kit': (o) => [
+    'A 30-day calendar and 12 captions, written for one platform you pick.',
+    `It comes with every ${S.spark.name}, and it pairs with any boost.`,
+    'Twelve posts in thirty days is about three a week. That is enough to look alive without burning out.',
+  ],
+  'profile-fix': () => [
+    'One time. Nothing recurring.',
+    'Ads are wasted on a page that doesn’t explain itself. Fixing the page first makes every later push work harder.',
+    'You publish the changes yourself, so you never hand over a login.',
+  ],
+};
+
 // Meta descriptions the default template leaves under 120 characters. Built from the offer data.
 const where = `Blackout Syndicate, ${BIZ.city}, ${BIZ.region}.`;
 const META = {
@@ -128,8 +182,22 @@ const META = {
   'profile-fix': (o) => `${o.name}: a rewritten bio, a pinned post plan, organized highlights and a shot list, so your page makes sense before ads send people. ${o.price}, one time.`,
   'ai-automation': (o) => `${o.name}: automatic replies, lead capture, follow-ups and post scheduling built around your business. Quoted per job. ${where}`,
 };
+// The same, with no price (showPrices false). Offers not listed use the default plain template below.
+const META_PLAIN = {
+  spark: (o) => `${o.name}: a small, real paid push on the platform you pick, a ${o.run} with the ${S['post-kit'].name} included. Ask us for pricing. ${where}`,
+  surge: (o) => `${o.name}: paid ads every month on up to 2 platforms, aim adjusted as numbers come in, and a monthly recap. Ask us for pricing. ${where}`,
+  overdrive: (o) => `${o.name}: everything in ${S.surge.name} plus automatic posting and AI tools set up for you. Month to month. Ask us for pricing. ${where}`,
+  'total-blackout': (o) => `${o.name}: ads, AI-made posts, an AI assistant that answers customers and a clean web page, done for you. Ask us for pricing. ${BIZ.city}, ${BIZ.region}.`,
+  'post-kit': (o) => `${o.name}: a 30-day posting calendar and 12 captions written for your business, emailed as a PDF within 2 business days. Ask us for pricing.`,
+  'profile-fix': (o) => `${o.name}: a rewritten bio, a pinned post plan, organized highlights and a shot list, so your page makes sense before ads send people. Ask us for pricing.`,
+  'ai-automation': META['ai-automation'],
+};
 
-export default () => OFFERS.map((o, i) => {
+// The build hands this function the merged config (src/config.mjs + BS_CONFIG_OVERRIDE). The page's
+// title, description, teaser and JSON-LD are read from it; the body reads c.config, the same object.
+export default (cfg = {}) => OFFERS.map((src, i) => {
+  const P = pricesOn(cfg);
+  const o = offerFor(src, cfg);
   const k = KIND[o.kind];
   const path = offerPath(o);
   const next = NEXT[o.slug] || (OFFERS[i + 1] ? offerPath(OFFERS[i + 1]) : 'contact.html');
@@ -157,8 +225,10 @@ export default () => OFFERS.map((o, i) => {
     section: 'packages',
     kind: o.kind,
     offer: o.slug,
-    title: `${o.name}${isService ? '' : ' · ' + o.price + o.suffix}`,
-    description: o.meta || (META[o.slug] ? META[o.slug](o) : null) || `${o.name}: ${o.tagline} ${isService ? 'Quoted per job.' : o.price + o.suffix + (o.kind === 'plan' ? '' : ', one time') + '.'} ${where}`,
+    title: P ? `${o.name}${isService ? '' : ' · ' + o.price + o.suffix}` : `${o.name}${isService ? '' : ' · ' + k.label}`,
+    description: P
+      ? o.meta || (META[o.slug] ? META[o.slug](o) : null) || `${o.name}: ${o.tagline} ${isService ? 'Quoted per job.' : o.price + o.suffix + (o.kind === 'plan' ? '' : ', one time') + '.'} ${where}`
+      : (META_PLAIN[o.slug] ? META_PLAIN[o.slug](o) : null) || `${o.name}: ${o.tagline} ${isService ? 'Quoted per job.' : o.run + '. Ask us for pricing.'} ${where}`,
     teaser: o.teaser,
     next,
     jsonld: (ctx, cfg) => ({
@@ -169,21 +239,28 @@ export default () => OFFERS.map((o, i) => {
       provider: { '@type': 'LocalBusiness', name: BIZ.name, telephone: '+1-574-213-9097', address: { '@type': 'PostalAddress', addressLocality: 'South Bend', addressRegion: 'IN', addressCountry: 'US' } },
       areaServed: BIZ.area.map((c) => c + ', IN'),
       url: cfg.siteUrl + '/' + path,
-      ...(isService ? {} : { offers: { '@type': 'Offer', price: o.price.replace('$', ''), priceCurrency: 'USD', ...(o.suffix ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: o.price.replace('$', ''), priceCurrency: 'USD', unitText: 'MONTH' } } : {}) } }),
+      // No Offer at all with prices hidden: an Offer without a price is not valid structured data.
+      ...(isService || !pricesOn(cfg) ? {} : { offers: { '@type': 'Offer', price: o.price.replace('$', ''), priceCurrency: 'USD', ...(o.suffix ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: o.price.replace('$', ''), priceCurrency: 'USD', unitText: 'MONTH' } } : {}) } }),
     }),
     body: (c) => {
+      // Read the switches from the build config (so BS_CONFIG_OVERRIDE works), never from config.mjs.
+      const priced = pricesOn(c.config);
       const priceHtml = `${o.price}${o.suffix ? `<small>${o.suffix}</small>` : ''}`;
-      // Read the switch from the build config (so BS_CONFIG_OVERRIDE works), never from config.mjs.
-      const payLink = !!(c.config.showPayLinks && o.store);
+      // Prices hidden: the price spot says "Ask us for pricing" (same words as the layout's price tag).
+      const ASK = c.ASK || { label: 'Pricing', short: 'Ask us', line: 'Ask us for pricing', cta: 'Get pricing' };
+      const askHtml = `${ASK.short}<small>for pricing</small>`;
+      const claim = isService || priced ? claimLabel : ASK.cta;
+      // The store pages show prices, so the Pay online link only shows with prices on.
+      const payLink = !!(priced && c.config.showPayLinks && o.store);
 
       // One signature module per kind, built only from the offer data.
-      const money_ = o.kind === 'boost' && ad ? `
+      const money_ = priced && o.kind === 'boost' && ad ? `
       <div class="offer-money">
         <p class="label label--dim">Where the money goes</p>
         <div class="offer-money__bar" role="img" aria-label="About ${money(ad)} of ${o.price} buys the ad itself"><i style="--w:${Math.round((ad / num(o.price)) * 100)}%"></i></div>
         <div class="offer-money__key"><span><b>About ${money(ad)}</b>buys the ad itself</span><span><b>The rest</b>covers setup, aiming and your recap</span></div>
       </div>` : '';
-      const rate = o.kind === 'plan' ? `
+      const rate = priced && o.kind === 'plan' ? `
       <div class="offer-rate">
         <p class="label label--dim">${o.regular ? 'Launch price' : 'Month to month'}</p>
         <p class="offer-rate__row"><span class="price">${priceHtml}</span></p>
@@ -192,7 +269,7 @@ export default () => OFFERS.map((o, i) => {
 
       const ladder = showLadder
         ? `<a class="ladder" href="${c.link(offerPath(up))}"><span class="label">${rel} · ${up.file}</span><b>${up.name}</b><span>${o.ladder.text}</span><span class="file__open">Open file ${c.arrow}</span></a>`
-        : drawer.length ? `<div class="ladder ladder--list"><span class="label">${drawerLabel}</span><ul>${drawer.map((x) => `<li><a href="${c.link(offerPath(x))}"><b>${x.name}</b><span>${x.kind === 'service' ? x.file : `${x.price}${x.suffix}`}</span>${c.arrow}</a></li>`).join('')}</ul></div>` : '';
+        : drawer.length ? `<div class="ladder ladder--list"><span class="label">${drawerLabel}</span><ul>${drawer.map((x) => `<li><a href="${c.link(offerPath(x))}"><b>${x.name}</b><span>${x.kind === 'service' ? x.file : !priced ? (x.kind === 'boost' ? x.run : x.file) : `${x.price}${x.suffix}`}</span>${c.arrow}</a></li>`).join('')}</ul></div>` : '';
 
       const claimNext = o.kind === 'plan' ? 'Your first month starts with the intake call.'
         : o.kind === 'boost' ? 'Our target is live within 24 hours of payment. Platform ad review can take longer.'
@@ -209,7 +286,7 @@ export default () => OFFERS.map((o, i) => {
         <h1 class="h1 offer-head__name${o.name.length > 12 ? ' offer-head__name--long' : ''}">${o.name}</h1>
         <p class="lede">${o.tagline}</p>
         <div class="ctas">
-          ${c.btn(claimLabel + ' ' + c.arrow, claimHref, 'lg')}
+          ${c.btn(claim + ' ' + c.arrow, claimHref, 'lg')}
           ${payLink ? c.btn('Pay online', o.store, 'ghost lg') : c.btn('Call ' + BIZ.phone, BIZ.phoneHref, 'ghost lg') + c.btn('Text us', BIZ.sms, 'ghost lg')}
         </div>
       </div>
@@ -217,15 +294,15 @@ export default () => OFFERS.map((o, i) => {
         <div class="offer-card__top">
           ${isService
             ? '<div class="price offer-card__price offer-card__price--quote">By quote<span class="sr">. Price in writing before work starts.</span></div>'
-            : `<div class="price offer-card__price">${priceHtml}</div>`}
+            : priced ? `<div class="price offer-card__price">${priceHtml}</div>` : `<div class="price offer-card__price price--ask">${askHtml}</div>`}
           <div class="stamp stamp--gold is-slam" aria-hidden="true">${k.stamp[0]}<br>${k.stamp[1]}<small>${k.stampSub}</small></div>
         </div>
         <dl class="ledger">
           <div><dt>Type</dt><dd>${k.label}</dd></div>
           ${isService ? `<div><dt>Starts with</dt><dd>${o.process[0].t}</dd></div>` : `<div><dt>Run</dt><dd>${o.run}</dd></div>`}
           <div><dt>Best for</dt><dd>${o.bestFor}</dd></div>
-          ${o.regular ? `<div><dt>Regular price</dt><dd>${o.regular}</dd></div>` : ''}
-          ${o.oneMonth ? `<div><dt>One month only</dt><dd>${o.oneMonth}, no commitment</dd></div>` : ''}
+          ${priced && o.regular ? `<div><dt>Regular price</dt><dd>${o.regular}</dd></div>` : ''}
+          ${priced && o.oneMonth ? `<div><dt>One month only</dt><dd>${o.oneMonth}, no commitment</dd></div>` : ''}
         </dl>
         ${isService ? '' : `<p class="offer-card__spend">${o.spend}</p>`}
       </aside>
@@ -268,8 +345,8 @@ export default () => OFFERS.map((o, i) => {
 
 <section class="band band--flush-top offer-bonus" aria-label="Bonus file">
   <div class="wrap wrap--narrow">
-    <p class="offer-bonus__note"><span class="label">Bonus file · ${isService ? 'Before you call' : 'The price math'}</span><span>${isService ? `What to have ready before you call about ${o.name}.` : `Where the money in ${o.name} goes, worked out line by line.`}<span class="offer-bonus__how"> It opens at Clearance 2: ${LEVELS[2].name}, which you earn by reading the site. No sign-up.</span></span></p>
-    ${c.classified({ id: 'math-' + o.slug, level: 2, bypass: true, title: isService ? `Bonus file: before you call about ${o.name}` : `Bonus file: the math behind ${o.name}`, body: `<ul>${(MATH[o.slug] ? MATH[o.slug](o) : []).map((m) => `<li>${m}</li>`).join('')}</ul>` })}
+    <p class="offer-bonus__note"><span class="label">Bonus file · ${isService ? 'Before you call' : priced ? 'The price math' : 'Field notes'}</span><span>${isService ? `What to have ready before you call about ${o.name}.` : priced ? `Where the money in ${o.name} goes, worked out line by line.` : `How to get the most out of ${o.name}, line by line.`}<span class="offer-bonus__how"> It opens at Clearance 2: ${LEVELS[2].name}, which you earn by reading the site. No sign-up.</span></span></p>
+    ${c.classified({ id: 'math-' + o.slug, level: 2, bypass: true, title: isService ? `Bonus file: before you call about ${o.name}` : priced ? `Bonus file: the math behind ${o.name}` : `Bonus file: field notes on ${o.name}`, body: `<ul>${((isService || priced ? MATH : NOTES)[o.slug] || (() => []))(o).map((m) => `<li>${m}</li>`).join('')}</ul>` })}
   </div>
 </section>
 
@@ -290,21 +367,22 @@ export default () => OFFERS.map((o, i) => {
       <div class="claim__main">
         <p class="label">${o.file} · ${o.name}</p>
         <h2 class="h2" id="claim-h">${isService ? 'Get the quote.' : 'Claim the file.'}</h2>
-        <p class="lede">${isService ? 'Tell us what you need. You get a written price before any work starts.' : `Send the form and we’ll reach out to confirm the details and how you’d like to pay. ${claimNext}`}</p>
-        <div class="ctas">${c.btn(claimLabel + ' ' + c.arrow, claimHref, 'lg')}${payLink ? c.btn('Pay online now', o.store, 'ghost lg') : ''}</div>
+        <p class="lede">${isService ? 'Tell us what you need. You get a written price before any work starts.' : priced ? `Send the form and we’ll reach out to confirm the details and how you’d like to pay. ${claimNext}` : `Send the form and we’ll reach out with pricing, the details and how you’d like to pay. ${claimNext}`}</p>
+        <div class="ctas">${c.btn(claim + ' ' + c.arrow, claimHref, 'lg')}${payLink ? c.btn('Pay online now', o.store, 'ghost lg') : ''}</div>
         <p class="small muted claim__line">Or call <a href="${BIZ.phoneHref}">${BIZ.phone}</a>, or <a href="${BIZ.sms}">send a text</a>.</p>
       </div>
       <div class="claim__side">
         ${isService
           ? `<p class="label label--dim">Price before work starts</p><ol class="ticks claim__path">${o.process.map((s) => `<li>${s.t}</li>`).join('')}</ol>`
-          : `<div class="price claim__price">${priceHtml}</div><p class="label label--dim">${o.cadence}</p>`}
+          : priced ? `<div class="price claim__price">${priceHtml}</div><p class="label label--dim">${o.cadence}</p>`
+          : `<div class="price claim__price price--ask">${ASK.short}</div><p class="label label--dim">For pricing · ${o.cadence}</p>`}
         ${ladder}
       </div>
     </div>
   </div>
 </section>`;
     },
-    css: OFFER_CSS,
+    css: P ? OFFER_CSS : OFFER_CSS + ASK_CSS,
     js: OFFER_JS,
   };
 });
@@ -410,4 +488,12 @@ a.ladder:hover{border-color:var(--gold)}
 .ladder--list a .arw{width:16px;height:16px;color:var(--gold);transition:transform .25s var(--ease)}
 .ladder--list a:hover b{color:var(--gold-hi)}
 .ladder--list a:hover .arw{transform:translateX(4px)}
+`;
+
+// Prices hidden: the price spots read "ASK US" in the price face with a small typed "for pricing" under it.
+const ASK_CSS = `
+.price--ask{text-transform:uppercase}
+.price--ask small{display:block;margin:10px 0 0;font-family:var(--f-type);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ash)}
+.offer-card__price.price--ask{font-size:clamp(40px,4.4vw,56px)}
+.claim__price.price--ask{font-size:clamp(52px,6.4vw,84px)}
 `;

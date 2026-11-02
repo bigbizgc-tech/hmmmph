@@ -64,6 +64,11 @@ const css = CLIP_ART_CSS + `
 .quick__list span:not(.price){grid-area:meta;font-size:14px;color:var(--ash);margin-top:3px}
 .quick__list .price{grid-area:price;font-size:32px;text-align:right}
 .quick__list .price small{font-size:13px}
+/* prices hidden: each row ends in an arrow, and one line says how to get a price */
+.quick__list a>.arw{grid-area:price;width:22px;height:22px;color:var(--gold);transition:transform .25s var(--ease)}
+.quick__list a:hover>.arw{transform:translateX(4px)}
+.quick__ask{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin-top:14px;font-size:15px;color:var(--paper)}
+.quick__ask .textlink{font-size:15px;margin-left:auto}
 
 /* ── The problem ── */
 .truth{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(32px,6vw,90px);align-items:center}
@@ -239,10 +244,10 @@ export default {
         <li>Call or text&nbsp;<a href="${BIZ.phoneHref}">${BIZ.phone}</a></li>
       </ul>
       <div class="ctas">
-        ${c.btn('See packages and prices ' + c.arrow, 'packages.html', 'lg')}
+        ${c.btn((c.priced ? 'See packages and prices ' : 'See the packages ') + c.arrow, 'packages.html', 'lg')}
         ${c.btn('Find my package', 'packages.html#match', 'ghost lg')}
       </div>
-      <p class="hero__prices">${c.BOOSTS.map((o) => `<span>${o.name} <b>${o.price}</b></span>`).join('')}<span>Plans from <b>${cheapest(c.PLANS).price}${cheapest(c.PLANS).suffix}</b></span></p>
+      ${c.priced ? `<p class="hero__prices">${c.BOOSTS.map((o) => `<span>${o.name} <b>${o.price}</b></span>`).join('')}<span>Plans from <b>${cheapest(c.PLANS).price}${cheapest(c.PLANS).suffix}</b></span></p>` : ''}
     </div>
     <aside class="visitor" data-visitor aria-label="Your visitor file">
       <div class="visitor__head"><span class="label">Visitor file</span><span class="badge badge--red" data-v="status">Uncleared</span></div>
@@ -262,11 +267,12 @@ export default {
 
 <section class="quick" aria-labelledby="quick-h">
   <div class="wrap">
-    <div class="quick__head"><h2 class="quick__h" id="quick-h">Packages and prices</h2><a class="textlink" href="${c.link('packages.html')}">Compare every package ${c.arrow}</a></div>
+    <div class="quick__head"><h2 class="quick__h" id="quick-h">${c.priced ? 'Packages and prices' : 'Packages'}</h2><a class="textlink" href="${c.link('packages.html')}">Compare every package ${c.arrow}</a></div>
     <ul class="quick__list">
-      ${c.BOOSTS.map((o) => `<li><a href="${c.link(c.offerPath(o))}"><b>${o.name}</b><span>${o.cadence} · ${o.run} · No contract</span><span class="price">${o.price}</span></a></li>`).join('')}
-      <li><a href="${c.link('packages.html#plans')}"><b>Monthly plans</b><span>${c.PLANS.map((o) => o.name).join(', ')}</span><span class="price"><small>from </small>${c.PLANS[0].price}<small>${c.PLANS[0].suffix}</small></span></a></li>
-    </ul>
+      ${c.BOOSTS.map((o) => `<li><a href="${c.link(c.offerPath(o))}"><b>${o.name}</b><span>${o.cadence} · ${o.run} · No contract</span>${c.priced ? `<span class="price">${o.price}</span>` : c.arrow}</a></li>`).join('')}
+      <li><a href="${c.link('packages.html#plans')}"><b>Monthly plans</b><span>${c.PLANS.map((o) => o.name).join(', ')}</span>${c.priced ? `<span class="price"><small>from </small>${c.PLANS[0].price}<small>${c.PLANS[0].suffix}</small></span>` : c.arrow}</a></li>
+    </ul>${c.priced ? '' : `
+    <p class="quick__ask"><span class="label">${c.ASK.label}</span><span>${c.ASK.short}.</span><a class="textlink" href="${c.link('contact.html#intake')}">${c.ASK.cta} ${c.arrow}</a></p>`}
   </div>
 </section>
 

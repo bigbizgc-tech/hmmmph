@@ -58,6 +58,14 @@ export const LEVELS = [
   { lv: 4, name: 'Lieutenant', xp: 200, unlock: 'Your first-call prep file (About)', href: 'about.html#cl-founder', cl: 'founder' },
   { lv: 5, name: 'Inner Circle', xp: 320, unlock: 'The Vault: the full Syndicate Playbook and your Syndicate ID', href: 'vault.html', cl: 'vault' },
 ];
+// config.showPrices: false turns the Level 2 reward (the math-* bonus files) into field notes with no price,
+// so the ladder names it that way. Same ids, hrefs and thresholds: only the wording changes.
+const LEVELS_PLAIN = { 2: { unlock: 'The field notes on every package file' } };
+// The ladder as this build should word it. Pass the merged build config (c.config in a page, or the
+// config the build hands a page module's function). Prices on (or no config): LEVELS, unchanged.
+export const levelsFor = (cfg) => (cfg && cfg.showPrices === false
+  ? LEVELS.map((l) => (LEVELS_PLAIN[l.lv] ? { ...l, ...LEVELS_PLAIN[l.lv] } : l))
+  : LEVELS);
 
 export const XP = { visit: 10, read: 15, quiz: 30, lead: 50, mark: 25, blackout: 20 };
 

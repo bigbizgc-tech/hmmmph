@@ -1,6 +1,6 @@
 // packages.html: the index of every file, the package matcher and the side-by-side comparisons.
 import { BIZ, LEVELS, POLICY } from '../data/business.mjs';
-import { OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, bySlug, offerPath } from '../data/offers.mjs';
+import { OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, bySlug, offerPath, offerFor } from '../data/offers.mjs';
 
 // ── Facts pulled from offers.mjs (never hard-code a price) ───────────────────
 const num = (p) => Number(String(p).replace(/[^0-9.]/g, ''));
@@ -13,20 +13,20 @@ const SURGE = bySlug.surge;
 // Boost table: wording lifted from each boost's includes in offers.mjs.
 const BOOST_ROWS = {
   spark: { plat: 'One platform you pick', tiktok: '', recap: 'Spend, reach, and clicks or views', kit: 'Included free' },
-  boost: { plat: 'One platform you pick', tiktok: 'On TikTok it runs as a one-day burst', recap: 'Spend, reach, clicks or views, and follows', kit: `Add it for ${POST_KIT.price}` },
-  blitz: { plat: 'Any one platform', tiktok: 'On TikTok it runs for 2 days', recap: 'Spend, reach, clicks or views, and follows', kit: `Add it for ${POST_KIT.price}` },
+  boost: { plat: 'One platform you pick', tiktok: 'On TikTok it runs as a one-day burst', recap: 'Spend, reach, clicks or views, and follows', kit: `Add it for ${POST_KIT.price}`, kitAsk: 'Available as an add-on' },
+  blitz: { plat: 'Any one platform', tiktok: 'On TikTok it runs for 2 days', recap: 'Spend, reach, clicks or views, and follows', kit: `Add it for ${POST_KIT.price}`, kitAsk: 'Available as an add-on' },
 };
 // Plan table: wording lifted from each plan's includes, notForYou and ladder in offers.mjs.
 const PLAN_ROWS = {
-  surge: { ads: `Every month on up to 2 platforms. About $${adOf(SURGE)} a month goes into the ads`, posting: '', ai: '', web: '', adds: 'Ads every month. No restarting from zero' },
+  surge: { ads: `Every month on up to 2 platforms. About $${adOf(SURGE)} a month goes into the ads`, adsAsk: 'Every month on up to 2 platforms', posting: '', ai: '', web: '', adds: 'Ads every month. No restarting from zero' },
   overdrive: { ads: 'Everything in Surge', posting: 'Automatic posting set up on your accounts', ai: 'AI tools set up for the repeat work in your business', web: '', adds: 'Automatic posting and AI tools' },
   'total-blackout': { ads: 'Paid promotion through the platforms your people use', posting: 'AI-made posts and promos for your pages', ai: 'An AI assistant that answers customers and captures their contact info', web: 'A clean web page with your hours, location and contact', adds: 'The customer-answering AI assistant and a clean web page' },
 };
 
 const GROUPS = [
-  { id: 'boosts', no: '01', name: 'One-time boosts', meta: `${BOOSTS.length} files · ${range(BOOSTS)}` },
-  { id: 'plans', no: '02', name: 'Monthly plans', meta: `${PLANS.length} files · ${range(PLANS)}` },
-  { id: 'addons', no: '03', name: 'Add-ons', meta: `${ADDONS.length} files · ${range(ADDONS)}` },
+  { id: 'boosts', no: '01', name: 'One-time boosts', meta: `${BOOSTS.length} files · ${range(BOOSTS)}`, metaAsk: `${BOOSTS.length} files · One-time` },
+  { id: 'plans', no: '02', name: 'Monthly plans', meta: `${PLANS.length} files · ${range(PLANS)}`, metaAsk: `${PLANS.length} files · Month to month` },
+  { id: 'addons', no: '03', name: 'Add-ons', meta: `${ADDONS.length} files · ${range(ADDONS)}`, metaAsk: `${ADDONS.length} files · One-time` },
   { id: 'built', no: '04', name: 'Built to order', meta: `${SERVICES.length} files · Quoted per job` },
 ];
 
@@ -63,9 +63,11 @@ const GUIDE = [
 ];
 
 const RULES = [
-  { t: 'Never run an ad? Start small.', d: `Spark is the cheapest real test: about $${adOf(bySlug.spark)} in the ad, a ${bySlug.spark.run}, and the 30-Day Post Kit comes with it. You find out what real reach feels like before you spend more.` },
+  { t: 'Never run an ad? Start small.', d: `Spark is the cheapest real test: about $${adOf(bySlug.spark)} in the ad, a ${bySlug.spark.run}, and the 30-Day Post Kit comes with it. You find out what real reach feels like before you spend more.`,
+    dAsk: `Spark is the smallest real test: a ${bySlug.spark.run}, and the 30-Day Post Kit comes with it. You find out what real reach feels like before you go bigger.` },
   { t: 'Fix the page before you buy the traffic.', d: 'If your bio doesn’t say what you do, where you are and what to do next, an ad just sends more people to a page that loses them. Profile Fix first.' },
-  { t: 'One date? Buy a boost. Every week? Get a plan.', d: `A boost is one push for one moment. If you keep buying them, stop. Three Blitzes cost about what Surge costs for a month, and Surge never restarts from zero.` },
+  { t: 'One date? Buy a boost. Every week? Get a plan.', d: `A boost is one push for one moment. If you keep buying them, stop. Three Blitzes cost about what Surge costs for a month, and Surge never restarts from zero.`,
+    dAsk: 'A boost is one push for one moment. If you keep buying them, stop. Surge keeps the push running every month and never restarts from zero.' },
   { t: 'Pay for the help you’ll actually use.', d: 'If you’ll post yourself, Surge is enough. If posting never happens, Overdrive. If you want the whole operation off your plate, Total Blackout.' },
 ];
 
@@ -114,19 +116,21 @@ function matcher() {
     return { main, addon };
   }
   const THING = { channel: 'your channel', shop: 'your shop', event: 'your events', messy: 'your page' };
+  // With prices hidden the data carries no ad amount (o.ad is null), so the amount clause drops out.
+  const amt = (o, pre, post) => (o.ad ? pre + o.ad + post : '');
   function why(slug, a) {
     const o = D[slug];
     switch (slug) {
       case 'total-blackout': return 'You want the whole thing handled. ' + o.name + ' covers the ads, the posts, an AI assistant that answers ' + (a[0] === 'channel' ? 'the people who message you' : 'your customers') + ' and a clean web page.' + (a[1] !== 'monthly' && o.oneMonth ? ' Only need one month? It’s ' + o.oneMonth + ', no commitment.' : '');
       case 'overdrive': return 'You want ads every month and the posting off your plate. Overdrive is everything in Surge, plus automatic posting and AI tools for the repeat work.';
-      case 'surge': return 'You want ' + THING[a[0]] + ' in front of people every month without starting cold. Surge keeps real paid ads running on up to 2 platforms, with about $' + o.ad + ' a month in the ads.';
+      case 'surge': return 'You want ' + THING[a[0]] + ' in front of people every month without starting cold. Surge keeps real paid ads running on up to 2 platforms' + amt(o, ', with about $', ' a month in the ads') + '.';
       case 'blitz': return a[0] === 'event'
-        ? 'A date on the calendar needs a crowd. Blitz is a full ' + o.run + ' with about $' + o.ad + ' in the ad itself, so book it at least a week before the date.'
-        : 'You need more than one night. Blitz is our biggest single push: a full ' + o.run + ' on one platform, with about $' + o.ad + ' in the ad itself.';
+        ? 'A date on the calendar needs a crowd. Blitz is a full ' + o.run + amt(o, ' with about $', ' in the ad itself') + ', so book it at least a week before the date.'
+        : 'You need more than one night. Blitz is our biggest single push: a full ' + o.run + ' on one platform' + amt(o, ', with about $', ' in the ad itself') + '.';
       case 'boost': return a[0] === 'channel'
-        ? 'One night that matters. Boost puts about $' + o.ad + ' of real ad money behind your stream, drop or release over a ' + o.run + ', or as a one-day burst on TikTok.'
-        : 'One sale, one drop, one big day. Boost puts about $' + o.ad + ' of real ad money behind it over a ' + o.run + ', aimed at your area.';
-      case 'spark': return 'Your page is new or still rough, so start small. Spark is a real ' + o.run + ' with about $' + o.ad + ' in the ad, and the 30-Day Post Kit comes with it.';
+        ? 'One night that matters. Boost puts ' + amt(o, 'about $', ' of ') + 'real ad money behind your stream, drop or release over a ' + o.run + ', or as a one-day burst on TikTok.'
+        : 'One sale, one drop, one big day. Boost puts ' + amt(o, 'about $', ' of ') + 'real ad money behind it over a ' + o.run + ', aimed at your area.';
+      case 'spark': return 'Your page is new or still rough, so start small. Spark is a real ' + o.run + amt(o, ' with about $', ' in the ad') + ', and the 30-Day Post Kit comes with it.';
       default: return '';
     }
   }
@@ -137,6 +141,7 @@ function matcher() {
   };
 
   function setPrice(el, o) {
+    if (!o.price) return; // prices hidden: the page already says "Ask us for pricing" here
     el.textContent = o.price;
     if (o.suffix) { const s = document.createElement('small'); s.textContent = o.suffix; el.appendChild(s); }
   }
@@ -160,7 +165,8 @@ function matcher() {
       ad.hidden = false;
       const link = $('[data-r="addon-link"]');
       link.href = x.href; link.textContent = x.name;
-      $('[data-r="addon-price"]').textContent = x.price;
+      const ap = $('[data-r="addon-price"]');
+      ap.textContent = x.price; ap.hidden = !x.price;
       $('[data-r="addon-why"]').textContent = ADDON_WHY[r.addon] ? ADDON_WHY[r.addon](A) : '';
     } else ad.hidden = true;
     const later = $('[data-r="later"]');
@@ -355,6 +361,12 @@ const css = `
 .pk-grid{margin-top:8px}
 .pk-policy{margin-top:clamp(18px,2.4vw,26px);font-size:14px;color:var(--ash);max-width:80ch}
 .pk-policy b{font-family:var(--f-type);font-weight:400;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-right:8px}
+/* prices hidden: one "Pricing" line under each policy line, and Call or text under the match */
+.pk-policy+.pk-policy{margin-top:8px}
+.pk-policy a{color:var(--paper);text-decoration:none;border-bottom:1px solid var(--brass)}
+.pk-policy a:hover{color:var(--gold-hi)}
+.pk-result__call{font-size:14.5px;color:var(--ink-mute)}
+.pk-result__call a{color:var(--ink);font-weight:600;text-underline-offset:3px}
 
 /* comparison tables */
 .pk-compare{margin-top:clamp(48px,6vw,76px);display:grid;gap:16px}
@@ -465,7 +477,7 @@ document.querySelectorAll('.pk-cab a, .pk-opt').forEach(function (el) {
 })();
 `;
 
-export default {
+const PAGE = {
   path: 'packages.html',
   file: 'Index',
   order: 5,
@@ -486,14 +498,18 @@ export default {
       name: o.name,
       description: o.tagline,
       url: config.siteUrl + '/' + offerPath(o),
-      ...(o.kind === 'service' ? {} : { price: String(num(o.price)), priceCurrency: 'USD' }),
+      ...(o.kind === 'service' || !ctx.priced ? {} : { price: String(num(o.price)), priceCurrency: 'USD' }),
       itemOffered: { '@type': 'Service', name: o.name, provider: { '@type': 'LocalBusiness', name: BIZ.name } },
     })),
   }),
   body: (c) => {
-    const data = Object.fromEntries(OFFERS.filter((o) => o.kind !== 'service').map((o) => [o.slug, {
-      name: o.name, file: o.file, price: o.price, suffix: o.suffix, cadence: o.cadence, run: o.run, oneMonth: o.oneMonth || '',
-      ad: adOf(o), ladder: o.ladder ? o.ladder.text : '', href: c.link(offerPath(o)), claim: c.link('contact.html?pkg=' + o.slug + '#intake'),
+    const P = c.priced;
+    // A Pricing line under a group's policy line (prices hidden only).
+    const askLine = P ? '' : `<p class="pk-policy"><b>${c.ASK.label}</b>${c.ASK.short}. <a href="${c.link('contact.html#intake')}">${c.ASK.cta}</a>, or call or text <a href="${BIZ.phoneHref}">${BIZ.phone}</a>.</p>`;
+    // Prices hidden: the matcher gets no price, single-month price or ad amount, and the wording from offers.mjs `plain`.
+    const data = Object.fromEntries(OFFERS.filter((o) => o.kind !== 'service').map((o) => offerFor(o, c.config)).map((o) => [o.slug, {
+      name: o.name, file: o.file, price: P ? o.price : '', suffix: P ? o.suffix : '', cadence: o.cadence, run: o.run, oneMonth: P ? o.oneMonth || '' : '',
+      ad: P ? adOf(o) : null, ladder: o.ladder ? o.ladder.text : '', href: c.link(offerPath(o)), claim: c.link('contact.html?pkg=' + o.slug + '#intake'),
     }]));
     const dataJson = JSON.stringify(data).replace(/</g, '\\u003c');
     const keys = ['A', 'B', 'C', 'D'];
@@ -518,7 +534,7 @@ export default {
         <p class="label label--dim">The cabinet · pull a drawer</p>
         <ol>
           <li><a class="pk-cab__first" href="#match"><span class="pk-cab__no" aria-hidden="true">00</span><span class="pk-cab__name">Find your file</span><span class="pk-cab__meta">3 questions · 1 match</span>${c.arrow}</a></li>
-          ${GROUPS.map((g) => `<li><a href="#${g.id}"><span class="pk-cab__no" aria-hidden="true">${g.no}</span><span class="pk-cab__name">${g.name}</span><span class="pk-cab__meta">${g.meta}</span>${c.arrow}</a></li>`).join('')}
+          ${GROUPS.map((g) => `<li><a href="#${g.id}"><span class="pk-cab__no" aria-hidden="true">${g.no}</span><span class="pk-cab__name">${g.name}</span><span class="pk-cab__meta">${P ? g.meta : g.metaAsk || g.meta}</span>${c.arrow}</a></li>`).join('')}
           <li><a href="#choose"><span class="pk-cab__no" aria-hidden="true">05</span><span class="pk-cab__name">How to choose</span><span class="pk-cab__meta">4 rules of thumb</span>${c.arrow}</a></li>
         </ol>
       </nav>
@@ -534,7 +550,7 @@ export default {
       <p>Tell us what you’re pushing, for how long, and how much you want off your plate. We point you at the one file that fits, plus an add-on when your page needs it.</p>
       <ul class="pk-match__list pk-jsonly">
         <li>One recommendation, with the reason why</li>
-        <li>The price, straight from the file</li>
+        <li>${P ? 'The price, straight from the file' : 'One tap to ask for the price'}</li>
         <li>No email needed to see it</li>
       </ul>
       <p class="pk-match__xp">First match: +30 clearance</p>
@@ -565,7 +581,7 @@ export default {
           <div class="pk-result__id">
             <p class="label" data-r="kicker">Match found</p>
             <h3 class="pk-result__name" id="pk-r-name" data-r="name">Your file</h3>
-            <div class="pk-result__price"><span class="price" data-r="price"></span><span class="pk-result__cad" data-r="cadence"></span></div>
+            <div class="pk-result__price">${P ? '<span class="price" data-r="price"></span>' : `<span class="price price--ask" data-r="price">${c.ASK.short} <small>for pricing</small></span>`}<span class="pk-result__cad" data-r="cadence"></span></div>
           </div>
           <span class="stamp" data-r="stamp" aria-hidden="true">Match<small>Cleared for you</small></span>
         </div>
@@ -579,10 +595,11 @@ export default {
         <div class="pk-result__foot">
           <div class="ctas">
             <a class="btn btn--paper" data-r="open" href="${c.link('packages.html')}">Open the file ${c.arrow}</a>
-            <a class="btn btn--paper btn--ghost" data-r="claim" href="${c.link('contact.html#intake')}">Claim it</a>
+            <a class="btn btn--paper btn--ghost" data-r="claim" href="${c.link('contact.html#intake')}">${P ? 'Claim it' : c.ASK.cta}</a>
           </div>
           <button class="pk-result__again" type="button" data-restart hidden>Start over</button>
-        </div>
+        </div>${P ? '' : `
+        <p class="pk-result__call">Rather ask out loud? Call <a href="${BIZ.phoneHref}">${BIZ.phone}</a>, or <a href="${BIZ.sms}">send a text</a>.</p>`}
         <p class="pk-result__later" data-r="later" hidden><span class="label">When you’re ready for more</span><span data-r="later-text"></span></p>
       </div>
     </div>
@@ -591,7 +608,7 @@ export default {
       <p class="label">The short guide</p>
       <p>Find your line. Start with that file.</p>
       <ul>
-        ${GUIDE.map((g) => { const o = bySlug[g.slug]; const x = g.and && bySlug[g.and]; return `<li><span><b>If you</b> ${g.if}</span><span class="pk-guide__pick"><a href="${c.link(offerPath(o))}">${o.name}</a><small>${o.price}${o.suffix}${x ? ` · plus ${x.name} ${x.price}` : ''}</small></span></li>`; }).join('')}
+        ${GUIDE.map((g) => { const o = bySlug[g.slug]; const x = g.and && bySlug[g.and]; return `<li><span><b>If you</b> ${g.if}</span><span class="pk-guide__pick"><a href="${c.link(offerPath(o))}">${o.name}</a><small>${P ? `${o.price}${o.suffix}${x ? ` · plus ${x.name} ${x.price}` : ''}` : `${o.cadence} · ${o.run}${x ? ` · plus ${x.name}` : ''}`}</small></span></li>`; }).join('')}
       </ul>
     </div>
   </div>
@@ -614,22 +631,22 @@ export default {
       <div class="pk-compare__head"><h3 class="h3" id="cmp-boosts-h">Boosts side by side</h3><span class="label label--dim pk-swipe">Swipe the table ${'→'}</span></div>
       <div class="pk-scroll" role="region" aria-labelledby="cmp-boosts-h" tabindex="0">
         <table class="pk-table">
-          <caption class="sr">Spark, Boost and Blitz compared: price, ad money, run length, platform, recap and Post Kit.</caption>
+          <caption class="sr">${P ? 'Spark, Boost and Blitz compared: price, ad money, run length, platform, recap and Post Kit.' : 'Spark, Boost and Blitz compared: run length, platform, recap and Post Kit.'}</caption>
           <thead><tr><td><span class="sr">Detail</span></td>${BOOSTS.map(colHead).join('')}</tr></thead>
           <tbody>
-            <tr><th scope="row">Price</th>${BOOSTS.map((o) => cell(o, `<span class="pk-num">${o.price}</span><span class="pk-sub">One time</span>`)).join('')}</tr>
-            <tr><th scope="row">In the ad itself</th>${BOOSTS.map((o, i) => cell(o, `About $${adOf(o)}<span class="pk-bar" aria-hidden="true"><i style="--w:${Math.round((adOf(o) / MAX_AD) * 100)}%;--d:${(i * 0.15).toFixed(2)}s"></i></span>`)).join('')}</tr>
+            ${P ? `<tr><th scope="row">Price</th>${BOOSTS.map((o) => cell(o, `<span class="pk-num">${o.price}</span><span class="pk-sub">One time</span>`)).join('')}</tr>
+            <tr><th scope="row">In the ad itself</th>${BOOSTS.map((o, i) => cell(o, `About $${adOf(o)}<span class="pk-bar" aria-hidden="true"><i style="--w:${Math.round((adOf(o) / MAX_AD) * 100)}%;--d:${(i * 0.15).toFixed(2)}s"></i></span>`)).join('')}</tr>` : ''}
             <tr><th scope="row">Run length</th>${BOOSTS.map((o) => cell(o, o.run.replace(/^./, (m) => m.toUpperCase()))).join('')}</tr>
             <tr><th scope="row">Platform</th>${BOOSTS.map((o) => cell(o, `${BOOST_ROWS[o.slug].plat}${BOOST_ROWS[o.slug].tiktok ? `<span class="pk-sub">${BOOST_ROWS[o.slug].tiktok}</span>` : ''}`)).join('')}</tr>
             <tr><th scope="row">Recap</th>${BOOSTS.map((o) => cell(o, BOOST_ROWS[o.slug].recap)).join('')}</tr>
-            <tr><th scope="row">30-Day Post Kit</th>${BOOSTS.map((o) => cell(o, BOOST_ROWS[o.slug].kit)).join('')}</tr>
+            <tr><th scope="row">30-Day Post Kit</th>${BOOSTS.map((o) => cell(o, P ? BOOST_ROWS[o.slug].kit : BOOST_ROWS[o.slug].kitAsk || BOOST_ROWS[o.slug].kit)).join('')}</tr>
             <tr><th scope="row">Best for</th>${BOOSTS.map((o) => cell(o, o.bestFor)).join('')}</tr>
           </tbody>
         </table>
       </div>
-      <p class="pk-policy"><b>Refunds</b>${POLICY.boosts}</p>
+      <p class="pk-policy"><b>Refunds</b>${POLICY.boosts}</p>${askLine}
       <div class="pk-compare__foot">
-        <p class="pk-seal"><span class="pk-seal__tag">Sealed</span><span>Each file has a sealed page with the math behind its price. It opens at Clearance 2: ${LEVELS[2].name}.</span></p>
+        ${P ? `<p class="pk-seal"><span class="pk-seal__tag">Sealed</span><span>Each file has a sealed page with the math behind its price. It opens at Clearance 2: ${LEVELS[2].name}.</span></p>` : ''}
         <a class="textlink" href="${c.link(offerPath(BOOSTS[0]))}">Start with File 01: ${BOOSTS[0].name} ${c.arrow}</a>
       </div>
     </div>
@@ -652,13 +669,13 @@ export default {
       <div class="pk-compare__head"><h3 class="h3" id="cmp-plans-h">Plans side by side</h3><span class="label label--dim pk-swipe">Swipe the table ${'→'}</span></div>
       <div class="pk-scroll" role="region" aria-labelledby="cmp-plans-h" tabindex="0">
         <table class="pk-table">
-          <caption class="sr">Surge, Overdrive and Total Blackout compared: monthly price, regular price, one month only price, and what each plan includes.</caption>
+          <caption class="sr">${P ? 'Surge, Overdrive and Total Blackout compared: monthly price, regular price, one month only price, and what each plan includes.' : 'Surge, Overdrive and Total Blackout compared: what each plan includes.'}</caption>
           <thead><tr><td><span class="sr">Detail</span></td>${PLANS.map(colHead).join('')}</tr></thead>
           <tbody>
-            <tr><th scope="row">Monthly price</th>${PLANS.map((o) => cell(o, `${o.regular ? '<span class="pk-tag">Launch price</span>' : ''}<span class="pk-num">${priceHtml(o)}</span>${lockedIn(o) ? '<span class="pk-sub">Locked in while you stay</span>' : '<span class="pk-sub">Month to month</span>'}`)).join('')}</tr>
+            ${P ? `<tr><th scope="row">Monthly price</th>${PLANS.map((o) => cell(o, `${o.regular ? '<span class="pk-tag">Launch price</span>' : ''}<span class="pk-num">${priceHtml(o)}</span>${lockedIn(o) ? '<span class="pk-sub">Locked in while you stay</span>' : '<span class="pk-sub">Month to month</span>'}`)).join('')}</tr>
             <tr><th scope="row">Regular price</th>${PLANS.map((o) => cell(o, o.regular ? `${o.regular}${lockedIn(o) ? '<span class="pk-sub">What new clients pay after the launch</span>' : ''}` : none)).join('')}</tr>
-            <tr><th scope="row">One month only</th>${PLANS.map((o) => cell(o, `${o.oneMonth}<span class="pk-sub">No commitment</span>`)).join('')}</tr>
-            <tr><th scope="row">Paid ads</th>${PLANS.map((o) => cell(o, PLAN_ROWS[o.slug].ads)).join('')}</tr>
+            <tr><th scope="row">One month only</th>${PLANS.map((o) => cell(o, `${o.oneMonth}<span class="pk-sub">No commitment</span>`)).join('')}</tr>` : ''}
+            <tr><th scope="row">Paid ads</th>${PLANS.map((o) => cell(o, P ? PLAN_ROWS[o.slug].ads : PLAN_ROWS[o.slug].adsAsk || PLAN_ROWS[o.slug].ads)).join('')}</tr>
             <tr><th scope="row">Posting</th>${PLANS.map((o) => cell(o, PLAN_ROWS[o.slug].posting || none)).join('')}</tr>
             <tr><th scope="row">AI</th>${PLANS.map((o) => cell(o, PLAN_ROWS[o.slug].ai || none)).join('')}</tr>
             <tr><th scope="row">Web page</th>${PLANS.map((o) => cell(o, PLAN_ROWS[o.slug].web || none)).join('')}</tr>
@@ -668,7 +685,7 @@ export default {
           </tbody>
         </table>
       </div>
-      <p class="pk-policy"><b>Billing</b>${POLICY.plans}</p>
+      <p class="pk-policy"><b>Billing</b>${POLICY.plans}</p>${askLine}
       <div class="pk-compare__foot">
         <p>Start on any plan and move up any month.</p>
         <a class="textlink" href="${c.link(offerPath(bySlug['total-blackout']))}">Open the flagship: ${bySlug['total-blackout'].name} ${c.arrow}</a>
@@ -688,7 +705,7 @@ export default {
     <div class="pk-pair rv">
       <p><strong>Pairs with any boost.</strong> The ${POST_KIT.name} already comes free with every ${bySlug.spark.name}. Profile Fix is best done before your first ad runs, and you publish the changes yourself, so nobody needs your login.</p>
     </div>
-    <p class="pk-policy rv"><b>Refunds</b>${POLICY.addons}</p>
+    <p class="pk-policy rv"><b>Refunds</b>${POLICY.addons}</p>${askLine.replace('class="pk-policy"', 'class="pk-policy rv"')}
   </div>
 </section>
 
@@ -724,7 +741,7 @@ export default {
         ${c.btn('Take the 3 questions', '#match', 'paper')}
       </div>
       <ol class="pk-rules rv" style="--d:.08s">
-        ${RULES.map((r) => `<li><h3>${r.t}</h3><p>${r.d}</p></li>`).join('')}
+        ${RULES.map((r) => `<li><h3>${r.t}</h3><p>${P ? r.d : r.dAsk || r.d}</p></li>`).join('')}
       </ol>
     </div>
     <div class="pk-record rv">
@@ -751,3 +768,7 @@ export default {
 </section>`;
   },
 };
+
+// Prices hidden (config.showPrices: false): the same page with a description that names no price.
+const DESC_ASK = 'Every Blackout Syndicate package side by side: one-time boosts, monthly plans, add-ons and quoted builds. Find yours in 3 questions, then ask for pricing.';
+export default (config = {}) => (config.showPrices === false ? { ...PAGE, description: DESC_ASK } : PAGE);

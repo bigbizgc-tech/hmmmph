@@ -1,6 +1,6 @@
 // File 08A: FAQ (it follows File 08, Profile Fix, on the reading path). Grouped, deep-linkable, searchable. Answers come from offers.mjs and POLICY only.
 import { BIZ, PLATFORMS, POLICY } from '../data/business.mjs';
-import { BOOSTS, PLANS, SERVICES, bySlug, offerPath } from '../data/offers.mjs';
+import { BOOSTS, PLANS, SERVICES, bySlug, offerPath, offerFor, pricesOn } from '../data/offers.mjs';
 
 const andList = (a) => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]);
 const orList = (a) => (a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' or ' + a[a.length - 1]);
@@ -15,12 +15,16 @@ const tel = `<a href="${BIZ.phoneHref}">${BIZ.phone}</a>`;
 const mail = `<a href="mailto:${BIZ.email}">${BIZ.email}</a>`;
 
 // Each answer is a function of the page context (for c.link) and `ld` (true when building JSON-LD).
+// config.showPrices false (see groupsFor): `plain` swaps in a question or answer with no price,
+// `priced: true` drops an answer whose whole point is the price, and `blurbPlain` replaces a group's blurb.
 const GROUPS = [
   {
     id: 'buying', t: 'Buying and paying', blurb: 'How to buy, where the money goes, and the refund policy word for word.',
     items: [
-      { id: 'how-to-buy', q: 'How do I buy a package?', a: (c) => `<p>Send the form on the <a href="${c.link('contact.html')}">contact page</a>, or call or text ${tel}. Tell us what you’re promoting and which package you want. The Claim button on any package page fills that package in for you.</p><p>${POLICY.payment} For boosts, our target is live within 24 hours of payment.</p>` },
-      { id: 'ad-money', q: 'How much of my price goes into the actual ad?', a: (c) => `<p>Here is the ad money in each one:</p><ul>${[...BOOSTS, SURGE].map((o) => `<li><a href="${c.link(offerPath(o))}"><strong>${o.name}</strong></a>: ${lc(o.spend)}</li>`).join('')}</ul><p>The rest covers setup, aiming it and your recap. ${OVERDRIVE.name} includes everything in ${SURGE.name}.</p>` },
+      { id: 'how-to-buy', q: 'How do I buy a package?', a: (c) => `<p>Send the form on the <a href="${c.link('contact.html')}">contact page</a>, or call or text ${tel}. Tell us what you’re promoting and which package you want. The Claim button on any package page fills that package in for you.</p><p>${POLICY.payment} For boosts, our target is live within 24 hours of payment.</p>`,
+        plain: { a: (c) => `<p>Send the form on the <a href="${c.link('contact.html')}">contact page</a>, or call or text ${tel}. Tell us what you’re promoting and which package you want, and we’ll give you the price. The ${c.ASK.cta} button on any package page fills that package in for you.</p><p>${POLICY.payment} For boosts, our target is live within 24 hours of payment.</p>` } },
+      { id: 'ad-money', q: 'How much of my price goes into the actual ad?', a: (c) => `<p>Here is the ad money in each one:</p><ul>${[...BOOSTS, SURGE].map((o) => `<li><a href="${c.link(offerPath(o))}"><strong>${o.name}</strong></a>: ${lc(o.spend)}</li>`).join('')}</ul><p>The rest covers setup, aiming it and your recap. ${OVERDRIVE.name} includes everything in ${SURGE.name}.</p>`,
+        plain: { q: 'Does my money go into a real ad?', a: (c) => `<p>Yes. Part of what you pay buys the ad itself, through the platform’s own ad tools. The rest covers setup, aiming it and your recap.</p><p>Every recap shows what the platform actually charged for the ad. <a href="${c.link('how-it-works.html#recap')}">What each number means</a>.</p>` } },
       { id: 'promote-myself', q: 'Why not just hit Promote myself?', a: (c) => `<p>You can. The Promote button in the app puts money behind a post, and sometimes that’s all a post needs. Here is what a package adds on top of the ad money:</p><ul><li>Setup in the platform’s own ad tools, aimed at your area or the audience you name.</li><li>You see it and OK it before anything runs.</li><li>A recap when the run ends: what was spent, how many people it reached, and the clicks or views it got. ${andList(BOOSTS.slice(1).map((o) => o.name))} add follows.</li><li><a href="${c.link(offerPath(SPARK))}">${SPARK.name}</a> comes with the <a href="${c.link(offerPath(POSTKIT))}">${POSTKIT.name}</a>, so new visitors land on a page that’s alive.</li><li>On a monthly plan, the aim is checked and adjusted every month as the numbers come in.</li></ul><p>Rather run it yourself? <a href="${c.link('how-it-works.html#aimed')}">How a push is aimed</a> is written up on How it works. Use it on your own ads.</p>` },
       { id: 'refunds', q: 'What is your refund policy?', a: (c) => `<p>Word for word:</p><ul><li><strong>Boosts:</strong> ${POLICY.boosts}</li><li><strong>Monthly plans:</strong> ${POLICY.plans}</li><li><strong>Add-ons:</strong> ${POLICY.addons}</li><li><strong>Quoted jobs:</strong> ${POLICY.quoted}</li><li><strong>Rejected ads:</strong> ${POLICY.rejected}</li></ul><p>The full terms are on the <a href="${c.link('terms.html')}">terms and refunds page</a>.</p>` },
       { id: 'quoted', q: 'How do you price websites and AI work?', a: (c) => `<p>${andList(SERVICES.map((o) => `<a href="${c.link(offerPath(o))}">${o.name}</a>`))} are quoted per job. After a short call you get a written quote with the price and what’s included, before any work starts.</p><p>${POLICY.quoted}</p>` },
@@ -42,17 +46,19 @@ const GROUPS = [
     items: [
       { id: 'how-many', q: 'How many views or followers will I get?', a: () => `<p>${BIZ.resultsNote}</p><p>Nobody honest can promise you a number. What you get is a real ad in front of real people, aimed where you want it, and a straight recap of what it did.</p>` },
       { id: 'recap', q: 'What do I get at the end of a run?', a: (c) => `<p>A recap. ${BOOSTS[0].name}’s covers spend, reach, and clicks or views. ${andList(BOOSTS.slice(1).map((o) => o.name))} add follows. Monthly plans get a recap every month with spend, reach, clicks or views, and follows.</p><p>Every recap shows what was spent and what it reached. <a href="${c.link('how-it-works.html#recap')}">What each number means</a>.</p>` },
-      { id: 'small', q: 'Is a small boost even worth it?', a: (c) => `<p><a href="${c.link(offerPath(BOOSTS[0]))}">${BOOSTS[0].name}</a> is a test, and that’s its job. ${BOOSTS[0].spend} Real people see a real placement, and you find out whether a bigger push makes sense before you spend more.</p>` },
+      { id: 'small', q: 'Is a small boost even worth it?', a: (c) => `<p><a href="${c.link(offerPath(BOOSTS[0]))}">${BOOSTS[0].name}</a> is a test, and that’s its job. ${offerFor(BOOSTS[0], c.config).spend} Real people see a real placement, and you find out whether a bigger push makes sense before you spend more.</p>` },
       { id: 'flop', q: 'What if the ad doesn’t do much?', a: (c) => `<p>Then you learned something real for the price of a test, and we’ll tell you straight what we’d change: the post, the aim, the platform, or the page people land on.</p><p>Sometimes the honest answer is to fix your page before you spend another dollar. That’s what <a href="${c.link('packages/profile-fix.html')}">Profile Fix</a> is for.</p>` },
     ],
   },
   {
-    id: 'plans', t: 'Monthly plans', blurb: 'Contracts, cancelling, launch prices and how the three plans differ.',
+    id: 'plans', t: 'Monthly plans', blurb: 'Contracts, cancelling, launch prices and how the three plans differ.', blurbPlain: 'Contracts, cancelling and how the three plans differ.',
     items: [
-      { id: 'contract', q: 'Is there a contract on the monthly plans?', a: () => `<p>No long contract. Monthly plans run month to month. The monthly price is for staying month to month.</p><p>Just want one month? ${andList(PLANS.filter((o) => o.oneMonth).map((o) => `${o.name} is ${o.oneMonth}`))}, with no commitment.</p>` },
+      { id: 'contract', q: 'Is there a contract on the monthly plans?', a: () => `<p>No long contract. Monthly plans run month to month. The monthly price is for staying month to month.</p><p>Just want one month? ${andList(PLANS.filter((o) => o.oneMonth).map((o) => `${o.name} is ${o.oneMonth}`))}, with no commitment.</p>`,
+        plain: { a: () => `<p>No long contract. Monthly plans run month to month.</p><p>Just want one month? ${andList(PLANS.filter((o) => o.oneMonth).map((o) => o.name))} ${PLANS.filter((o) => o.oneMonth).length > 1 ? 'each come' : 'comes'} as one month only, billed once with no commitment.</p>` } },
       { id: 'cancel', q: 'How do I cancel a plan?', a: (c) => `<p>Call, text or email us. ${POLICY.plans}</p><p>The full terms are on the <a href="${c.link('terms.html')}">terms and refunds page</a>.</p>` },
-      { id: 'launch-price', q: 'What does “launch price” mean?', a: () => `<p>${PLANS.filter((o) => o.regular).map((o) => `${o.name} is ${o.price} a month at launch. Its regular price is ${o.regular.replace('/mo', ' a month')}.`).join(' ')}</p><p>Start at the launch price and you keep it for as long as you stay. New clients after the launch pay the regular price.</p>` },
-      { id: 'which-plan', q: 'What’s the difference between the three plans?', a: (c) => `<ul><li><a href="${c.link(offerPath(SURGE))}"><strong>${SURGE.name}</strong></a> (${SURGE.price}${SURGE.suffix}): paid promotion every month on up to 2 platforms, with a monthly recap.</li><li><a href="${c.link(offerPath(OVERDRIVE))}"><strong>${OVERDRIVE.name}</strong></a> (${OVERDRIVE.price}${OVERDRIVE.suffix}): everything in ${SURGE.name}, plus automatic posting and AI tools for the repeat work in your business.</li><li><a href="${c.link(offerPath(TOTAL))}"><strong>${TOTAL.name}</strong></a> (${TOTAL.price}${TOTAL.suffix}): ads, AI-made posts, an AI assistant that answers your customers, and a clean web page, all set up and run for you.</li></ul><p>You can move up any month.</p>` },
+      { id: 'launch-price', q: 'What does “launch price” mean?', a: () => `<p>${PLANS.filter((o) => o.regular).map((o) => `${o.name} is ${o.price} a month at launch. Its regular price is ${o.regular.replace('/mo', ' a month')}.`).join(' ')}</p><p>Start at the launch price and you keep it for as long as you stay. New clients after the launch pay the regular price.</p>`, priced: true },
+      { id: 'which-plan', q: 'What’s the difference between the three plans?', a: (c) => `<ul><li><a href="${c.link(offerPath(SURGE))}"><strong>${SURGE.name}</strong></a> (${SURGE.price}${SURGE.suffix}): paid promotion every month on up to 2 platforms, with a monthly recap.</li><li><a href="${c.link(offerPath(OVERDRIVE))}"><strong>${OVERDRIVE.name}</strong></a> (${OVERDRIVE.price}${OVERDRIVE.suffix}): everything in ${SURGE.name}, plus automatic posting and AI tools for the repeat work in your business.</li><li><a href="${c.link(offerPath(TOTAL))}"><strong>${TOTAL.name}</strong></a> (${TOTAL.price}${TOTAL.suffix}): ads, AI-made posts, an AI assistant that answers your customers, and a clean web page, all set up and run for you.</li></ul><p>You can move up any month.</p>`,
+        plain: { a: (c) => `<ul><li><a href="${c.link(offerPath(SURGE))}"><strong>${SURGE.name}</strong></a>: paid promotion every month on up to 2 platforms, with a monthly recap.</li><li><a href="${c.link(offerPath(OVERDRIVE))}"><strong>${OVERDRIVE.name}</strong></a>: everything in ${SURGE.name}, plus automatic posting and AI tools for the repeat work in your business.</li><li><a href="${c.link(offerPath(TOTAL))}"><strong>${TOTAL.name}</strong></a>: ads, AI-made posts, an AI assistant that answers your customers, and a clean web page, all set up and run for you.</li></ul><p>You can move up any month. ${c.ASK.line} on any of the three.</p>` } },
     ],
   },
   {
@@ -61,7 +67,7 @@ const GROUPS = [
       { id: 'passwords', q: 'Do I have to give you my passwords?', a: () => `<p>Not for Profile Fix. You publish the changes yourself, so nobody else needs your login.</p><p>For ads and automatic posting, we go over exactly what access your package needs before anything is set up. Your accounts stay yours.</p>` },
       { id: 'your-ok', q: 'Will anything go out under my name without my OK?', a: () => `<p>No. Nothing runs without your OK, and nothing goes out under your name that you haven’t seen. AI replies and automations are written around your business and approved by you before they go live.</p>` },
       { id: 'form', q: 'What happens to what I send in the contact form?', a: (c) => `<p>It’s emailed to us so we can get back to you about what you asked. The <a href="${c.link('privacy.html')}">privacy page</a> covers what we collect and why.</p>` },
-      { id: 'clearance-meter', q: 'What is the clearance meter on this site?', a: (c, ld) => `<p>Every page here is a file. Open one and read it to the end and your clearance goes up. Higher levels open the classified blocks: the pricing math, how a push is aimed, the first-call prep file, and at Level 5 the Vault.</p><p>Clearance is saved in your own browser only, and you can burn it from the clearance panel any time. Separately, the site can use the X pixel, a measurement tag from X, to count visits and form sends that come from our ads. The <a href="${c.link('privacy.html')}">privacy page</a> has the details.</p>${ld ? '' : `<p class="qa__secret">There are three hidden marks on this site. One of them is right here. ${c.mark('m3')}</p>`}` },
+      { id: 'clearance-meter', q: 'What is the clearance meter on this site?', a: (c, ld) => `<p>Every page here is a file. Open one and read it to the end and your clearance goes up. Higher levels open the classified blocks: ${pricesOn(c.config) ? 'the pricing math' : 'the field notes on every package file'}, how a push is aimed, the first-call prep file, and at Level 5 the Vault.</p><p>Clearance is saved in your own browser only, and you can burn it from the clearance panel any time. Separately, the site can use the X pixel, a measurement tag from X, to count visits and form sends that come from our ads. The <a href="${c.link('privacy.html')}">privacy page</a> has the details.</p>${ld ? '' : `<p class="qa__secret">There are three hidden marks on this site. One of them is right here. ${c.mark('m3')}</p>`}` },
     ],
   },
   {
@@ -73,7 +79,12 @@ const GROUPS = [
     ],
   },
 ];
-const TOTAL_Q = GROUPS.reduce((n, g) => n + g.items.length, 0);
+const groupsFor = (cfg) => (pricesOn(cfg) ? GROUPS : GROUPS.map((g) => ({
+  ...g,
+  blurb: g.blurbPlain || g.blurb,
+  items: g.items.filter((it) => !it.priced).map((it) => (it.plain ? { ...it, ...it.plain } : it)),
+})));
+const countOf = (groups) => groups.reduce((n, g) => n + g.items.length, 0);
 const plain = (h) => h.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').replace(/\s([.,:;?!])/g, '$1').trim();
 
 const css = `
@@ -249,9 +260,12 @@ export default {
   jsonld: (ctx) => ({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: GROUPS.flatMap((g) => g.items.map((it) => ({ '@type': 'Question', name: it.q, acceptedAnswer: { '@type': 'Answer', text: plain(it.a(ctx, true)) } }))),
+    mainEntity: groupsFor(ctx.config).flatMap((g) => g.items.map((it) => ({ '@type': 'Question', name: it.q, acceptedAnswer: { '@type': 'Answer', text: plain(it.a(ctx, true)) } }))),
   }),
-  body: (c) => `
+  body: (c) => {
+    const GROUPS = groupsFor(c.config);
+    const TOTAL_Q = countOf(GROUPS);
+    return `
 <header class="pagehead">
   <div class="wrap pagehead__in">
     ${c.crumbs([{ t: 'Home', p: 'index.html' }, { t: 'FAQ' }])}
@@ -314,5 +328,6 @@ export default {
       <p class="ask__note">Call or text. ${andList(BIZ.area)}, and anywhere online.</p>
     </div>
   </div>
-</section>`,
+</section>`;
+  },
 };

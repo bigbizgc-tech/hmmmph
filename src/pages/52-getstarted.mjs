@@ -24,6 +24,15 @@ const css = `
 .gs-pop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,22px)}
 @media (max-width:980px){.gs-pop{grid-template-columns:1fr}}
 @media (min-width:981px){.gs-pop{grid-template-rows:auto auto 1fr auto auto;row-gap:14px}.gs-pop>.file{grid-row:span 5;grid-template-rows:subgrid}}
+/* prices hidden: the class (its price stays) and, when there's a donation link, the Washington trip */
+.gs-extra{display:grid;gap:clamp(14px,2vw,22px)}
+.gs-extra--2{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+@media (max-width:900px){.gs-extra--2{grid-template-columns:1fr}}
+.gs-class{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px 32px}
+.gs-class__txt{display:grid;gap:8px;min-width:0;flex:1 1 300px}
+.gs-class__txt p:not(.label){color:var(--ash);max-width:48ch}
+.gs-extra .note{align-content:center}
+.gs-extra .note p:not(.label){font-size:15.5px}
 `;
 
 export default {
@@ -36,12 +45,26 @@ export default {
   css: css + BOOKING_CSS, js: BOOKING_JS,
   body: (c) => {
     const picks = ['spark', 'surge', 'total-blackout'].map((s) => bySlug[s]);
+    const K = CLASSES[0];
+    // With prices hidden the class keeps its price on a gold button; the trip card shows whenever there's a donation link.
+    const extra = [
+      c.priced ? '' : `
+      <div class="panel gs-class">
+        <div class="gs-class__txt">
+          <p class="label">Live class · With Biz</p>
+          <h2 class="h3" id="gs-class-h">${K.name}</h2>
+          <p>${K.length}, live. Set up Claude and start your own work in it.</p>
+        </div>
+        ${c.classBtn('lg')}
+      </div>`,
+      c.washingtonCard(),
+    ].filter(Boolean);
     return `
 <header class="gs" data-spot>
   <div class="wrap gs__in">
     <p class="label">You found the door · ${BIZ.area.join(' · ')}</p>
     <h1 class="gs__title">Get started.<span class="whisper">Three ways in. Pick one.</span></h1>
-    <p class="lede"><strong>Real ads. Real people. No bots.</strong> Paid reach for creators, streamers, solo businesses and local shops. Prices are on every package. Nothing runs until you say go.</p>
+    <p class="lede"><strong>Real ads. Real people. No bots.</strong> Paid reach for creators, streamers, solo businesses and local shops. ${c.priced ? 'Prices are on every package.' : 'Ask us for pricing on any package.'} Nothing runs until you say go.</p>
   </div>
 </header>
 
@@ -67,7 +90,13 @@ export default {
       </div>
     </div>
   </div>
-</section>
+</section>${extra.length ? `
+
+<section class="band band--tight band--flush-top" aria-label="More ways in">
+  <div class="wrap">
+    <div class="gs-extra${extra.length > 1 ? ' gs-extra--2' : ''}">${extra.join('')}</div>
+  </div>
+</section>` : ''}
 
 <section class="band band--coal" aria-labelledby="pop-h">
   <div class="wrap">

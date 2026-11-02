@@ -40,6 +40,8 @@ const GLOSS = [
   { t: 'Views', tag: 'Every recap · video goals', d: 'How many times your video was watched. Each platform sets its own rule for what counts as a view, so compare views on the same app.' },
   { t: 'Follows', tag: andList([...BOOSTS.slice(1).map((o) => o.name), 'plans']), d: 'People who hit follow while the run was live. Whether they do depends most on what they find when they land on your page.' },
 ];
+// config.showPrices false: the same glossary, with no ad-money figures in the Spend line.
+const GLOSS_PLAIN = GLOSS.map((g) => (g.t === 'Spend' ? { ...g, d: 'What the platform actually charged for the ad. It’s the part of what you pay that buys the ad itself.' } : g));
 
 const NEVER = [
   { t: 'Bots', d: 'No software pretending to be people. Your ad is shown by the platform itself, through its own ad tools.' },
@@ -383,6 +385,9 @@ export default {
     const nameLinks = (arr) => arr.map((o) => `<a href="${c.link(c.offerPath(o))}">${o.name}</a>`).join(' · ');
     const oneMonth = PLANS.filter((o) => o.oneMonth);
     const launch = PLANS.filter((o) => o.regular).map((o) => o.name);
+    // config.showPrices false: the price spots say "Ask us for pricing" (c.ASK), and nothing else changes shape.
+    const P = c.priced;
+    const ask = `<span><b>${c.ASK.short}</b> for pricing</span>`;
     return `
 <header class="pagehead">
   <div class="wrap pagehead__in hw-head__grid">
@@ -422,7 +427,7 @@ export default {
         <header class="path__head">
           <p class="label">One-time · No contract</p>
           <h3 class="path__name" id="pb-h">The boost path</h3>
-          <p class="path__meta"><span>${nameLinks(BOOSTS)}</span><span>From <b>${BOOSTS[0].price}</b></span><span>${orList(boostDays)} days</span></p>
+          <p class="path__meta"><span>${nameLinks(BOOSTS)}</span>${P ? `<span>From <b>${BOOSTS[0].price}</b></span>` : ask}<span>${orList(boostDays)} days</span></p>
         </header>
         <ol class="track" data-track>
           ${BOOST_STEPS.map((s, i) => step(s, i)).join('')}
@@ -433,7 +438,7 @@ export default {
         <header class="path__head">
           <p class="label">Monthly · Stay or walk</p>
           <h3 class="path__name" id="pp-h">The plan path</h3>
-          <p class="path__meta"><span>${nameLinks(PLANS)}</span><span>From <b>${PLANS[0].price}${PLANS[0].suffix}</b></span></p>
+          <p class="path__meta"><span>${nameLinks(PLANS)}</span>${P ? `<span>From <b>${PLANS[0].price}${PLANS[0].suffix}</b></span>` : ask}</p>
         </header>
         <ol class="track" data-track>
           ${PLAN_STEPS.map((s, i) => step(s, i, i === 2 ? ' class="is-loop is-loop--first"' : i === 3 ? ' class="is-loop is-loop--last"' : '')).join('').replace('<div class="track__body"><h4><span class="sr">Step 3: </span>', `<div class="track__body"><span class="loop-tag" aria-hidden="true">${loopIcon}Repeats monthly</span><h4><span class="sr">Step 3: </span>`)}
@@ -448,8 +453,9 @@ export default {
         <caption class="sr">The boost path compared with the plan path</caption>
         <thead><tr><th scope="col"><span class="sr">Question</span></th><th scope="col">Boost</th><th scope="col">Plan</th></tr></thead>
         <tbody>
-          <tr><th scope="row">You pay</th><td data-h="Boost">Once. ${andList(BOOSTS.map((o) => `${o.name} ${o.price}`))}.</td><td data-h="Plan">Every month. ${andList(PLANS.map((o) => `${o.name} ${o.price}`))}.${launch.length ? ` ${andList(launch)} are at launch prices.` : ''}</td></tr>
-          <tr><th scope="row">Commitment</th><td data-h="Boost">None.</td><td data-h="Plan">Month to month. Or one month only, no commitment: ${andList(oneMonth.map((o) => `${o.name} ${o.oneMonth}`))}.</td></tr>
+          ${P ? `<tr><th scope="row">You pay</th><td data-h="Boost">Once. ${andList(BOOSTS.map((o) => `${o.name} ${o.price}`))}.</td><td data-h="Plan">Every month. ${andList(PLANS.map((o) => `${o.name} ${o.price}`))}.${launch.length ? ` ${andList(launch)} are at launch prices.` : ''}</td></tr>
+          <tr><th scope="row">Commitment</th><td data-h="Boost">None.</td><td data-h="Plan">Month to month. Or one month only, no commitment: ${andList(oneMonth.map((o) => `${o.name} ${o.oneMonth}`))}.</td></tr>` : `<tr><th scope="row">You pay</th><td data-h="Boost">Once. ${c.ASK.line}.</td><td data-h="Plan">Every month. ${c.ASK.line}.</td></tr>
+          <tr><th scope="row">Commitment</th><td data-h="Boost">None.</td><td data-h="Plan">Month to month.${oneMonth.length ? ` Or one month only, billed once with no commitment${oneMonth.length < PLANS.length ? `: ${andList(oneMonth.map((o) => o.name))}` : ''}.` : ''}</td></tr>`}
           <tr><th scope="row">How long it runs</th><td data-h="Boost">${orList(boostDays)} days. Shorter bursts on TikTok.</td><td data-h="Plan">Every month until you stop.</td></tr>
           <tr><th scope="row">Platforms</th><td data-h="Boost">One per boost, your pick.</td><td data-h="Plan">Picked with you on the intake call.</td></tr>
           <tr><th scope="row">It starts with</th><td data-h="Boost">The form or a call.</td><td data-h="Plan">A twenty-minute intake call.</td></tr>
@@ -503,7 +509,7 @@ export default {
     </div>
     <div class="recap">
       <dl class="gloss rv">
-        ${GLOSS.map((g) => `<div><dt>${g.t}<small>${g.tag}</small></dt><dd>${g.d}</dd></div>`).join('')}
+        ${(P ? GLOSS : GLOSS_PLAIN).map((g) => `<div><dt>${g.t}<small>${g.tag}</small></dt><dd>${g.d}</dd></div>`).join('')}
       </dl>
       <figure class="ri rv" style="--d:.1s" data-ri data-mode="both">
         <div class="ri__top">
@@ -582,8 +588,8 @@ export default {
       <a class="hw-close__phone" href="${BIZ.phoneHref}">${BIZ.phone}</a>
     </div>
     <div class="doors">
-      <a class="door" href="${c.link('packages.html#boosts')}"><span class="label">One push</span><b>One-time boosts</b><span class="door__go">See them ${c.arrow}</span><small>${andList(BOOSTS.map((o) => o.name))}. From ${BOOSTS[0].price}, no contract.</small></a>
-      <a class="door" href="${c.link('packages.html#plans')}"><span class="label">Every month</span><b>Monthly plans</b><span class="door__go">See them ${c.arrow}</span><small>${andList(PLANS.map((o) => o.name))}. From ${PLANS[0].price}${PLANS[0].suffix}, stay or walk.</small></a>
+      <a class="door" href="${c.link('packages.html#boosts')}"><span class="label">One push</span><b>One-time boosts</b><span class="door__go">See them ${c.arrow}</span><small>${andList(BOOSTS.map((o) => o.name))}. ${P ? `From ${BOOSTS[0].price}, no contract.` : 'Pay once, no contract.'}</small></a>
+      <a class="door" href="${c.link('packages.html#plans')}"><span class="label">Every month</span><b>Monthly plans</b><span class="door__go">See them ${c.arrow}</span><small>${andList(PLANS.map((o) => o.name))}. ${P ? `From ${PLANS[0].price}${PLANS[0].suffix}, stay or walk.` : 'Month to month, stay or walk.'}</small></a>
     </div>
   </div>
 </section>`;

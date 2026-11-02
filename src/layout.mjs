@@ -3,7 +3,22 @@ import { readFileSync } from 'node:fs';
 import { BIZ, SOCIALS, LEVELS, POLICY, PLATFORMS, REEL } from './data/business.mjs';
 import { ICONS } from './data/icons.mjs';
 import { LOCKUP, CELL, snapbrim } from './data/logo.mjs';
-import { OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, offerPath } from './data/offers.mjs';
+import { OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, CLASSES, offerPath } from './data/offers.mjs';
+
+// What a price spot says when config.showPrices is false. One wording for the whole site.
+export const ASK = { label: 'Pricing', short: 'Ask us', line: 'Ask us for pricing', cta: 'Get pricing' };
+
+// Biz's Washington trip (owner's budget note). washington.html is only built when config.donateUrl is set.
+export const TRIP = {
+  path: 'washington.html',
+  title: 'Send Biz to Washington',
+  event: 'NVIDIA GTC',
+  where: 'Washington, D.C.',
+  when: 'Nov 29 to Dec 3',
+  covers: ['The conference pass', 'Travel there and back', 'The hotel'],
+};
+// A pasted link without https:// still opens as an outside page.
+export const donateHref = (url = '') => (/^[a-z][a-z0-9+.-]*:/i.test(url) ? url : 'https://' + String(url).replace(/^\/+/, ''));
 
 export const esc = (s = '') => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -38,6 +53,15 @@ export function makeCtx(page, all, config = {}) {
   // One of three hidden marks in the whole site.
   const mark = (id) => `<button class="hidden-mark" type="button" data-mark="${id}" aria-label="Hidden mark. Claim it for clearance.">${logoMark()}</button>`;
 
+  // config.showPrices: false hides every package price (the class price in CLASSES stays).
+  const priced = config.showPrices !== false;
+  // The price spot: the offer's price, or "Ask us for pricing" in the same place and size.
+  const priceTag = (o, cls = 'price') => priced
+    ? `<span class="${cls}">${o.price}${o.suffix ? `<small>${o.suffix}</small>` : ''}</span>`
+    : `<span class="${cls} price--ask">${ASK.short} <small>for pricing</small></span>`;
+  // Where "Claim it" goes; with prices hidden the same link is labelled ASK.cta ("Get pricing").
+  const pricingHref = (o) => link('contact.html?pkg=' + o.slug + '#intake');
+
   const offerCard = (o, opts = {}) => `
 <a class="file${o.flagship ? ' file--flag' : ''}" href="${link(offerPath(o))}" data-spot>
   <span class="file__tab">${o.file}</span>
@@ -45,11 +69,24 @@ export function makeCtx(page, all, config = {}) {
   <span class="file__name">${o.name}</span>
   <span class="file__tag">${o.tagline}</span>
   <span class="file__foot">
-    <span class="price">${o.price}${o.suffix ? `<small>${o.suffix}</small>` : ''}</span>
+    ${priceTag(o)}
     <span class="file__open">Open file ${arrow}</span>
   </span>
-  ${o.oneMonth && !opts.compact ? `<span class="file__note">One month only: ${o.oneMonth}, billed once</span>` : ''}
+  ${priced && o.oneMonth && !opts.compact ? `<span class="file__note">One month only: ${o.oneMonth}, billed once</span>` : ''}
 </a>`;
+
+  // Learn Claude With Me: its price shows in both modes. Gold button to the class page's booking block.
+  const K = CLASSES[0];
+  const classBtn = (v = '') => btn(`${K.price} · Book a class`, page.path === K.path ? '#book' : K.path + '#book', v);
+
+  // The Washington trip: only when the page was built (config.donateUrl set).
+  const washington = !!config.donateUrl && all.some((p) => p.path === TRIP.path);
+  const washingtonCard = () => washington ? `
+<aside class="note wtrip" aria-label="${TRIP.title}">
+  <p class="label">${TRIP.title}</p>
+  <p><strong>${TRIP.event}, ${TRIP.where}, ${TRIP.when}.</strong> Chip in toward the conference pass, travel and hotel.</p>
+  <a class="textlink" href="${page.path === TRIP.path ? '#donate' : link(TRIP.path)}">About the trip ${arrow}</a>
+</aside>` : '';
 
   const crumbs = (items) => `<nav class="crumbs" aria-label="Breadcrumb"><ol>${items.map((it, i) => i === items.length - 1 ? `<li aria-current="page">${it.t}</li>` : `<li><a href="${link(it.p)}">${it.t}</a></li>`).join('')}</ol></nav>`;
 
@@ -62,7 +99,7 @@ export function makeCtx(page, all, config = {}) {
 
   const socialRow = (cls = 'socials') => `<ul class="${cls}">${SOCIALS.map((s) => `<li><a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}: ${esc(s.handle)}">${icon(s.key)}<span>${s.label}</span></a></li>`).join('')}</ul>`;
 
-  return { POLICY, PLATFORMS, REEL, config, page, all, r, link, btn, classified, mark, offerCard, crumbs, contactLines, socialRow, icon, arrow, logoMark, esc, BIZ, SOCIALS, LEVELS, OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, offerPath };
+  return { POLICY, PLATFORMS, REEL, config, page, all, r, link, btn, classified, mark, offerCard, crumbs, contactLines, socialRow, icon, arrow, logoMark, esc, BIZ, SOCIALS, LEVELS, OFFERS, BOOSTS, PLANS, ADDONS, SERVICES, CLASSES, offerPath, priced, priceTag, pricingHref, ASK, classBtn, TRIP, washington, washingtonCard, donateHref };
 }
 
 // ── Chrome ───────────────────────────────────────────────────────────────────
@@ -148,10 +185,10 @@ function footer(ctx) {
         ${ctx.contactLines()}
       </div>
       <div class="foot__cols">
-        ${col('One-time boosts', [...BOOSTS, ...ADDONS].map((o) => ({ t: `${o.name} <span class="foot__price">${o.price}</span>`, p: offerPath(o) })))}
-        ${col('Monthly plans', PLANS.map((o) => ({ t: `${o.name} <span class="foot__price">${o.price}${o.suffix}</span>`, p: offerPath(o) })))}
+        ${col('One-time boosts', [...BOOSTS, ...ADDONS].map((o) => ({ t: ctx.priced ? `${o.name} <span class="foot__price">${o.price}</span>` : o.name, p: offerPath(o) })))}
+        ${col('Monthly plans', PLANS.map((o) => ({ t: ctx.priced ? `${o.name} <span class="foot__price">${o.price}${o.suffix}</span>` : o.name, p: offerPath(o) })))}
         ${col('Built to order', SERVICES.map((o) => ({ t: o.name, p: offerPath(o) })))}
-        ${col('The Syndicate', [{ t: 'How it works', p: 'how-it-works.html' }, { t: 'The Reel', p: 'work.html' }, { t: 'About', p: 'about.html' }, { t: 'FAQ', p: 'faq.html' }, { t: 'Contact', p: 'contact.html' }, { t: 'The Vault', p: 'vault.html' }])}
+        ${col('The Syndicate', [{ t: 'How it works', p: 'how-it-works.html' }, { t: 'The Reel', p: 'work.html' }, { t: 'About', p: 'about.html' }, { t: 'FAQ', p: 'faq.html' }, { t: 'Contact', p: 'contact.html' }, { t: 'The Vault', p: 'vault.html' }, ...(ctx.washington ? [{ t: TRIP.title, p: TRIP.path }] : [])])}
       </div>
     </div>
     <div class="foot__social">

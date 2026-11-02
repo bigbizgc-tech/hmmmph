@@ -25,6 +25,8 @@ const noteFor = (o) => {
   if (o.kind === 'addon') return `${KIND.addon} · ${o.run}. ${o.tagline}`;
   return `${KIND.service} · ${o.spend}`;
 };
+// config.showPrices false: the package select and the note under it show names only (the option text is
+// also what the lead email, the X pixel content_name and thank-you.html read).
 const TEL = BIZ.phoneHref.replace('tel:', '');
 // Twitch is a destination, not a platform we buy ads on: the chip is there so streamers can say where
 // they stream, and the note under the chips says how it works. Brand path from simple-icons (CC0).
@@ -212,7 +214,7 @@ const js = `
     if (from) { const l = document.createElement('span'); l.className = 'label'; l.textContent = from; pick.append(l); }
     const b = document.createElement('b'); b.textContent = o.dataset.name;
     const a = document.createElement('a'); a.href = o.dataset.href; a.textContent = 'Open the ' + o.dataset.name + ' file';
-    pick.append(b, ' · ' + o.dataset.note + ' ', a);
+    pick.append(b, ' · ' + (o.dataset.note ? o.dataset.note + ' ' : ''), a);
   }
   // picking call or text makes the phone number needed
   const reachMsg = { Call: 'Add a phone number so we can call you.', Text: 'Add a phone number so we can text you.' };
@@ -275,7 +277,9 @@ export default {
     },
   }),
   body: (c) => {
-    const options = GROUPS.map((g) => `<optgroup label="${g.t}">${OFFERS.filter((o) => o.kind === g.kind).map((o) => `<option value="${o.slug}" data-slug="${o.slug}" data-name="${c.esc(o.name)}" data-note="${c.esc(noteFor(o))}" data-href="${c.link(offerPath(o))}">${c.esc(o.name)} · ${priceOf(o)}</option>`).join('')}</optgroup>`).join('');
+    const options = GROUPS.map((g) => `<optgroup label="${g.t}">${OFFERS.filter((o) => o.kind === g.kind).map((o) => c.priced
+      ? `<option value="${o.slug}" data-slug="${o.slug}" data-name="${c.esc(o.name)}" data-note="${c.esc(noteFor(o))}" data-href="${c.link(offerPath(o))}">${c.esc(o.name)} · ${priceOf(o)}</option>`
+      : `<option value="${o.slug}" data-slug="${o.slug}" data-name="${c.esc(o.name)}" data-note="" data-href="${c.link(offerPath(o))}">${c.esc(o.name)}</option>`).join('')}</optgroup>`).join('');
     const platformChips = [...PLATFORMS.map((p) => ({ v: p.name, icon: c.icon(p.name.toLowerCase()) })), { v: 'Twitch', icon: TWITCH }, { v: 'Not sure' }]
       .map((p) => `<label class="chip"><input type="radio" name="platform" value="${p.v}"><span>${p.icon || ''}${p.v}</span></label>`).join('');
     const reachChips = ['Call', 'Text', 'Email'].map((v) => `<label class="chip"><input type="radio" name="reach" value="${v}"><span>${v}</span></label>`).join('');
@@ -382,7 +386,7 @@ export default {
         <h2 class="ct-h" id="next-h">What happens next.</h2>
         <ol class="ct-next">
           <li><h3>We read it</h3><p>It comes straight to us and a person reads it. No bots on this end either.</p></li>
-          <li><h3>We reach out the way you asked</h3><p>Call, text or email. Pick one on the form and that’s how we get back to you.</p></li>
+          <li><h3>We reach out the way you asked</h3><p>Call, text or email. Pick one on the form and that’s how we get back to you${c.priced ? '' : ', with pricing for what you asked about'}.</p></li>
           <li><h3>We confirm before anything starts</h3><p>${POLICY.payment} Nothing runs without your OK.</p></li>
         </ol>
       </section>

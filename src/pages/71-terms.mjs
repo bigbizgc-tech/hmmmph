@@ -111,20 +111,22 @@ const SECTIONS = (c) => [
   <li><strong>Add-ons:</strong> the ${andList(ADDONS.map((o) => o.name))}. One-time pieces that pair with any boost.</li>
   <li><strong>Quoted work:</strong> ${andList(SERVICES.map((o) => o.name))}. Priced per job in a written quote.</li>
 </ul>
-<div class="lg-tablewrap">
+${c.priced ? `<div class="lg-tablewrap">
   <table class="lg-table">
     <caption>Prices as listed on this site</caption>
     <thead><tr><th scope="col">Package</th><th scope="col">Price</th></tr></thead>
     ${GROUPS.map((g) => `<tbody><tr class="lg-grp"><th colspan="2" scope="colgroup">${g.t}</th></tr>${g.list.map((o) => `<tr><th scope="row"><a href="${c.link(offerPath(o))}">${o.name}</a></th><td class="num">${priceCell(o)}</td></tr>`).join('')}</tbody>`).join('')}
   </table>
 </div>
-<p><a href="${c.link('packages.html')}">Compare every package side by side</a>.</p>`,
+` : ''}<p><a href="${c.link('packages.html')}">Compare every package side by side</a>.</p>`,
   },
   {
     id: 'prices', t: 'Prices',
-    body: `
+    body: c.priced ? `
 <p>Prices are in US dollars. You pay the price listed on this site when you buy. For quoted work, you pay the price in your written quote.</p>
-<p>We can change the prices on the site. A change never touches something you’ve already paid for, and a launch price on a monthly plan stays locked for as long as you stay on that plan.</p>`,
+<p>We can change the prices on the site. A change never touches something you’ve already paid for, and a launch price on a monthly plan stays locked for as long as you stay on that plan.</p>` : `
+<p>Prices are in US dollars. ${c.ASK.line} on any package and you have the price before you buy. You pay the price we confirmed with you. For quoted work, you pay the price in your written quote.</p>
+<p>We can change our prices. A change never touches something you’ve already paid for.</p>`,
   },
   {
     id: 'paying', t: 'Paying',
@@ -141,7 +143,7 @@ const SECTIONS = (c) => [
     id: 'ad-money', t: 'Where the ad money goes',
     body: `
 <p>Part of what you pay for a boost or a monthly plan is ad money. It’s paid to the platform, through the platform’s own ad tools, for the ad itself. The rest covers setup, aiming it and your recap.</p>
-<fieldset class="lg-split">
+${c.priced ? `<fieldset class="lg-split">
   <legend>Pick one. See where the money goes.</legend>
   <div class="chips">${SPLIT.map((o, i) => `<label class="chip"><input type="radio" name="split" value="${o.slug}"${i === 0 ? ' checked' : ''}><span>${o.name}</span></label>`).join('')}</div>
   <div class="lg-slips" aria-live="polite">
@@ -159,7 +161,7 @@ const SECTIONS = (c) => [
     </div>`).join('')}
   </div>
 </fieldset>
-<p>${bySlug.overdrive.name} includes everything in ${bySlug.surge.name}. Every recap shows what was spent and what it reached.</p>`,
+<p>${bySlug.overdrive.name} includes everything in ${bySlug.surge.name}. Every recap shows what was spent and what it reached.</p>` : `<p>Every recap shows what was spent and what it reached.</p>`}`,
   },
   {
     id: 'platform-rules', t: 'Platform rules and rejected ads',
@@ -207,8 +209,8 @@ const SECTIONS = (c) => [
 <p>Call, text or email us and tell us what you’re cancelling: ${tel} or ${mail}.</p>`,
   },
   {
-    id: 'monthly-plans', t: 'Monthly plans and one-month prices',
-    body: `
+    id: 'monthly-plans', t: c.priced ? 'Monthly plans and one-month prices' : 'Monthly plans and one month only',
+    body: c.priced ? `
 <p>Each plan has two ways in: stay month to month at the monthly price, or take one month only at the one-month price, with no commitment.</p>
 <div class="lg-tablewrap">
   <table class="lg-table">
@@ -219,6 +221,11 @@ const SECTIONS = (c) => [
 </div>
 <ul>
   <li><strong>Launch prices:</strong> ${andList(PLANS.filter((o) => o.regular).map((o) => o.name))} are at launch prices. Start at the launch price and you keep it for as long as you stay. New clients after the launch pay the regular price.</li>
+  <li><strong>Moving up:</strong> you can move up to a bigger plan any month.</li>
+  <li><strong>Cancelling:</strong> ${c.POLICY.plans}</li>
+</ul>` : `
+<p>Each plan has two ways in: stay month to month, or take one month only, billed once with no commitment.</p>
+<ul>
   <li><strong>Moving up:</strong> you can move up to a bigger plan any month.</li>
   <li><strong>Cancelling:</strong> ${c.POLICY.plans}</li>
 </ul>`,
@@ -309,7 +316,7 @@ ${legalBody('Terms and refunds', sections)}
 ${legalClose(c, {
   label: 'Back to the files',
   title: 'The packages',
-  teaser: 'Every package and every price, side by side. Start small or go all in.',
+  teaser: c.priced ? 'Every package and every price, side by side. Start small or go all in.' : 'Every package, side by side. Start small or go all in.',
   href: 'packages.html',
   line: `Read the deal? Now find the file that fits. Three questions, and the match is worth +${XP.quiz} clearance.`,
   ctas: `${c.btn('Find my match ' + c.arrow, 'packages.html#match')}${c.btn('Make contact', 'contact.html', 'ghost')}`,

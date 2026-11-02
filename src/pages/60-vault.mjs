@@ -82,7 +82,7 @@ const RULES = (c) => {
       <p><strong>Do it today:</strong> ask your next ten customers which app they open first. Streaming? Ask chat which app they found you on. Put your effort there.</p>` },
     { t: 'Put money behind what already works', s: 'Back what already works', body: `
       <p>A paid push puts a post in front of more people. It does the most for a post that already gave people a reason to stop: the clip that got shared, the post that brought messages, the moment chat lost it.</p>
-      <p>Look at what pulled on its own before you pay to push anything. If two posts are close, test both small and let the cheap test pick. That is the job of ${a('spark', 'Spark')}: a small, real push that tells you whether a bigger one makes sense.</p>
+      <p>Look at what pulled on its own before you pay to push anything. If two posts are close, test both small and let ${c.priced ? 'the cheap test' : 'the test'} pick. That is the job of ${a('spark', 'Spark')}: a small, real push that tells you whether a bigger one makes sense.</p>
       <p><strong>Do it today:</strong> scroll back through your last month of posts and clips. Find the one that did best with no money behind it. That is your first push.</p>` },
     { t: 'Start the push before stream night', s: 'Start before stream night', body: `
       <p>An ad for a stream night has to land before you go live. People need to see it, remember it and come back at the time you said.</p>

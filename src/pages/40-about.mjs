@@ -12,14 +12,15 @@ const DISCORD = SOCIALS.find((s) => s.key === 'discord');
 // prices, timing and the payment line come from the data.
 const [SPARK, BOOST, BLITZ] = BOOSTS;
 const PREP = (c) => {
-  const f = (o) => `<a href="${c.link(offerPath(o))}">${o.name}</a> (${o.price}${o.suffix})`;
+  // config.showPrices false: the same answer names the files without their prices.
+  const f = (o) => (c.priced ? `<a href="${c.link(offerPath(o))}">${o.name}</a> (${o.price}${o.suffix})` : `<a href="${c.link(offerPath(o))}">${o.name}</a>`);
   return `
       <p>Calling or texting ${BIZ.phone} for the first time? Have these four answers ready and the call gets to the point fast. Each one has a shop answer and a streamer answer, so you can see the shape.</p>
       <ol>
         <li><strong>What are you pushing, and where should people land?</strong><br><span class="ab-ex">Shop: “Saturday brunch. The booking link in our bio.”</span><br><span class="ab-ex">Streamer: “Friday’s stream. My Twitch channel.”</span></li>
         <li><strong>Who should see it?</strong><br><span class="ab-ex">Shop: “People close enough to drive over.”</span><br><span class="ab-ex">Streamer: “People who watch the games I play.”</span></li>
         <li><strong>Is there a date?</strong><br><span class="ab-ex">An opening, an event, a stream night. If there is, get in touch at least a week ahead so the whole run lands before it.</span></li>
-        <li><strong>How big do you want to start?</strong><br><span class="ab-ex">A test is ${f(SPARK)}. A launch or a stream night is ${f(BOOST)}. A date you only get once is ${f(BLITZ)}. Every month is a plan, from ${PLANS[0].price}${PLANS[0].suffix}.</span></li>
+        <li><strong>How big do you want to start?</strong><br><span class="ab-ex">A test is ${f(SPARK)}. A launch or a stream night is ${f(BOOST)}. A date you only get once is ${f(BLITZ)}. ${c.priced ? `Every month is a plan, from ${PLANS[0].price}${PLANS[0].suffix}.` : `Every month is a plan. ${c.ASK.line} on any of them.`}</span></li>
       </ol>
       <p><strong>The one-line brief.</strong> Put the four together and say it in one breath: “I want to push ___, to people who ___, landing on ___, by ___.” Start the call with that line.</p>
       <p><strong>What GC does with it.</strong> He tells you which file fits, or whether you need one at all. If your page isn’t ready for strangers yet, you hear that first.</p>
@@ -40,15 +41,17 @@ const TRADES = [
 const TERMS = [
   { t: 'A crew that works for you', d: 'One local crew sets up your push, aims it, and reports back to you. You always know who’s handling it.' },
   { t: 'Straight talk', d: 'We tell you which file fits, or whether you need one at all. If a platform is the wrong fit for you, you hear that first.' },
-  { t: 'Every dollar accounted for', d: 'Every recap shows what was spent and what it reached. Each boost page shows how much of your price buys the ad itself.' },
+  { t: 'Every dollar accounted for', d: 'Every recap shows what was spent and what it reached. Each boost page shows how much of your price buys the ad itself.', plain: 'Every recap shows what was spent on the ad and what it reached.' },
   { t: 'No bots', d: 'No fake followers, no engagement pods, no software pretending to be people. Real ads, bought through each platform’s own tools.' },
 ];
 
 // The rules. Billing wording comes straight from POLICY.
+// TERMS and RULES: `plain` is the line used when config.showPrices is false (no price, no pointer to one);
+// a rule's `plain` is a function of the page context, for the shared "Ask us for pricing" wording (c.ASK).
 const RULES = [
   { t: 'Your OK comes first', d: 'Nothing runs under your name until you say go. You see what runs before it runs.' },
   { t: 'You get a recap', d: 'When a run ends you get the numbers that matter: what was spent, how many people it reached, and the clicks or views it got.' },
-  { t: 'Price before work', d: `Boosts, plans and add-ons have their price on the page. ${POLICY.quoted}` },
+  { t: 'Price before work', d: `Boosts, plans and add-ons have their price on the page. ${POLICY.quoted}`, plain: (c) => `${c.ASK.line} on any boost, plan or add-on, and you have it before anything starts. ${POLICY.quoted}` },
   { t: 'No promised numbers', d: BIZ.resultsNote },
   { t: 'Stay or walk', d: POLICY.plans },
   { t: 'A local person answers', d: `Call or text ${BIZ.phone}. You deal with a person in ${BIZ.city}.` },
@@ -444,7 +447,7 @@ export default {
       <p class="ab-name__blackout">Blackout is where most posts end up: posted, and never seen. The Syndicate is the crew that gets you out of it.</p>
     </div>
     <ul class="ab-terms rv" style="--d:.1s">
-      ${TERMS.map((t, i) => `<li><span class="ab-terms__n">Term ${String(i + 1).padStart(2, '0')}</span><b>${t.t}</b><p>${t.d}</p></li>`).join('')}
+      ${TERMS.map((t, i) => `<li><span class="ab-terms__n">Term ${String(i + 1).padStart(2, '0')}</span><b>${t.t}</b><p>${c.priced || !t.plain ? t.d : t.plain}</p></li>`).join('')}
     </ul>
   </div>
 </section>
@@ -454,10 +457,10 @@ export default {
     <div class="band__head rv">
       <p class="label">The code</p>
       <h2 class="h2" id="rules-h">The rules we run by.</h2>
-      <p>Six lines we hold to on every job, from a ${bySlug.spark.price} ${bySlug.spark.name} to a monthly plan.</p>
+      <p>Six lines we hold to on every job, from a ${c.priced ? bySlug.spark.price : 'one-time'} ${bySlug.spark.name} to a monthly plan.</p>
     </div>
     <ol class="ab-rules rv">
-      ${RULES.map((r) => `<li><div><h3>${r.t}</h3><p>${r.d}</p></div></li>`).join('')}
+      ${RULES.map((r) => `<li><div><h3>${r.t}</h3><p>${c.priced || !r.plain ? r.d : r.plain(c)}</p></div></li>`).join('')}
     </ol>
     <p class="ab-sign rv"><span>Signed</span><b>${BIZ.founder}</b></p>
   </div>

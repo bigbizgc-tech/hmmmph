@@ -1,6 +1,7 @@
 // Learn Claude With Me: Biz's live class. Not a clearance file (no `file`), so the game counts don't change.
 // Facts only from Biz's class draft: live, about an hour, $40 a class, what you do in it, bring your own project,
 // times announced on the socials, booked through the calendar. Independent; not affiliated with Anthropic.
+// The class price is the one price that shows with config.showPrices off too (owner: "leave a $40 button").
 import { BIZ } from '../data/business.mjs';
 import { CLASSES } from '../data/offers.mjs';
 import { bookingBlock, BOOKING_CSS, BOOKING_JS } from '../data/booking.mjs';
@@ -32,7 +33,7 @@ export default {
     <h1 class="h1">${K.name}</h1>
     <p class="lede">One hour, live, with Biz. Set up Claude and start your own work in it.</p>
     <div class="lc-price"><b>${K.price}</b><span>a ${K.per} · ${K.length.toLowerCase()}</span></div>
-    <div class="ctas">${c.btn('Book a class', '#book', 'lg')}${c.btn(`Call or text ${BIZ.phone}`, BIZ.phoneHref, 'ghost')}</div>
+    <div class="ctas">${c.classBtn ? c.classBtn('lg') : c.btn(`${K.price} · Book a class`, '#book', 'lg')}${c.btn(`Call or text ${BIZ.phone}`, BIZ.phoneHref, 'ghost')}</div>
   </div>
 </header>
 
@@ -59,6 +60,9 @@ export default {
     </aside>
   </div>
 </section>
-${bookingBlock({ id: 'book', label: 'Book a class', title: 'Pick your hour.', lead: `Choose a 1-hour slot that works for you. ${K.name} is ${K.price} a ${K.per}.` })}
+${bookingBlock({ id: 'book', label: 'Book a class', title: 'Pick your hour.', lead: `Choose a 1-hour slot that works for you. ${K.name} is ${K.price} a ${K.per}.` })}${c.washington ? `
+<section class="band band--tight">
+  <div class="wrap">${c.washingtonCard()}</div>
+</section>` : ''}
 `,
 };

@@ -1,7 +1,7 @@
 // File 06A: The Reel (it follows File 06, Total Blackout, on the reading path). The crew's own clips as poster cards (they open on YouTube), what the crew makes,
 // an honest line on client results, the Graveshift crew, and where to follow.
 import { BIZ, SOCIALS, REEL } from '../data/business.mjs';
-import { BOOSTS, bySlug, offerPath } from '../data/offers.mjs';
+import { BOOSTS, bySlug, offerPath, offerFor } from '../data/offers.mjs';
 import { VS, artFor, clipArt, CLIP_ART_CSS } from '../data/clipart.mjs';
 
 const YT = SOCIALS.find((s) => s.key === 'youtube');
@@ -290,8 +290,8 @@ export default {
         <a class="textlink" href="${c.link(offerPath(CS))}">Open the file ${c.arrow}</a>
       </div>
       <div class="rl-hire__opt">
-        <b>${BOOST.name} <span class="price">${BOOST.price}</span></b>
-        <p>Already have a clip that deserves more eyes? A ${BOOST.run.toLowerCase()} of real paid reach behind it. ${BOOST.spend}</p>
+        <b>${BOOST.name} ${c.priced ? `<span class="price">${BOOST.price}</span>` : c.priceTag(BOOST)}</b>
+        <p>Already have a clip that deserves more eyes? A ${BOOST.run.toLowerCase()} of real paid reach behind it. ${offerFor(BOOST, c.config).spend}</p>
         <a class="textlink" href="${c.link(offerPath(BOOST))}">Open the file ${c.arrow}</a>
       </div>
     </div>

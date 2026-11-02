@@ -29,12 +29,23 @@ export default {
   // ── CHECKOUT ───────────────────────────────────────────────────────────────
   // false = every package routes to the lead form (works no matter what payment processor does).
   // true  = package pages also show a "Pay online" link to the store product page.
-  // false: no dollar amounts anywhere on the site (packages say "Ask for pricing"); true: prices from src/data/offers.mjs.
-  showPrices: false,
-  // The Washington trip fund (NVIDIA GTC, Washington, D.C., Nov 29 - Dec 3). Paste the donation link here
-  // (PayPal, Cash App, Venmo, GoFundMe...). Empty = the donation section and page are not shown.
-  donateUrl: '',
+  // The store pages show prices, so keep this false while showPrices is false.
   showPayLinks: false,
+
+  // ── PRICES ─────────────────────────────────────────────────────────────────
+  // false = no package prices anywhere on the site. Every price spot says "Ask us for pricing" and the
+  //         "Claim it" buttons become "Get pricing" (they open the form with the package picked).
+  //         Learn Claude With Me keeps its class price either way (CLASSES in src/data/offers.mjs).
+  // true  = every price shows again, read from src/data/offers.mjs. Nothing there was removed.
+  showPrices: false,
+
+  // ── WASHINGTON TRIP ────────────────────────────────────────────────────────
+  // Biz's trip to NVIDIA GTC in Washington, D.C., Nov 29 to Dec 3 (pass, travel and hotel).
+  // Paste the donation link here (PayPal, Cash App, Venmo, GoFundMe...).
+  // Set   = washington.html is built, with a big Donate button to this link, and linked from the
+  //         footer, Get started and the class page.
+  // Empty = no page and no links anywhere. Empty it again once the trip is over.
+  donateUrl: '',
 
   // Preview mode: the form skips the network and goes straight to the thank-you page.
   // The build turns this on automatically for `npm run build:preview`.

@@ -28,7 +28,12 @@ export default {
 };
 ```
 
-Pages without `file` (thank-you, vault, privacy, terms, 404) give no clearance for visiting.
+Pages without `file` (thank-you, vault, privacy, terms, 404, washington) give no clearance for visiting.
+
+A module may instead export a **function**: the build calls it with the merged config (`src/config.mjs` plus any
+`BS_CONFIG_OVERRIDE`) and it returns a page, a list of pages, or `[]` to build nothing. Use it when the title,
+description, teaser or JSON-LD depend on a switch (the package pages word their meta without prices when
+`showPrices` is false; `washington.html` returns `[]` while `donateUrl` is empty). Never import `config.mjs` in a page.
 
 ## Helper context `c`
 
@@ -39,13 +44,51 @@ Pages without `file` (thank-you, vault, privacy, terms, 404) give no clearance f
 | `c.arrow` | Inline arrow SVG for buttons/links. |
 | `c.classified({ id, level, title, body, bypass })` | Redacted paper dossier that opens at clearance `level` (1–5). `body` is HTML with `<p>`, `<ul><li>`, `<ol><li>`. Unique `id`. `bypass: true` adds "Break the seal anyway". |
 | `c.mark('m1')` | One of the 3 hidden marks (+25 clearance). Ids `m1` (about), `m2` (how-it-works), `m3` (faq). Hide it somewhere discoverable but not obvious: inside a heading, next to a rule, at the end of a paragraph. |
-| `c.offerCard(offer)` | The package "file" card. |
+| `c.offerCard(offer)` | The package "file" card. Its price spot follows `showPrices` on its own. |
 | `c.crumbs([{t,p},…,{t}])` | Breadcrumbs. Last item has no `p`. |
 | `c.contactLines()` | Big phone number (tap to call) with Call, Text (`sms:`) and Copy, then the email with Copy. The footer and the phone menu also carry Call and Text. |
 | `c.socialRow()` | Social links with icons. |
 | `c.icon('x')` | Brand icon SVG: x, tiktok, instagram, facebook, youtube, discord. |
 | `c.config` | The merged build config (`src/config.mjs` plus any `BS_CONFIG_OVERRIDE`). Read switches such as `c.config.showPayLinks` from here, never by importing `config.mjs`. |
+| `c.priced` | `true` unless `config.showPrices` is exactly `false`. Branch on it wherever a page prints a package price (see "Prices on or off" below). |
+| `c.priceTag(o, cls)` | The price spot: `o.price` + `o.suffix` with prices on, `Ask us for pricing` in the same place and size with prices off. |
+| `c.ASK` | The one wording for a hidden price: `{ label: 'Pricing', short: 'Ask us', line: 'Ask us for pricing', cta: 'Get pricing' }`. Never type these by hand. |
+| `c.pricingHref(o)` | `contact.html?pkg=<slug>#intake`: where "Claim it" (prices on) or `c.ASK.cta` (prices off) sends people. The form opens with that package picked. |
+| `c.classBtn(variant)` | The gold "<class price> · Book a class" button for Learn Claude With Me (price from `CLASSES`), to `learn-claude.html#book` (or `#book` on that page). Shows in both modes. |
+| `c.washington`, `c.washingtonCard()`, `c.TRIP` | The Washington trip. `c.washington` is true only when `config.donateUrl` is set and `washington.html` was built; `c.washingtonCard()` is the small note card linking to it (empty string otherwise). `c.TRIP` holds the event, place, dates and what the money covers. |
 | `c.BIZ`, `c.SOCIALS`, `c.LEVELS`, `c.POLICY` (refund/billing wording: use it verbatim), `c.PLATFORMS`, `c.REEL`, `c.OFFERS`, `c.BOOSTS`, `c.PLANS`, `c.ADDONS`, `c.SERVICES`, `c.offerPath(o)` | Data. Never hard-code a price: read it from the offer. |
+
+## Prices on or off (`config.showPrices`)
+
+The owner asked for no pricing on the site. `showPrices: false` in `src/config.mjs` hides every package price;
+`true` brings every one back exactly as before. Nothing is deleted from the data: `src/data/offers.mjs`
+(`price`, `suffix`, `oneMonth`, `regular`, and the amounts inside `spend`, `includes` and `faq`) stays the single source.
+
+- **Read the switch** from `c.config` / `c.priced` in a page, or from the config a module function receives. Data helpers
+  take that same object: `pricesOn(cfg)`, `offerFor(o, cfg)` (the offer with its `plain` wording swapped in when prices
+  are off: `spend`, `includes`, `faq`, `summary`, `teaser`… with no amount), `plainOffer(o)` in `offers.mjs`, and
+  `levelsFor(cfg)` in `business.mjs` (the clearance ladder: Level 2 reads "The field notes on every package file").
+  Never print `price`, `suffix`, `oneMonth` or `regular` from a plain offer: they stay on it for sorting only.
+- **Keep the prices-on markup as it is.** Branch with `c.priced ? <today's markup> : <plain markup>` so turning prices back on renders the same page.
+- **With prices off, nowhere** shows a dollar amount: not in text, `<title>`, meta description, og/twitter tags, JSON-LD
+  (no `Offer` price), aria-labels, data attributes, inline scripts or the X pixel `content_name` (the contact form's
+  option text). No "from $X", no "/mo", no regular or struck prices, no launch-price talk, no one-month prices, no
+  "how much of your money buys the ad" figures and no price comparisons ("three Blitzes cost about what Surge costs").
+- **Where a price was**, say it one way: `c.priceTag(o)` or the `c.ASK` words ("Ask us for pricing"). The package action
+  "Claim it" becomes `c.ASK.cta` ("Get pricing") to `c.pricingHref(o)`, next to Call and Text.
+- **Keep** package names, what's included, run times ("one-time", "monthly", "month to month", "one month only, billed
+  once") and `POLICY` wording verbatim.
+- **Hide whole blocks whose point is the price** (price math, price ledgers and tables, comparisons, "plans from" strips)
+  instead of leaving them empty: no empty box, no stray separator, and the copy around it must still read naturally.
+  The math-* bonus files keep their id (the clearance ladder links there) and become field notes with no price.
+- **FAQ answers** can carry `plain: { q?, a? }` (asked and answered without a price) or `priced: true` (only shown with
+  prices on, such as "What does launch price mean?"). Counts and JSON-LD follow what is shown.
+- **The contact form** lists package names only, and the note under the select shows the name and the file link.
+  `thank-you.html` shows the package name only.
+- **Two exceptions.** Learn Claude With Me keeps its class price in both modes (`CLASSES` in `offers.mjs`, `c.classBtn()`).
+  The Washington donation page (`54-washington.mjs`) shows no dollar figure at all, and exists only while `config.donateUrl` is set.
+- **Never invent**: no "affordable", "competitive", "cheap" or "starting low", and no new offers.
+- **Check**: build with `showPrices` off and grep the output for `/\$\s?\d/`. The only hits are the class price.
 
 ## CSS components (in `src/assets/css/site.css`)
 
@@ -100,5 +143,5 @@ font swap doesn't move the layout; keep them first after the web font.
 - **No invented facts**: no testimonials, client names, case studies, stats, follower counts, ratings, years in business beyond "ten years building things with my hands", awards, guarantees of results, office address, hours. If it isn't in `src/data/*.mjs`, don't claim it.
 - Results line (use where you sell promotion): "Results depend on your content, your audience and the platform. No set number of views, likes or followers is guaranteed."
 - No em-dash asides, no "not X, but Y" framing, no "worth noting", no emoji, no exclamation spam.
-- Prices only from `src/data/offers.mjs`.
+- Prices only from `src/data/offers.mjs`, and only while `showPrices` is on (the class price shows either way). See "Prices on or off".
 - The syndicate/noir theme is flavor, not confusion: every heading must still say plainly what the section is about.

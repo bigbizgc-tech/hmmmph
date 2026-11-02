@@ -36,13 +36,15 @@ async function loadPages() {
     try {
       const mod = await import(pathToFileURL(join(dir, f)).href + (LENIENT ? '?t=' + process.hrtime.bigint() : ''));
       exp = mod.default;
-      if (typeof exp === 'function') exp = await exp();
+      // A module may export a function: it gets the merged config (src/config.mjs + BS_CONFIG_OVERRIDE)
+      // and returns a page, a list of pages, or [] to build nothing (e.g. washington.html without a donateUrl).
+      if (typeof exp === 'function') exp = await exp(config);
     } catch (e) {
       if (!LENIENT) throw new Error(`${f}: ${e.message}`);
       console.warn(`⚠ skipped ${f}: ${e.message}`);
       continue;
     }
-    for (const p of Array.isArray(exp) ? exp : [exp]) {
+    for (const p of Array.isArray(exp) ? exp : exp ? [exp] : []) {
       for (const k of ['path', 'title', 'description', 'body']) if (!p[k]) throw new Error(`${f}: page missing "${k}"`);
       pages.push(p);
     }

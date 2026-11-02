@@ -2,6 +2,10 @@
 // and the current site. Prices are the single source of truth for every page.
 import { POLICY } from './business.mjs';
 
+// config.showPrices: false (see the end of this file): each offer's `plain` block holds the wording of
+// every field that carries a dollar amount or a price comparison, rewritten with none. It only replaces
+// those fields. The prices themselves are never removed here, so showPrices: true reads them as before.
+
 // `store` links are the old Wix product pages. They only show when config.showPayLinks is true.
 // Before turning that on, replace each one with the new checkout link: once blackoutsyn.com
 // moves off Wix these pages are gone (the build writes 301s for their old addresses).
@@ -48,6 +52,23 @@ export const OFFERS = [
     ladder: { to: 'boost', text: 'Liked what Spark did? Boost puts 2.5 times the ad money behind you.' },
     store: STORE + 'spark-get-seen-boost',
     teaser: 'The cheapest way to find out what real reach feels like.',
+    plain: {
+      summary: 'Spark puts a real paid placement behind one post, page or channel on the platform you pick. It is the smallest way to find out what happens when people who don’t follow you yet actually see your work.',
+      spend: 'Part of what you pay buys the ad itself. The rest covers setup, aiming it and your recap.',
+      includes: [
+        'Setup of one paid promotion on one platform you pick',
+        'Part of what you pay goes straight into the ad itself',
+        'A 3-day run aimed at your area or the audience you name',
+        'The 30-Day Post Kit, so you have something to post while new people find you',
+        'A short recap: spend, reach, and clicks or views',
+      ],
+      faq: [
+        { q: 'Is a push this small worth it?', a: 'At this size it is a test. Real people see a real placement, and you find out whether a bigger push makes sense. That is the whole job of Spark.' },
+        { q: 'How does the ad actually run?', a: 'Through the platform’s own ad tools, the same ones any business uses. Nothing runs without your OK.' },
+        { q: 'Will I get followers?', a: 'Maybe. Spark puts you in front of real people. Whether they follow depends on your content, your audience and the platform.' },
+      ],
+      teaser: 'The smallest way to find out what real reach feels like.',
+    },
   },
   {
     slug: 'boost', kind: 'boost', file: 'File 02', name: 'Boost', price: '$49.99', suffix: '', cadence: 'One-time',
@@ -75,6 +96,16 @@ export const OFFERS = [
     ladder: { to: 'blitz', text: 'Need it bigger? Blitz doubles the ad money and runs a full week.' },
     store: STORE + 'boost-get-seen-boost',
     teaser: 'More fuel, a longer run. Aim it at the night that matters.',
+    plain: {
+      spend: 'Part of what you pay buys the ad itself. The rest covers setup, aiming it and your recap.',
+      includes: [
+        'Setup of one paid promotion on the platform you pick',
+        'Part of what you pay goes straight into the ad itself',
+        'A 5-day run. On TikTok it runs as a one-day burst',
+        'Aimed at your area or the people you name',
+        'A recap: spend, reach, clicks or views, and follows',
+      ],
+    },
   },
   {
     slug: 'blitz', kind: 'boost', file: 'File 03', name: 'Blitz', price: '$99.99', suffix: '', cadence: 'One-time',
@@ -101,6 +132,18 @@ export const OFFERS = [
     ladder: { to: 'surge', text: 'Three Blitzes in? Surge is the better deal and it never restarts from zero.' },
     store: STORE + 'blitz-get-seen-boost',
     teaser: 'A full week of reach for the moment you only get once.',
+    plain: {
+      spend: 'Part of what you pay buys the ad itself. The rest covers setup, aiming it and your recap.',
+      includes: [
+        'Setup of one paid promotion on any one platform',
+        'Part of what you pay goes straight into the ad itself',
+        'A full 7-day run. On TikTok it runs for 2 days',
+        'Aimed at your area or the audience you name',
+        'A recap: spend, reach, clicks or views, and follows',
+      ],
+      notForYou: ['You will need this every month. Surge runs every month and never stops'],
+      ladder: { to: 'surge', text: 'Need a push every month? Surge keeps it running and never restarts from zero.' },
+    },
   },
 
   // ── MONTHLY PLANS ────────────────────────────────────────────────────────
@@ -131,6 +174,22 @@ export const OFFERS = [
     ladder: { to: 'overdrive', text: 'Want the posting handled too? Overdrive adds automatic posting and AI tools.' },
     store: null,
     teaser: 'The push that never restarts from zero.',
+    plain: {
+      spend: 'Part of what you pay each month goes into the ads themselves.',
+      includes: [
+        'Paid promotion every month on up to 2 platforms',
+        'Part of what you pay each month goes straight into the ads',
+        'Aim checked and adjusted every month as numbers come in',
+        'A monthly recap: spend, reach, clicks or views, and follows',
+        'Just want one month? One month only is billed once and never renews',
+      ],
+      faq: [
+        { q: 'Is there a contract?', a: `No. ${POLICY.plans} Want a single month without monthly billing? You can buy one month only. It is billed once and never renews.` },
+        { q: 'Which two platforms?', a: 'Whichever two your people actually use. We decide that together on the intake call.' },
+        { q: 'I stream on Twitch. Can the ads point there?', a: 'Yes. The ads run on X, TikTok, Instagram, Facebook or YouTube, and they can send people to your Twitch channel.' },
+        { q: 'Can I move up to Overdrive?', a: 'Yes. Move up any month.' },
+      ],
+    },
   },
   {
     slug: 'overdrive', kind: 'plan', file: 'File 05', name: 'Overdrive', price: '$400', suffix: '/mo', cadence: 'Monthly',
@@ -158,6 +217,21 @@ export const OFFERS = [
     ladder: { to: 'total-blackout', text: 'Want the whole operation handled? Total Blackout is the full setup.' },
     store: null,
     teaser: 'Ads keep running. Posts go out without you.',
+    plain: {
+      spend: 'Month to month. Part of what you pay each month goes into the ads themselves.',
+      includes: [
+        'Everything in Surge',
+        'Automatic posting set up on your accounts',
+        'AI tools set up for the repeat work in your business',
+        'Month to month, no contract',
+        'Just want one month? One month only is billed once and never renews',
+      ],
+      faq: [
+        { q: 'What does “automatic posting” mean?', a: 'Your posts are scheduled ahead and go out on their own, so your page stays active on days you are busy.' },
+        { q: 'Is there a contract?', a: `No. ${POLICY.plans}` },
+        { q: 'Do I approve what gets posted?', a: 'Yes. Nothing goes out under your name that you haven’t seen.' },
+      ],
+    },
   },
   {
     slug: 'total-blackout', kind: 'plan', file: 'File 06', name: 'Total Blackout', price: '$500', suffix: '/mo', cadence: 'Monthly', flagship: true,
@@ -185,6 +259,21 @@ export const OFFERS = [
     ladder: { to: 'post-kit', text: 'Not ready for the full plan? Start with the 30-Day Post Kit and build up.' },
     store: null,
     teaser: 'The one we built everything else around.',
+    plain: {
+      spend: 'Month to month. Part of what you pay each month goes into the ads themselves.',
+      includes: [
+        'Everything in Overdrive: ads every month on up to 2 platforms, automatic posting and AI tools',
+        'An AI assistant that answers customers and captures their contact info',
+        'AI-made posts and promos for your pages',
+        'A clean web page with your hours, location and contact',
+        'Just want one month? One month only is billed once and never renews',
+      ],
+      faq: [
+        { q: 'What does the AI assistant do?', a: 'It answers common customer questions and takes down their contact info so you can follow up. It is set up around your business, hours and prices.' },
+        { q: 'Do I need a website already?', a: 'No. A clean web page with your hours, location and contact is part of the plan.' },
+        { q: 'Can I cancel?', a: `Yes. ${POLICY.plans} Want a single month instead? One month only is billed once and never renews.` },
+      ],
+    },
   },
 
   // ── ADD-ONS ──────────────────────────────────────────────────────────────
@@ -373,6 +462,16 @@ export const OFFERS = [
     teaser: 'Every stream turned into a week of posts.',
   },
 ];
+
+// ── Prices on or off ─────────────────────────────────────────────────────────
+// Pass the merged build config (c.config in a page, or what the build hands a page module's function).
+// Same rule as the layout: prices show unless showPrices is exactly false.
+export const pricesOn = (cfg) => !cfg || cfg.showPrices !== false;
+// The offer with its `plain` wording swapped in. Price fields (price, suffix, oneMonth, regular) stay on
+// the object for sorting and comparisons, so never print them from a plain offer.
+export const plainOffer = (o) => (o.plain ? { ...o, ...o.plain } : o);
+// The offer as this build should word it.
+export const offerFor = (o, cfg) => (pricesOn(cfg) ? o : plainOffer(o));
 
 export const offerPath = (o) => (o.kind === 'service' ? 'services/' : 'packages/') + o.slug + '.html';
 export const bySlug = Object.fromEntries(OFFERS.map((o) => [o.slug, o]));

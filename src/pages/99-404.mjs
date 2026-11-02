@@ -155,9 +155,9 @@ export default {
       </a>
       <a class="file" href="${c.link('packages.html')}" data-spot>
         <span class="file__tab">The files</span>
-        <span class="file__top"><span class="label">Prices up front</span></span>
+        <span class="file__top"><span class="label">${c.priced ? 'Prices up front' : 'What we sell'}</span></span>
         <span class="file__name">Packages</span>
-        <span class="file__tag">Every boost, plan and add-on, from a ${c.BOOSTS[0].price} test push to a monthly plan.</span>
+        <span class="file__tag">Every boost, plan and add-on, from a ${c.priced ? c.BOOSTS[0].price : 'small'} test push to a monthly plan.</span>
         <span class="file__foot"><span class="file__open">Open file ${c.arrow}</span></span>
       </a>
       <a class="file" href="${c.link('packages.html#match')}" data-spot>
