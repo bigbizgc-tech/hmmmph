@@ -29,6 +29,11 @@ export default {
   // ── CHECKOUT ───────────────────────────────────────────────────────────────
   // false = every package routes to the lead form (works no matter what payment processor does).
   // true  = package pages also show a "Pay online" link to the store product page.
+  // false: no dollar amounts anywhere on the site (packages say "Ask for pricing"); true: prices from src/data/offers.mjs.
+  showPrices: false,
+  // The Washington trip fund (NVIDIA GTC, Washington, D.C., Nov 29 - Dec 3). Paste the donation link here
+  // (PayPal, Cash App, Venmo, GoFundMe...). Empty = the donation section and page are not shown.
+  donateUrl: '',
   showPayLinks: false,
 
   // Preview mode: the form skips the network and goes straight to the thank-you page.
