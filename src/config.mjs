@@ -11,11 +11,13 @@ export default {
   // Paste the pixel ID (looks like "o1a2b"). Leave '' to load no tracking at all.
   xPixelId: '',
   // Event IDs come from Events Manager → "Add events". They look like "tw-o1a2b-o3c4d".
+  // An event left as '' simply doesn't fire.
   xEvents: {
-    lead: '',          // fires once on thank-you.html after a form is sent (the conversion)
-    formSubmit: '',    // fires the moment the contact form is sent successfully
+    lead: '',          // THE conversion: fires once on thank-you.html after a real send from this browser
+    formSubmit: '',    // secondary: fires the moment the form is sent (same send as lead; don't count both)
     packageView: '',   // fires on every package / service page view
     contactView: '',   // fires when someone opens contact.html
+    call: '',          // fires when someone taps a phone (call), text or email link on any page
   },
 
   // ── LEAD FORM ──────────────────────────────────────────────────────────────

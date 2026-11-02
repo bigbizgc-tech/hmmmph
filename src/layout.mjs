@@ -182,7 +182,10 @@ twq('config','${esc(config.xPixelId)}');
 </script>`;
 }
 
-const FONTS = 'https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..800;1,100,400&family=Big+Shoulders+Display:wght@600;800;900&family=Bodoni+Moda:ital,opsz,wght@1,6..96,500;1,6..96,700&family=Courier+Prime:wght@400;700&display=swap';
+// Only what the site uses: Archivo upright 400-700 (no width axis, no italics), Big Shoulders 800 and 900,
+// Bodoni Moda italic 500 and 700 at one optical size (the accent words), Courier Prime 400 and 700.
+// About 110 KB of Latin font files instead of 202 KB. site.css has metric-matched fallbacks for the swap.
+const FONTS = 'https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=Big+Shoulders+Display:wght@800;900&family=Bodoni+Moda:ital,opsz,wght@1,48,500;1,48,700&family=Courier+Prime:wght@400;700&display=swap';
 
 // ── Full document ────────────────────────────────────────────────────────────
 export function renderPage(page, all, config, assets) {

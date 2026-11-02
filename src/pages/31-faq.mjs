@@ -237,7 +237,7 @@ export default {
   title: 'FAQ',
   description: 'Straight answers on buying, refunds, the ads, results, monthly plans, your accounts and privacy, from Blackout Syndicate in South Bend, Indiana.',
   teaser: 'Every question people ask before they buy, answered straight.',
-  next: 'about.html',
+  next: 'contact.html',
   css,
   js,
   jsonld: (ctx) => ({

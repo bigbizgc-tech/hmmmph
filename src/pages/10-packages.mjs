@@ -117,7 +117,7 @@ function matcher() {
   function why(slug, a) {
     const o = D[slug];
     switch (slug) {
-      case 'total-blackout': return 'You want the whole thing handled. ' + o.name + ' covers the ads, the posts, an AI assistant that answers your customers and a clean web page.' + (a[1] !== 'monthly' && o.oneMonth ? ' Only need one month? It’s ' + o.oneMonth + ', no commitment.' : '');
+      case 'total-blackout': return 'You want the whole thing handled. ' + o.name + ' covers the ads, the posts, an AI assistant that answers ' + (a[0] === 'channel' ? 'the people who message you' : 'your customers') + ' and a clean web page.' + (a[1] !== 'monthly' && o.oneMonth ? ' Only need one month? It’s ' + o.oneMonth + ', no commitment.' : '');
       case 'overdrive': return 'You want ads every month and the posting off your plate. Overdrive is everything in Surge, plus automatic posting and AI tools for the repeat work.';
       case 'surge': return 'You want ' + THING[a[0]] + ' in front of people every month without starting cold. Surge keeps real paid ads running on up to 2 platforms, with about $' + o.ad + ' a month in the ads.';
       case 'blitz': return a[0] === 'event'
@@ -130,9 +130,10 @@ function matcher() {
       default: return '';
     }
   }
+  // the add-on line speaks to whoever answered: a channel gets "your channel", everyone else "your business"
   const ADDON_WHY = {
-    'profile-fix': 'Fix the page first. We rewrite your bio and plan your pinned posts and highlights, so people from the ads get what you do in three seconds.',
-    'post-kit': 'A 30-day posting calendar and 12 captions written for your business. You hit publish while the ad brings people in.',
+    'profile-fix': () => 'Fix the page first. We rewrite your bio and plan your pinned posts and highlights, so people from the ads get what you do in three seconds.',
+    'post-kit': (a) => 'A 30-day posting calendar and 12 captions written for ' + (a[0] === 'channel' ? 'your channel' : 'your business') + '. You hit publish while the ad brings people in.',
   };
 
   function setPrice(el, o) {
@@ -160,7 +161,7 @@ function matcher() {
       const link = $('[data-r="addon-link"]');
       link.href = x.href; link.textContent = x.name;
       $('[data-r="addon-price"]').textContent = x.price;
-      $('[data-r="addon-why"]').textContent = ADDON_WHY[r.addon] || '';
+      $('[data-r="addon-why"]').textContent = ADDON_WHY[r.addon] ? ADDON_WHY[r.addon](A) : '';
     } else ad.hidden = true;
     const later = $('[data-r="later"]');
     if (o.ladder && r.main !== 'total-blackout') { later.hidden = false; $('[data-r="later-text"]').textContent = o.ladder; }
@@ -326,7 +327,16 @@ const css = `
 .pk-result__again{background:none;border:0;padding:0 0 2px;border-bottom:1px solid var(--brass);font-family:var(--f-type);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);cursor:pointer}
 .pk-result__again:hover{color:var(--brass)}
 .pk-result__again[hidden]{display:none}
-@media (max-width:520px){.pk-result .stamp{width:88px;font-size:15px;padding:10px}.pk-result .stamp small{font-size:7.5px}.pk-result__head{padding-right:12px}}
+/* phones: the name gets the full card width (whole words only), the stamp drops beside the price */
+@media (max-width:520px){
+  .pk-result__head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px 14px;padding-right:0}
+  .pk-result__id{display:contents}
+  .pk-result__id>.label{grid-column:1/-1;padding-right:36px}
+  .pk-result__name{grid-column:1/-1;font-size:clamp(38px,13.5vw,60px);overflow-wrap:break-word}
+  .pk-result__price{grid-column:1}
+  .pk-result .stamp{grid-column:2;width:84px;font-size:14px;padding:10px;margin-top:0}
+  .pk-result .stamp small{font-size:7.5px}
+}
 
 /* no-JS guide */
 .pk-guide{display:grid;gap:16px;min-width:0}
@@ -342,7 +352,6 @@ const css = `
 @media (max-width:560px){.pk-guide li{grid-template-columns:1fr}.pk-guide__pick{justify-items:start;text-align:left}}
 
 /* ── Groups ── */
-.pk-h2 .whisper{display:block;margin-top:.12em}
 .pk-grid{margin-top:8px}
 .pk-policy{margin-top:clamp(18px,2.4vw,26px);font-size:14px;color:var(--ash);max-width:80ch}
 .pk-policy b{font-family:var(--f-type);font-weight:400;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-right:8px}
@@ -484,7 +493,7 @@ export default {
   body: (c) => {
     const data = Object.fromEntries(OFFERS.filter((o) => o.kind !== 'service').map((o) => [o.slug, {
       name: o.name, file: o.file, price: o.price, suffix: o.suffix, cadence: o.cadence, run: o.run, oneMonth: o.oneMonth || '',
-      ad: adOf(o), ladder: o.ladder ? o.ladder.text : '', href: c.link(offerPath(o)), claim: c.link('contact.html?pkg=' + o.slug),
+      ad: adOf(o), ladder: o.ladder ? o.ladder.text : '', href: c.link(offerPath(o)), claim: c.link('contact.html?pkg=' + o.slug + '#intake'),
     }]));
     const dataJson = JSON.stringify(data).replace(/</g, '\\u003c');
     const keys = ['A', 'B', 'C', 'D'];
@@ -529,7 +538,7 @@ export default {
         <li>No email needed to see it</li>
       </ul>
       <p class="pk-match__xp">First match: +30 clearance</p>
-      <p class="pk-match__call">Rather talk it through? Call or text <a href="${BIZ.phoneHref}">${BIZ.phone}</a>.</p>
+      <p class="pk-match__call">Rather talk it through? Call <a href="${BIZ.phoneHref}">${BIZ.phone}</a>, or <a href="${BIZ.sms}">send a text</a>.</p>
     </div>
 
     <div class="pk-quiz rv" style="--d:.08s" data-quiz>
@@ -570,7 +579,7 @@ export default {
         <div class="pk-result__foot">
           <div class="ctas">
             <a class="btn btn--paper" data-r="open" href="${c.link('packages.html')}">Open the file ${c.arrow}</a>
-            <a class="btn btn--paper btn--ghost" data-r="claim" href="${c.link('contact.html')}">Claim it</a>
+            <a class="btn btn--paper btn--ghost" data-r="claim" href="${c.link('contact.html#intake')}">Claim it</a>
           </div>
           <button class="pk-result__again" type="button" data-restart hidden>Start over</button>
         </div>
@@ -593,8 +602,8 @@ export default {
   <div class="wrap">
     <div class="band__head band__head--row rv">
       <div>
-        <p class="label">Drawer 01 · ${BOOSTS.length} files</p>
-        <h2 class="h2 pk-h2" id="boosts-h">One-time boosts. <span class="whisper">No contract.</span></h2>
+        <p class="label">Drawer 01 · ${BOOSTS.length} files · No contract</p>
+        <h2 class="h2 pk-h2" id="boosts-h">One-time boosts</h2>
         <p>One push for one moment. Pick the size, point it at your post, page, channel or site, and we run a real paid placement on one platform through its own ad tools. Our target is live within 24 hours of payment. Platform ad review can take longer.</p>
       </div>
       <a class="textlink" href="#compare-boosts">Compare the three ${c.arrow}</a>
@@ -631,8 +640,8 @@ export default {
   <div class="wrap">
     <div class="band__head band__head--row rv">
       <div>
-        <p class="label">Drawer 02 · ${PLANS.length} files</p>
-        <h2 class="h2 pk-h2" id="plans-h">Monthly plans. <span class="whisper">Stay or walk.</span></h2>
+        <p class="label">Drawer 02 · ${PLANS.length} files · Month to month</p>
+        <h2 class="h2 pk-h2" id="plans-h">Monthly plans</h2>
         <p>The push keeps running every month, so you never start cold. Every plan starts with a twenty-minute intake call and ends each month with a recap in plain English. Want to try one first? Every plan comes as one month only, with no commitment.</p>
       </div>
       <a class="textlink" href="#compare-plans">Compare the three ${c.arrow}</a>
@@ -671,8 +680,8 @@ export default {
 <section class="band" id="addons" aria-labelledby="addons-h">
   <div class="wrap">
     <div class="band__head rv">
-      <p class="label">Drawer 03 · ${ADDONS.length} files</p>
-      <h2 class="h2 pk-h2" id="addons-h">Add-ons. <span class="whisper">Get the page ready.</span></h2>
+      <p class="label">Drawer 03 · ${ADDONS.length} files · Get the page ready</p>
+      <h2 class="h2 pk-h2" id="addons-h">Add-ons</h2>
       <p>Small one-time jobs that make every push work harder. A clear page and a month of posts mean the people an ad sends you have a reason to stay.</p>
     </div>
     <div class="grid grid--2 pk-grid rv">${ADDONS.map((o) => c.offerCard(o)).join('')}</div>
@@ -687,11 +696,11 @@ export default {
   <div class="wrap">
     <div class="band__head band__head--row rv">
       <div>
-        <p class="label">Drawer 04 · ${SERVICES.length} files</p>
-        <h2 class="h2 pk-h2" id="built-h">Built to order. <span class="whisper">Quoted per job.</span></h2>
+        <p class="label">Drawer 04 · ${SERVICES.length} files · Quoted per job</p>
+        <h2 class="h2 pk-h2" id="built-h">Built to order</h2>
         <p>Bigger jobs that don’t fit one price: websites, AI setup and creator systems. Every one starts with a short call, and you get the price in writing before work starts.</p>
       </div>
-      ${c.btn('Ask for a quote ' + c.arrow, 'contact.html', 'ghost')}
+      ${c.btn('Ask for a quote ' + c.arrow, 'contact.html#intake', 'ghost')}
     </div>
     <ul class="pk-built rv">
       ${SERVICES.map((o) => `<li><a href="${c.link(offerPath(o))}">
@@ -709,8 +718,8 @@ export default {
   <div class="wrap">
     <div class="pk-choose">
       <div class="pk-choose__head rv">
-        <p class="label">Rules of thumb</p>
-        <h2 class="h2" id="choose-h">How to choose. <span class="whisper">Four rules.</span></h2>
+        <p class="label">Four rules of thumb</p>
+        <h2 class="h2" id="choose-h">How to choose</h2>
         <p>If the questions didn’t settle it, these will. They are the same rules we use when someone calls and asks which file to buy.</p>
         ${c.btn('Take the 3 questions', '#match', 'paper')}
       </div>

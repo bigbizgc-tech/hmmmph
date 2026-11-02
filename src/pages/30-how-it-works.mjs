@@ -366,7 +366,7 @@ export default {
   title: 'How it works',
   description: 'How a Blackout Syndicate push works: the boost path and the plan path step by step, what we need from you, what the recap means, and what we never do.',
   teaser: 'Every step from claim to recap, and the lines we never cross.',
-  next: 'faq.html',
+  next: 'packages/surge.html',
   css,
   js,
   jsonld: (ctx, config) => ({

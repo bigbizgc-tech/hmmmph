@@ -1,7 +1,18 @@
 // One dedicated page per package and per built-to-order service (12 pages).
 import { OFFERS, offerPath, bySlug } from '../data/offers.mjs';
-import { BIZ } from '../data/business.mjs';
-import config from '../config.mjs';
+import { BIZ, LEVELS } from '../data/business.mjs';
+
+// The "Next file" reading path. The story pages sit between the packages so the payoff comes late:
+// packages → spark → boost → blitz → how-it-works → surge → overdrive → total-blackout → work → about
+// → post-kit → profile-fix → faq → contact → vault. The built-to-order files run as their own branch
+// (packages#built → website-design → ai-consulting → ai-automation → creator-systems → work).
+// Any offer not listed here points at the next offer in offers.mjs.
+const NEXT = {
+  blitz: 'how-it-works.html',
+  'total-blackout': 'work.html',
+  'profile-fix': 'faq.html',
+  'creator-systems': 'work.html',
+};
 
 // Section headings change with the kind of file, so clicking file to file doesn't feel copy-pasted.
 const KIND = {
@@ -22,7 +33,9 @@ const KIND = {
     heads: { what: ['What we', 'build.'], run: ['From call', 'to handoff.'], fit: ['Is this', 'your job?'] },
   },
 };
+// The Bodoni whisper is kept for two headings per page (what it is, and is it for you); the rest are plain.
 const head = (h) => `${h[0]} <span class="whisper">${h[1]}</span>`;
+const plain = (h) => `${h[0]} ${h[1]}`;
 
 // ── Number helpers: every figure below is computed from offers.mjs, never typed in. ──
 const num = (p) => Number(String(p).replace(/[^0-9.]/g, '')) || 0;
@@ -41,9 +54,7 @@ const planMath = (o, below, adds) => {
   const step = num(o.price) - num(below.price);
   return [
     `Launch price ${o.price} a month. Regular price ${money(num(o.regular))} a month.`,
-    lockedIn(o)
-      ? `Staying on the launch price saves <strong>${money(save)} a month, ${money(save * 12)} a year</strong>.`
-      : `The regular price is <strong>${money(save)} a month more</strong> than the launch price.`,
+    `The regular price is <strong>${money(save)} a month more</strong> than the launch price.${lockedIn(o) ? ' Start at the launch price and you keep it while you stay.' : ''}`,
     `One month only costs ${o.oneMonth}. Staying month to month at ${o.price} costs ${money(single)} a month less.`,
     `${o.name} is ${money(step)} more than ${below.name}, and that ${money(step)} ${adds}.`,
   ];
@@ -56,12 +67,14 @@ const MATH = {
     `Over a ${o.run} that is about <strong>${money(adOf(o) / daysOf(o))} a day</strong> of real ad money.`,
     `The ${S['post-kit'].name} is included. On its own it costs ${S['post-kit'].price}${num(S['post-kit'].price) >= num(o.price) ? ', so the push is the bonus' : ''}.`,
     'Platforms spend the first part of any run learning who responds. That is one reason longer runs tend to get more out of each dollar.',
+    `<strong>Why not hit Promote yourself?</strong> You can. With ${o.name} we set the ad up in the platform’s own ad tools, aim it at your area or the audience you name, add the ${S['post-kit'].name}, and send you a recap of spend, reach, and clicks or views.`,
   ],
   boost: (o) => [
     `${o.price} total. About <strong>${money(adOf(o))} buys the ad</strong>: ${times(adOf(o) / adOf(S.spark))} what ${S.spark.name} puts in.`,
     `Over a ${o.run} that is about <strong>${money(adOf(o) / daysOf(o))} a day</strong> of ad money.`,
     `On TikTok the same ${money(adOf(o))} runs as a one-day burst, so it lands hard on the day that counts.`,
     `If you already ran a ${S.spark.name}, ${o.name} is the cheapest real step up.`,
+    `<strong>Why not hit Promote yourself?</strong> You can. With ${o.name} we set the ad up in the platform’s own ad tools, aim it at your area or the people you name, and send you a recap of spend, reach, clicks or views, and follows.`,
   ],
   blitz: (o) => [
     `${o.price} total. About <strong>${money(adOf(o))} buys the ad</strong>: ${times(adOf(o) / adOf(S.boost))} ${S.boost.name}, ${times(adOf(o) / adOf(S.spark))} ${S.spark.name}.`,
@@ -110,11 +123,14 @@ const META = {
 export default () => OFFERS.map((o, i) => {
   const k = KIND[o.kind];
   const path = offerPath(o);
-  const nextOffer = OFFERS[i + 1];
-  const next = nextOffer ? offerPath(nextOffer) : 'how-it-works.html';
+  const next = NEXT[o.slug] || (OFFERS[i + 1] ? offerPath(OFFERS[i + 1]) : 'contact.html');
   const up = o.ladder && bySlug[o.ladder.to];
   const isService = o.kind === 'service';
   const claimLabel = isService ? 'Get my quote' : `Claim ${o.name}`;
+  // Straight to the intake form, with this file picked.
+  const claimHref = 'contact.html?pkg=' + o.slug + '#intake';
+  // The file number, drawn huge behind the name ("File 05" → "05").
+  const fileNo = String(o.file).replace(/\D/g, '');
   // The ladder card only shows when it points somewhere the "Next file" card below doesn't.
   const showLadder = up && offerPath(up) !== next;
   const rel = !up ? '' : (isService || up.kind === 'service') ? 'Related file' : (o.kind === 'addon' || up.kind === 'addon') ? 'Pairs with' : num(up.price) > num(o.price) ? 'Next step up' : 'Start smaller';
@@ -148,6 +164,8 @@ export default () => OFFERS.map((o, i) => {
     }),
     body: (c) => {
       const priceHtml = `${o.price}${o.suffix ? `<small>${o.suffix}</small>` : ''}`;
+      // Read the switch from the build config (so BS_CONFIG_OVERRIDE works), never from config.mjs.
+      const payLink = !!(c.config.showPayLinks && o.store);
 
       // One signature module per kind, built only from the offer data.
       const money_ = o.kind === 'boost' && ad ? `
@@ -159,8 +177,8 @@ export default () => OFFERS.map((o, i) => {
       const rate = o.kind === 'plan' ? `
       <div class="offer-rate">
         <p class="label label--dim">${o.regular ? 'Launch price' : 'Month to month'}</p>
-        <p class="offer-rate__row"><span class="price">${priceHtml}</span>${o.regular ? `<s class="offer-rate__was"><span class="sr">Regular price </span>${o.regular}</s>` : ''}</p>
-        <p class="offer-rate__note">${o.regular ? (lockedIn(o) ? 'Locked in while you stay. ' : 'Month to month. ') : ''}${o.oneMonth ? `One month only: ${o.oneMonth}, no commitment.` : ''}</p>
+        <p class="offer-rate__row"><span class="price">${priceHtml}</span></p>
+        <p class="offer-rate__note">${o.regular ? (lockedIn(o) ? `Locked in while you stay. New clients after the launch pay the regular price, ${o.regular}. ` : `Month to month. The regular price is ${o.regular}. `) : ''}${o.oneMonth ? `One month only: ${o.oneMonth}, no commitment.` : ''}</p>
       </div>` : '';
 
       const ladder = showLadder
@@ -172,17 +190,18 @@ export default () => OFFERS.map((o, i) => {
         : o.spend;
 
       return `
-<header class="pagehead offer-head">
+<header class="pagehead offer-head" data-spot data-spot-idle>
   <div class="wrap pagehead__in">
     ${c.crumbs([{ t: 'Home', p: 'index.html' }, { t: isService ? 'Built to order' : 'Packages', p: isService ? 'packages.html#built' : 'packages.html' }, { t: o.name }])}
     <div class="offer-head__grid">
       <div class="offer-head__main">
+        ${fileNo ? `<span class="offer-no" data-spot-layer aria-hidden="true"><span class="offer-no__dark">${fileNo}</span><span class="offer-no__lit">${fileNo}</span></span>` : ''}
         <p class="label">${o.file} · ${k.label}${o.flagship ? ' · <span class="label--red">Flagship</span>' : ''}</p>
         <h1 class="h1 offer-head__name${o.name.length > 12 ? ' offer-head__name--long' : ''}">${o.name}</h1>
         <p class="lede">${o.tagline}</p>
         <div class="ctas">
-          ${c.btn(claimLabel + ' ' + c.arrow, 'contact.html?pkg=' + o.slug, 'lg')}
-          ${config.showPayLinks && o.store ? c.btn('Pay online', o.store, 'ghost lg') : c.btn('Call ' + BIZ.phone, BIZ.phoneHref, 'ghost lg')}
+          ${c.btn(claimLabel + ' ' + c.arrow, claimHref, 'lg')}
+          ${payLink ? c.btn('Pay online', o.store, 'ghost lg') : c.btn('Call ' + BIZ.phone, BIZ.phoneHref, 'ghost lg') + c.btn('Text us', BIZ.sms, 'ghost lg')}
         </div>
       </div>
       <aside class="offer-card" aria-label="${o.name} at a glance">
@@ -223,7 +242,7 @@ export default () => OFFERS.map((o, i) => {
 
 <section class="band ${isService ? 'band--paper offer-paper' : 'band--coal'}" aria-labelledby="run-h">
   <div class="wrap">
-    <div class="band__head rv"><p class="label">How it runs</p><h2 class="h2" id="run-h">${head(k.heads.run)}</h2></div>
+    <div class="band__head rv"><p class="label">How it runs</p><h2 class="h2" id="run-h">${plain(k.heads.run)}</h2></div>
     <ol class="steps rv" style="--n:${o.process.length}">${o.process.map((s) => `<li><h3>${s.t}</h3><p>${s.d}</p></li>`).join('')}</ol>
   </div>
 </section>
@@ -238,8 +257,9 @@ export default () => OFFERS.map((o, i) => {
   </div>
 </section>
 
-<section class="band band--flush-top" aria-label="Bonus file">
+<section class="band band--flush-top offer-bonus" aria-label="Bonus file">
   <div class="wrap wrap--narrow">
+    <p class="offer-bonus__note"><span class="label">Bonus file · ${isService ? 'Before you call' : 'The price math'}</span><span>${isService ? `What to have ready before you call about ${o.name}.` : `Where the money in ${o.name} goes, worked out line by line.`}<span class="offer-bonus__how"> It opens at Clearance 2: ${LEVELS[2].name}, which you earn by reading the site. No sign-up.</span></span></p>
     ${c.classified({ id: 'math-' + o.slug, level: 2, bypass: true, title: isService ? `Bonus file: before you call about ${o.name}` : `Bonus file: the math behind ${o.name}`, body: `<ul>${(MATH[o.slug] ? MATH[o.slug](o) : []).map((m) => `<li>${m}</li>`).join('')}</ul>` })}
   </div>
 </section>
@@ -248,7 +268,7 @@ export default () => OFFERS.map((o, i) => {
   <div class="wrap split">
     <div class="rv" style="display:grid;gap:18px;align-content:start">
       <p class="label">Questions</p>
-      <h2 class="h2" id="faq-h">Asked <span class="whisper">and answered.</span></h2>
+      <h2 class="h2" id="faq-h">Asked and answered.</h2>
       <a class="textlink" href="${c.link('faq.html')}">Every other question ${c.arrow}</a>
     </div>
     <div class="rv">${o.faq.map((q) => `<details class="qa"><summary>${q.q}</summary><div><p>${q.a}</p></div></details>`).join('')}</div>
@@ -262,8 +282,8 @@ export default () => OFFERS.map((o, i) => {
         <p class="label">${o.file} · ${o.name}</p>
         <h2 class="h2" id="claim-h">${isService ? 'Get the quote.' : 'Claim the file.'}</h2>
         <p class="lede">${isService ? 'Tell us what you need. You get a written price before any work starts.' : `Send the form and we’ll reach out to confirm the details and how you’d like to pay. ${claimNext}`}</p>
-        <div class="ctas">${c.btn(claimLabel + ' ' + c.arrow, 'contact.html?pkg=' + o.slug, 'lg')}${config.showPayLinks && o.store ? c.btn('Pay online now', o.store, 'ghost lg') : ''}</div>
-        <p class="small muted">Or call or text <a href="${BIZ.phoneHref}" style="color:var(--gold)">${BIZ.phone}</a>.</p>
+        <div class="ctas">${c.btn(claimLabel + ' ' + c.arrow, claimHref, 'lg')}${payLink ? c.btn('Pay online now', o.store, 'ghost lg') : ''}</div>
+        <p class="small muted claim__line">Or call <a href="${BIZ.phoneHref}">${BIZ.phone}</a>, or <a href="${BIZ.sms}">send a text</a>.</p>
       </div>
       <div class="claim__side">
         ${isService
@@ -282,8 +302,14 @@ export default () => OFFERS.map((o, i) => {
 const OFFER_CSS = `
 .offer-head__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:clamp(28px,5vw,72px);align-items:start}
 @media (max-width:900px){.offer-head__grid{grid-template-columns:minmax(0,1fr)}}
-.offer-head__main{display:grid;gap:22px;min-width:0}
+.offer-head__main{display:grid;gap:22px;min-width:0;position:relative;isolation:isolate}
 .offer-head__name{overflow-wrap:anywhere}
+/* signature: the file number, huge and outlined behind the name, lit where the searchlight passes */
+.offer-no{--x:40%;--y:50%;position:absolute;z-index:-1;right:0;top:0;transform:translateY(-6%);display:grid;font-family:var(--f-display);font-weight:900;font-size:clamp(200px,23vw,330px);line-height:.76;letter-spacing:-.02em;font-variant-numeric:tabular-nums;pointer-events:none;user-select:none;-webkit-user-select:none}
+.offer-no>span{grid-area:1/1}
+.offer-no__dark{color:transparent;-webkit-text-stroke:1.5px rgba(217,178,95,.2)}
+.offer-no__lit{color:rgba(243,212,138,.06);-webkit-text-stroke:2px var(--gold-hi);-webkit-mask-image:radial-gradient(clamp(140px,18vw,260px) circle at var(--x) var(--y),#000 0 30%,transparent 72%);mask-image:radial-gradient(clamp(140px,18vw,260px) circle at var(--x) var(--y),#000 0 30%,transparent 72%)}
+@media (max-width:900px){.offer-no{font-size:clamp(170px,46vw,300px)}}
 .offer-head__name--long{font-size:clamp(56px,8vw,118px)}
 .offer-card{background:var(--coal);border:1px solid var(--smoke);padding:24px 22px;display:grid;gap:16px;position:relative;min-width:0;margin-top:2px}
 .offer-card::before{content:"";position:absolute;inset:-1px -1px auto auto;width:30px;height:30px;border-top:2px solid var(--gold);border-right:2px solid var(--gold)}
@@ -305,9 +331,7 @@ const OFFER_CSS = `
 .offer-money__key b{display:block;font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1;letter-spacing:.02em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
 .offer-money__key span:last-child{text-align:right}
 .offer-money__key span:last-child b{color:var(--paper)}
-.offer-rate__row{display:flex;align-items:baseline;gap:8px 20px;flex-wrap:wrap}
 .offer-rate .price{font-size:clamp(52px,5.4vw,68px)}
-.offer-rate__was{font-family:var(--f-display);font-weight:800;font-size:30px;line-height:1;color:var(--ash);text-decoration:line-through;text-decoration-color:var(--signal);text-decoration-thickness:2px}
 .offer-rate__note{font-size:15px;color:var(--ash)}
 
 .offer-paper .panel{background:var(--paper-2);border-color:rgba(23,20,15,.18)}
@@ -320,7 +344,13 @@ const OFFER_CSS = `
 
 .offer-fit--lean{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:start}
 @media (max-width:640px){.offer-fit--lean{grid-template-columns:minmax(0,1fr)}}
-#faq-h .whisper{display:block;white-space:nowrap;margin-top:.08em}
+
+/* the bonus file: one plain line says what it is and how it opens; the locked sheet stays short */
+.offer-bonus__note{display:grid;gap:6px;margin-bottom:16px;font-size:15px;color:var(--ash);max-width:62ch}
+.js .offer-bonus .classified.is-locked .classified__body{max-height:4.6em}
+.offer-bonus:has(.classified.is-open) .offer-bonus__how{display:none}
+.claim__line a{color:var(--gold);text-underline-offset:3px}
+.claim__line a:hover{color:var(--gold-hi)}
 
 .claim{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);padding:clamp(28px,4.5vw,56px);border:1px solid var(--gold);background:linear-gradient(160deg,#211a0d,var(--coal) 60%);align-items:start}
 @media (max-width:860px){.claim{grid-template-columns:minmax(0,1fr)}}

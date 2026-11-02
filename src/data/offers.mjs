@@ -69,11 +69,12 @@ export const OFFERS = [
     faq: [
       { q: 'Can I pick TikTok?', a: 'Yes. TikTok runs as a one-day burst at this size because that is where the money works hardest there.' },
       { q: 'Can I point it at my website?', a: 'Yes. Your post, page, channel, website or booking line all work.' },
+      { q: 'I stream on Twitch. Can Boost send people there?', a: 'Yes. The ad runs on X, TikTok, Instagram, Facebook or YouTube, and it can point people at your Twitch channel. Send us your channel link when you claim it.' },
       { q: 'Can I upgrade later?', a: 'Any time. Boost is a one-time buy with no contract.' },
     ],
     ladder: { to: 'blitz', text: 'Need it bigger? Blitz doubles the ad money and runs a full week.' },
     store: STORE + 'boost-get-seen-boost',
-    teaser: 'Twice the fuel. Aim it at the night that matters.',
+    teaser: 'More fuel, a longer run. Aim it at the night that matters.',
   },
   {
     slug: 'blitz', kind: 'boost', file: 'File 03', name: 'Blitz', price: '$99.99', suffix: '', cadence: 'One-time',
@@ -124,6 +125,7 @@ export const OFFERS = [
     faq: [
       { q: 'Is there a contract?', a: `No. ${POLICY.plans} Want a single month without monthly billing? That is $450, billed once, and it never renews.` },
       { q: 'Which two platforms?', a: 'Whichever two your people actually use. We decide that together on the intake call.' },
+      { q: 'I stream on Twitch. Can the ads point there?', a: 'Yes. The ads run on X, TikTok, Instagram, Facebook or YouTube, and they can send people to your Twitch channel.' },
       { q: 'Can I move up to Overdrive?', a: 'Yes. Move up any month.' },
     ],
     ladder: { to: 'overdrive', text: 'Want the posting handled too? Overdrive adds automatic posting and AI tools.' },

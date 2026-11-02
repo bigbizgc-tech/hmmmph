@@ -293,7 +293,7 @@ export default {
   title: 'The Reel',
   description: 'Watch the Reel: ad spots, shorts, Graveshift Gaming highlights and AI tool showdowns cut by the Blackout Syndicate crew in South Bend. Opens on YouTube.',
   teaser: 'Ad spots, shorts and showdowns cut by the crew. Press play.',
-  next: 'contact.html',
+  next: 'about.html',
   css, js,
   jsonld: (ctx, config) => ({
     '@context': 'https://schema.org',

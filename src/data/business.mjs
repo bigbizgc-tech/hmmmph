@@ -42,7 +42,9 @@ export const PLATFORMS = [
   { name: 'Facebook', note: 'Local reach' },
 ];
 
-// Clearance ladder. XP thresholds tuned so a curious visitor levels up every 1–2 files.
+// Clearance ladder. Thresholds follow the "Next file" reading path (packages, spark, boost, blitz,
+// how it works, surge, overdrive, total blackout, the reel, about, post kit, profile fix, faq, contact):
+// each level opens on or before the page that holds its reward, and the gaps widen so the Vault comes late.
 // href: where the level's reward lives (the build checks the page and anchor exist).
 // cl: the classified block id that holds it ("math-" = every math-* block); 'vault' = the Vault page.
 export const LEVELS = [
@@ -50,8 +52,8 @@ export const LEVELS = [
   { lv: 1, name: 'Lookout', xp: 25, unlock: 'Playbook Rule 01 on the home page', href: 'index.html#cl-rule-01', cl: 'rule-01' },
   { lv: 2, name: 'Associate', xp: 60, unlock: 'The pricing math on every package file', href: 'packages/spark.html#cl-math-spark', cl: 'math-' },
   { lv: 3, name: 'Operative', xp: 110, unlock: 'How a push is actually aimed (How it works)', href: 'how-it-works.html#cl-aim', cl: 'aim' },
-  { lv: 4, name: 'Lieutenant', xp: 170, unlock: 'The founder’s full file (About)', href: 'about.html#cl-founder', cl: 'founder' },
-  { lv: 5, name: 'Inner Circle', xp: 240, unlock: 'The Vault: the full Syndicate Playbook and your Syndicate ID', href: 'vault.html', cl: 'vault' },
+  { lv: 4, name: 'Lieutenant', xp: 200, unlock: 'The founder’s full file (About)', href: 'about.html#cl-founder', cl: 'founder' },
+  { lv: 5, name: 'Inner Circle', xp: 320, unlock: 'The Vault: the full Syndicate Playbook and your Syndicate ID', href: 'vault.html', cl: 'vault' },
 ];
 
 export const XP = { visit: 10, read: 15, quiz: 30, lead: 50, mark: 25, blackout: 20 };

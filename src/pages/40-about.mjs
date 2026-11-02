@@ -351,7 +351,7 @@ export default {
   title: 'About the Syndicate',
   description: 'Meet Gregory Clark, the South Bend founder of Blackout Syndicate: ten years building with his hands, now building real reach for creators and local shops.',
   teaser: 'The man behind the Syndicate, the rules he runs by, and the ground he covers.',
-  next: 'work.html',
+  next: 'packages/post-kit.html',
   css, js,
   jsonld: (ctx, config) => ({
     '@context': 'https://schema.org',
