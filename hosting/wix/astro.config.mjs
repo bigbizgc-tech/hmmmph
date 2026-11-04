@@ -3,7 +3,7 @@
 // scripts/sync-site.mjs). The Wix pieces follow the Wix Headless kit's managed-Astro setup
 // (github.com/wix/skills, skills/wix-headless-templates/blank/project/astro.config.mjs):
 // the @wix/astro integration, the Wix hosting adapter, output "server".
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 import wix from "@wix/astro";
 import wixHostingAdapter from "@wix/astro-wix-hosting-adapter";
 
@@ -24,6 +24,9 @@ export default defineConfig({
   integrations: [siteRouting, wix({ robots: false })],
   adapter: wixHostingAdapter(),
   output: "server",
+  // X_PIXEL_TOKEN: the X Conversion API token (src/x-conversion.mjs). Optional, so a build or a
+  // site without the secret still works; the endpoint then answers 202 "no token".
+  env: { schema: { X_PIXEL_TOKEN: envField.string({ context: "server", access: "secret", optional: true }) } },
   security: { checkOrigin: false },
   image: { domains: ["static.wixstatic.com"] },
 });

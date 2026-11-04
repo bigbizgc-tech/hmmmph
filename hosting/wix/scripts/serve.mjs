@@ -27,7 +27,7 @@ async function staticFile(pathname) {
   return s?.isFile() ? file : null;
 }
 
-export async function startServer(port = 4321) {
+export async function startServer(port = 4321, extraEnv = {}) {
   const worker = (await import(pathToFileURL(join(ROOT, "dist/server/index.mjs")).href)).default;
   const server = createServer(async (req, res) => {
     try {
@@ -37,7 +37,9 @@ export async function startServer(port = 4321) {
         res.writeHead(200, { "Content-Type": TYPES[extname(file)] ?? "application/octet-stream", "X-Served-By": "static" });
         return res.end(req.method === "HEAD" ? undefined : await readFile(file));
       }
-      const response = await worker.fetch(new Request(url, { method: req.method, headers: req.headers }), ENV);
+      const hasBody = req.method !== "GET" && req.method !== "HEAD";
+      const body = hasBody ? Buffer.concat(await req.toArray()) : undefined;
+      const response = await worker.fetch(new Request(url, { method: req.method, headers: req.headers, body }), { ...ENV, ...extraEnv });
       res.writeHead(response.status, { ...Object.fromEntries(response.headers), "X-Served-By": "server" });
       if (response.body && req.method !== "HEAD") Readable.fromWeb(response.body).pipe(res);
       else res.end();

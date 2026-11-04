@@ -641,6 +641,17 @@
         ss.set('bs2.lead', { name: (data.name || '').split(' ')[0], interest: interestLabel, slug: sel?.selectedOptions[0]?.dataset.slug || '', preview: !!CFG.previewMode, id: token });
         ss.set(LEAD_TOKEN, token);
         track('formSubmit', { contents: [{ content_name: interestLabel }] });
+        // Tell our own server about the lead too (it passes it to X from the server, with this same token as the
+        // conversion id, so X counts it once). Fire and forget: the visitor never waits on it and a failure changes nothing.
+        if (CFG.xPixelId && !CFG.previewMode) {
+          try {
+            const tw = ((src.src || '').match(/(?:^|&)twclid=([^&]+)/) || [])[1];
+            fetch('/x-conversion', {
+              method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true,
+              body: JSON.stringify({ conversion_id: token, email: data.email || '', phone: data.phone || '', twclid: tw ? decodeURIComponent(tw) : '', page: PATH }),
+            }).catch(() => {});
+          } catch (e) { /* never block the send */ }
+        }
         // give the X beacon a moment to leave before the page changes
         setTimeout(() => { location.href = ROOT + 'thank-you.html?sent=' + token; }, CFG.xPixelId && typeof window.twq === 'function' ? 400 : 0);
         return;

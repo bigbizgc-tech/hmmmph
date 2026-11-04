@@ -349,11 +349,13 @@ const SECTIONS = (c) => [
   </ul></div>
   <div><p class="label label--red">What we never pass to X</p><ul class="ticks ticks--no">
     <li>Your name</li>
-    <li>Your email or phone number</li>
+    <li>Your email or phone number in readable form</li>
     <li>Your message</li>
     <li>Your clearance file</li>
   </ul></div>
 </div>
+<h3>When you send the form</h3>
+<p>When you send the contact form, our own server also tells X that a form was sent. It includes your X ad-click ID if you came from an X ad, your IP address and browser, and a scrambled (hashed) version of your email and phone number. X uses that only to match the form send to the ad. X can’t read a hashed email or phone number, and we send none of the message you wrote.</p>
 <p>X handles pixel data under its own <a href="https://x.com/en/privacy" target="_blank" rel="noopener">privacy policy</a>. What we get back is reporting in our X ads account, like how many visits or form sends followed an ad. Those reports don’t tell us who you are.</p>
 <h3>How to limit it</h3>
 <ul>
