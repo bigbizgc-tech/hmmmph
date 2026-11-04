@@ -18,6 +18,7 @@
     "@wix/astro": "3.1.0",
     "@wix/astro-wix-hosting-adapter": "3.0.4",
     "@wix/essentials": "1.0.15",
+    "@wix/secrets": "1.0.75",
     "astro": "7.4.4",
     "react": "18.3.1",
     "react-dom": "18.3.1"
