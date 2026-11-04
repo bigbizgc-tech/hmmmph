@@ -45,7 +45,7 @@ export default {
   // Set   = washington.html is built, with a big Donate button to this link, and linked from the
   //         footer, Get started and the class page.
   // Empty = no page and no links anywhere. Empty it again once the trip is over.
-  donateUrl: '',
+  donateUrl: 'https://www.paypal.com/ncp/payment/PLB-R86C6BMUCFZR',
 
   // Preview mode: the form skips the network and goes straight to the thank-you page.
   // The build turns this on automatically for `npm run build:preview`.
