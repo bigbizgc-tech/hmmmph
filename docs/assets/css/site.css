@@ -563,7 +563,7 @@ a.copy { display: inline-flex; align-items: center; text-decoration: none; }
 
 /* ── Drawer (clearance panel) ─────────────────────────────────────────── */
 .scrim { position: fixed; inset: 0; z-index: 80; background: rgba(4,4,5,.62); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); animation: fadeIn .25s; }
-.drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 85; width: min(460px, 100%); background: var(--coal); border-left: 1px solid var(--smoke); overflow-y: auto; padding: calc(20px + env(safe-area-inset-top, 0px)) max(22px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) 22px; animation: slideIn .35s var(--ease); }
+.drawer {overscroll-behavior:contain; position: fixed; top: 0; right: 0; bottom: 0; z-index: 85; width: min(460px, 100%); background: var(--coal); border-left: 1px solid var(--smoke); overflow-y: auto; padding: calc(20px + env(safe-area-inset-top, 0px)) max(22px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) 22px; animation: slideIn .35s var(--ease); }
 .drawer:focus { outline: none; }
 .drawer__in { display: grid; gap: 22px; }
 [data-drawer-body] { display: grid; gap: 22px; }

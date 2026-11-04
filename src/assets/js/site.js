@@ -406,20 +406,22 @@
     clearToasts();
     renderDrawer();
     drawer.hidden = false; scrim.hidden = false;
+    document.documentElement.style.overflow = 'hidden'; // the page behind stays put while the panel is open
     behindDrawer().forEach((el) => (el.inert = true));
     $$('[data-hud]').forEach((h) => h.setAttribute('aria-expanded', 'true'));
-    drawer.focus();
+    drawer.focus({ preventScroll: true });
   }
   function closeDrawer(restore = true) {
     if (!drawerOpen) return;
     behindDrawer().forEach((el) => (el.inert = false));
     drawer.hidden = true; scrim.hidden = true; drawerOpen = false;
+    document.documentElement.style.overflow = '';
     $$('[data-hud]').forEach((h) => h.setAttribute('aria-expanded', 'false'));
     release();
     if (!restore) return;
     // a toast that opened the drawer may be gone by now: fall back to the HUD
     const back = lastFocus && lastFocus.isConnected && !lastFocus.closest('[data-toasts]') ? lastFocus : $('[data-hud]');
-    if (back && back.focus) back.focus();
+    if (back && back.focus) back.focus({ preventScroll: true });
   }
   $$('[data-hud], [data-hud-open]').forEach((b) => b.addEventListener('click', () => (drawerOpen ? closeDrawer() : openDrawer())));
   $$('[data-drawer-close]').forEach((b) => b.addEventListener('click', () => closeDrawer()));
@@ -440,8 +442,8 @@
     if (open === was) return;
     if (open) clearToasts(); else release();
     behindMenu().forEach((el) => (el.inert = open));
-    if (open) { const a = $('#menu a'); if (a) a.focus(); }
-    else if (refocus || (document.activeElement && document.activeElement.closest('#menu'))) burger.focus();
+    if (open) { const a = $('#menu a'); if (a) a.focus({ preventScroll: true }); }
+    else if (refocus || (document.activeElement && document.activeElement.closest('#menu'))) burger.focus({ preventScroll: true });
   }
   if (burger && topbar) {
     burger.addEventListener('click', () => setMenu(!topbar.hasAttribute('data-open')));
