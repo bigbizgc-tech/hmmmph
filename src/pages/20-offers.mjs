@@ -289,7 +289,7 @@ export default (cfg = {}) => OFFERS.map((src, i) => {
         <p class="lede">${o.tagline}</p>
         <div class="ctas">
           ${c.btn(claim + ' ' + c.arrow, claimHref, 'lg')}
-          ${payLink ? c.btn('Pay online', o.store, 'ghost lg') : c.btn('Call ' + BIZ.phone, BIZ.phoneHref, 'ghost lg') + c.btn('Text us', BIZ.sms, 'ghost lg')}
+          ${payLink ? c.btn('Pay online', o.store, 'ghost lg') : c.btn('Call ' + BIZ.phone, BIZ.phoneHref, 'ghost lg') + c.btn('Text us', BIZ.sms, 'ghost lg')}${c.config.payUrl ? c.btn('Pay', 'pay.html', 'ghost lg') : ''}
         </div>
       </div>
       <aside class="offer-card" aria-label="${o.name} at a glance">

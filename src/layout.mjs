@@ -188,7 +188,7 @@ function footer(ctx) {
         ${col('One-time boosts', [...BOOSTS, ...ADDONS].map((o) => ({ t: ctx.priced ? `${o.name} <span class="foot__price">${o.price}</span>` : o.name, p: offerPath(o) })))}
         ${col('Monthly plans', PLANS.map((o) => ({ t: ctx.priced ? `${o.name} <span class="foot__price">${o.price}${o.suffix}</span>` : o.name, p: offerPath(o) })))}
         ${col('Built to order', SERVICES.map((o) => ({ t: o.name, p: offerPath(o) })))}
-        ${col('The Syndicate', [{ t: 'How it works', p: 'how-it-works.html' }, { t: 'The Reel', p: 'work.html' }, { t: 'About', p: 'about.html' }, { t: 'FAQ', p: 'faq.html' }, { t: 'Contact', p: 'contact.html' }, { t: 'The Vault', p: 'vault.html' }, ...(ctx.washington ? [{ t: TRIP.title, p: TRIP.path }] : [])])}
+        ${col('The Syndicate', [{ t: 'How it works', p: 'how-it-works.html' }, { t: 'The Reel', p: 'work.html' }, { t: 'About', p: 'about.html' }, { t: 'FAQ', p: 'faq.html' }, { t: 'Contact', p: 'contact.html' }, { t: 'The Vault', p: 'vault.html' }, ...(ctx.config.payUrl ? [{ t: 'Pay', p: 'pay.html' }] : []), ...(ctx.washington ? [{ t: TRIP.title, p: TRIP.path }] : [])])}
       </div>
     </div>
     <div class="foot__social">

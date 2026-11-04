@@ -45,7 +45,9 @@ export default {
   // Set   = washington.html is built, with a big Donate button to this link, and linked from the
   //         footer, Get started and the class page.
   // Empty = no page and no links anywhere. Empty it again once the trip is over.
-  donateUrl: 'https://www.paypal.com/ncp/payment/PLB-R86C6BMUCFZR',
+  donateUrl: 'https://www.paypal.biz/blackoutsyn',
+  // Biz's PayPal Business page. The Pay page and every Pay button open it; the payer types the amount on PayPal.
+  payUrl: 'https://www.paypal.biz/blackoutsyn',
 
   // Preview mode: the form skips the network and goes straight to the thank-you page.
   // The build turns this on automatically for `npm run build:preview`.
