@@ -11,10 +11,14 @@ export const BIZ = {
   // Biz's Google Calendar booking page (1-hour slots) and its official inline embed.
   booking: 'https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0Tt-GekG_A-1iOgDPKcKCITFBH1ueDON5a_LyZd_O-g26Yz_-i44LIeKeoKF3qh-zLkCXShW9F',
   bookingEmbed: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0Tt-GekG_A-1iOgDPKcKCITFBH1ueDON5a_LyZd_O-g26Yz_-i44LIeKeoKF3qh-zLkCXShW9F?gv=true',
+  // Gregory's hometown. Personal lines only ("a South Bend guy"). Not where the business says it is based.
   city: 'South Bend',
   region: 'IN',
   regionLong: 'Indiana',
-  area: ['South Bend', 'Mishawaka', 'Elkhart'],
+  // Business location and the area the site says it serves.
+  based: 'Michiana based',
+  areaName: 'Michiana',
+  area: ['Michiana'],
   tagline: 'Real ads. Real people. No bots.',
   // Stated on the store: keep this sentence on every page that sells promotion.
   resultsNote: 'Results depend on your content, your audience and the platform. No set number of views, likes or followers is guaranteed.',

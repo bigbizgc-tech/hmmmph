@@ -223,7 +223,7 @@ export default {
   navTitle: 'The Reel',
   section: 'work',
   title: 'The Reel',
-  description: 'Watch the Reel: ad spots, shorts, Graveshift Gaming highlights and AI tool showdowns cut by the Blackout Syndicate crew in South Bend. Opens on YouTube.',
+  description: 'Watch the Reel: ad spots, shorts, Graveshift Gaming highlights and AI tool showdowns cut by the Blackout Syndicate crew in Michiana. Opens on YouTube.',
   teaser: 'Ad spots, shorts and showdowns cut by the crew. Press play.',
   next: 'about.html',
   css, js,

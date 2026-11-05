@@ -210,8 +210,8 @@ export default {
   order: 0,
   navTitle: 'Home',
   section: 'home',
-  title: 'Blackout Syndicate · Get Seen in South Bend',
-  description: 'Real ads. Real people. No bots. Paid reach for creators, streamers, solo businesses and local shops in South Bend, Mishawaka and Elkhart, Indiana.',
+  title: 'Blackout Syndicate · Get Seen in Michiana',
+  description: 'Real ads. Real people. No bots. Paid reach for creators, streamers, solo businesses and local shops in Michiana.',
   teaser: 'Real ads, real people, no bots. Step into the light.',
   next: 'packages.html',
   css, js,
@@ -227,8 +227,8 @@ export default {
     description: 'Paid social media ads, content and AI setup for creators, streamers and local businesses.',
     founder: { '@type': 'Person', name: BIZ.founder },
     parentOrganization: { '@type': 'Organization', name: BIZ.legal },
-    address: { '@type': 'PostalAddress', addressLocality: 'South Bend', addressRegion: 'IN', addressCountry: 'US' },
-    areaServed: BIZ.area.map((c) => ({ '@type': 'City', name: c + ', IN' })),
+    address: { '@type': 'PostalAddress', addressLocality: BIZ.areaName, addressRegion: 'IN', addressCountry: 'US' },
+    areaServed: [{ '@type': 'AdministrativeArea', name: BIZ.areaName }],
     sameAs: SOCIALS.map((s) => s.url),
   }),
   body: (c) => `
@@ -237,7 +237,7 @@ export default {
     <div class="hero__main">
       <p class="label">File 00 · Paid social ads · ${BIZ.area.join(' · ')}</p>
       <h1 class="hero__title"><span class="hero__get">Get</span> <span class="hero__seen">Seen.<span class="hero__bar" aria-hidden="true"></span></span></h1>
-      <p class="hero__pitch">Paid social ads for South Bend shops, creators and streamers.</p>
+      <p class="hero__pitch">Paid social ads for Michiana shops, creators and streamers.</p>
       <p class="lede"><strong>Real ads. Real people. No bots.</strong> We buy real placements through each platform’s own ad tools, aim them at your people, and show you what every dollar did.</p>
       <ul class="hero__facts">
         <li>No contract on boosts</li>
@@ -396,7 +396,7 @@ export default {
       <span class="stamp final__stamp" aria-hidden="true">Open<br>line<small>Call or text</small></span>
       <p class="label">The direct line</p>
       <a class="final__phone" href="${BIZ.phoneHref}">${BIZ.phone}</a>
-      <p class="final__note">Call or text. You deal with a person in ${BIZ.city}.</p>
+      <p class="final__note">Call or text. You deal with a person in ${BIZ.areaName}.</p>
       <a class="final__mail" href="mailto:${BIZ.email}">${BIZ.email}</a>
     </div>
   </div>

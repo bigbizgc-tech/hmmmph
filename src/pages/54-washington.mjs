@@ -6,6 +6,7 @@
 import { BIZ } from '../data/business.mjs';
 import { bySlug, offerPath, CLASSES } from '../data/offers.mjs';
 import { TRIP, donateHref, esc, arrow } from '../layout.mjs';
+import { paypalCheckout, paypalWidget } from '../paypal.mjs';
 
 const css = `
 .wt-head .whisper{display:block;margin-top:.12em}
@@ -24,16 +25,27 @@ const css = `
 .wt-final .wt-donate .arw{width:26px;height:26px}
 .wt-final .wt-fine{font-size:15px;line-height:1.5;max-width:60ch;border-top:1.5px dashed rgba(7,7,8,.35);padding-top:14px}
 .wt-final .wt-fine a{color:var(--void);font-weight:600;text-underline-offset:3px}
+.wt-final .pp-pay{background:var(--void);color:var(--paper);max-width:440px}
+.wt-final .pp-pay a{color:var(--gold-hi)}
 @media (max-width:560px){.wt-final .wt-donate{width:100%}}
 `;
 
 const page = (config) => {
   const href = donateHref(config.donateUrl);
+  const hosted = paypalCheckout(config, 'paypalDonateButtonId');
   let host = '';
   try { host = new URL(href).hostname.replace(/^www\./, ''); } catch (e) { /* shown as "the donation page" */ }
   const where = host ? esc(host) : 'the donation page';
-  // The one action on this page: an outside donation link, always in a new tab.
-  const donate = (cls = '') => `<a class="btn${cls ? ' ' + cls : ''}" href="${esc(href)}" target="_blank" rel="noopener">Donate ${arrow}<span class="sr"> (opens ${where} in a new tab)</span></a>`;
+  // One PayPal render per page. Other Donate buttons jump to it. Without a live
+  // button ID, every Donate button stays the outside link.
+  const donate = (cls = '') => hosted
+    ? `<a class="btn${cls ? ' ' + cls : ''}" href="#donate">Donate ${arrow}</a>`
+    : `<a class="btn${cls ? ' ' + cls : ''}" href="${esc(href)}" target="_blank" rel="noopener">Donate ${arrow}<span class="sr"> (opens ${where} in a new tab)</span></a>`;
+  const give = hosted
+    ? `${paypalWidget(config, 'paypalDonateButtonId', 'donate-box')}
+    <p class="wt-fine">Type any amount, then pay with PayPal or a debit or credit card. A card does not need a PayPal login. If the buttons do not load, <a href="${esc(href)}" target="_blank" rel="noopener">open ${where}</a>. Questions? Call or text <a href="${BIZ.phoneHref}">${BIZ.phone}</a>.</p>`
+    : `${donate('wt-donate')}
+    <p class="wt-fine">The button opens ${where} in a new tab. Questions? Call or text <a href="${BIZ.phoneHref}">${BIZ.phone}</a>.</p>`;
   const K = CLASSES[0];
 
   return {
@@ -82,7 +94,7 @@ const page = (config) => {
     <h2 class="h2" id="wt-why-h">Why go <span class="whisper">at all.</span></h2>
     <div class="prose">
       <p>A lot of what we do runs on AI: the AI tools in our monthly plans, <a href="${c.link(offerPath(bySlug['ai-consulting']))}">AI Consulting</a>, <a href="${c.link(offerPath(bySlug['ai-automation']))}">AI Automation</a> and the <a href="${c.link(K.path)}">${K.name}</a> class.</p>
-      <p>${TRIP.event} is where NVIDIA shows what’s coming in AI. Biz wants to see it first-hand, ask his questions in person, and bring what he learns back to ${BIZ.city} in plain English.</p>
+      <p>${TRIP.event} is where NVIDIA shows what’s coming in AI. Biz wants to see it first-hand, ask his questions in person, and bring what he learns back to ${BIZ.areaName} in plain English.</p>
       <p>That’s the whole pitch. You’re helping one local guy get in the room.</p>
     </div>
   </div>
@@ -93,8 +105,7 @@ const page = (config) => {
     <p class="label">Chip in</p>
     <h2 id="wt-final-h">Send him<br>to D.C.</h2>
     <p>Give what you want. It goes toward the pass, the travel and the hotel.</p>
-    ${donate('wt-donate')}
-    <p class="wt-fine">The button opens ${where} in a new tab. Questions? Call or text <a href="${BIZ.phoneHref}">${BIZ.phone}</a>.</p>
+    ${give}
   </div>
 </section>`,
   };

@@ -196,7 +196,7 @@ function footer(ctx) {
       ${ctx.socialRow('socials socials--foot')}
     </div>
     <div class="foot__base">
-      <p>© <span data-year>2026</span> ${BIZ.name} · a ${BIZ.legal} company · ${BIZ.city}, ${BIZ.regionLong}</p>
+      <p>© <span data-year>2026</span> ${BIZ.name} · a ${BIZ.legal} company · ${BIZ.based}</p>
       <p class="foot__legal"><a href="${link('privacy.html')}">Privacy</a><a href="${link('terms.html')}">Terms &amp; refunds</a><button class="foot__files" type="button" data-hud-open>Files opened <b data-files-count>0 / ${totalFiles}</b></button></p>
     </div>
   </div>
@@ -273,13 +273,13 @@ export function renderPage(page, all, config, assets) {
 <meta property="og:image" content="${config.siteUrl}/assets/img/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Blackout Syndicate: Get seen. Real ads. Real people. No bots. South Bend, Mishawaka, Elkhart.">
+<meta property="og:image:alt" content="Blackout Syndicate: Get seen. Real ads. Real people. No bots. Michiana.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@BzTheG">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(page.description)}">
 <meta name="twitter:image" content="${config.siteUrl}/assets/img/og.png">
-<meta name="twitter:image:alt" content="Blackout Syndicate: Get seen. Real ads. Real people. No bots. South Bend, Mishawaka, Elkhart.">
+<meta name="twitter:image:alt" content="Blackout Syndicate: Get seen. Real ads. Real people. No bots. Michiana.">
 ${page.noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="icon" href="${r}assets/img/favicon.ico" sizes="any">
 <link rel="icon" href="${r}assets/img/favicon.svg" type="image/svg+xml">

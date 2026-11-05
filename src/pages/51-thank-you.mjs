@@ -164,7 +164,7 @@ export default {
           <div><dt>Status</dt><dd>On the desk</dd></div>
         </dl>
         <div class="slip__stampzone">
-          <span>${BIZ.city} desk</span>
+          <span>${BIZ.areaName} desk</span>
           <div class="stamp ty-stamp" aria-hidden="true">Received<small>On the desk</small></div>
         </div>
       </div>

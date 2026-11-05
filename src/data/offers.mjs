@@ -377,14 +377,14 @@ export const OFFERS = [
     slug: 'ai-consulting', kind: 'service', file: 'File 10', name: 'AI Consulting', price: 'Quoted', suffix: '', cadence: 'Per job',
     tagline: 'Plain-English help finding where AI actually saves you time.',
     bestFor: 'Owners curious about AI but short on time',
-    summary: 'AI Consulting is a sit-down about your week. We look at what eats your time, find the parts AI can honestly handle, and set them up with you. We come to you around South Bend, Mishawaka and Elkhart, and you walk away with it running.',
+    summary: 'AI Consulting is a sit-down about your week. We look at what eats your time, find the parts AI can honestly handle, and set them up with you. We come to you around Michiana, and you walk away with it running.',
     spend: 'Quoted per job. You know the price before we start.',
     run: 'Quoted per job',
     includes: [
       'A walk through the work that eats your week',
       'A short list of where AI can actually help, and where it can’t',
       'The right tools picked for your business and budget',
-      'Setup done with you, in person in the South Bend area',
+      'Setup done with you, in person in Michiana',
       'You walk away with it running',
     ],
     process: [
@@ -397,7 +397,7 @@ export const OFFERS = [
     notForYou: ['You already know exactly what to automate. Go straight to AI Automation'],
     faq: [
       { q: 'Do I need to be good with computers?', a: 'No. Everything is explained in plain English and set up with you.' },
-      { q: 'Do you come to me?', a: 'Yes, around South Bend, Mishawaka and Elkhart. Calls work too.' },
+      { q: 'Do you come to me?', a: 'Yes, around Michiana. Calls work too.' },
     ],
     ladder: { to: 'ai-automation', text: 'Know what you want automated? AI Automation builds it.' },
     store: null,

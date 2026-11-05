@@ -255,7 +255,7 @@ export default {
   navTitle: 'Contact',
   section: 'contact',
   title: 'Contact',
-  description: `Call or text ${BIZ.phone}, email ${BIZ.email}, or send the form. Real paid ads, content and AI setup for ${BIZ.area.slice(0, -1).join(', ')} and ${BIZ.area.slice(-1)}.`,
+  description: `Call or text ${BIZ.phone}, email ${BIZ.email}, or send the form. Real paid ads, content and AI setup for ${BIZ.areaName}.`,
   teaser: 'Make contact. Real person, real phone.',
   next: 'vault.html',
   css: css + BOOKING_CSS, js: js + BOOKING_JS,
@@ -270,8 +270,8 @@ export default {
       url: cfg.siteUrl + '/',
       telephone: TEL,
       email: BIZ.email,
-      address: { '@type': 'PostalAddress', addressLocality: BIZ.city, addressRegion: BIZ.region, addressCountry: 'US' },
-      areaServed: BIZ.area.map((a) => ({ '@type': 'City', name: `${a}, ${BIZ.region}` })),
+      address: { '@type': 'PostalAddress', addressLocality: BIZ.areaName, addressRegion: BIZ.region, addressCountry: 'US' },
+      areaServed: [{ '@type': 'AdministrativeArea', name: BIZ.areaName }],
       contactPoint: { '@type': 'ContactPoint', telephone: TEL, email: BIZ.email, contactType: 'customer service' },
       sameAs: SOCIALS.map((s) => s.url),
     },
@@ -405,12 +405,10 @@ export default {
         <div class="terr" aria-hidden="true">
           <span class="terr__beam"></span>
           <svg class="terr__river" viewBox="0 0 400 156" preserveAspectRatio="none" focusable="false"><path d="M400 60 C372 64 346 80 320 79 S262 66 222 78 S162 98 128 89 S80 76 48 83 S20 62 14 0"/><path d="M400 60 C372 64 346 80 320 79 S262 66 222 78 S162 98 128 89 S80 76 48 83 S20 62 14 0"/></svg>
-          <span class="terr__pin terr__pin--hq" style="--px:12%;--py:53.2%"><i></i><b>South Bend</b></span>
-          <span class="terr__pin terr__pin--up" style="--px:32%;--py:57%"><i></i><b>Mishawaka</b></span>
-          <span class="terr__pin" style="--px:80%;--py:50.6%"><i></i><b>Elkhart</b></span>
+          <span class="terr__pin terr__pin--hq" style="--px:46%;--py:48%"><i></i><b>${BIZ.areaName}</b></span>
           <span class="terr__net">Online · anywhere</span>
         </div>
-        <p class="muted">We’re based in ${BIZ.city} and work across ${BIZ.area.slice(1).join(' and ')}. AI setup can happen in person around here. Ads, content and the rest run online, so you can be anywhere.</p>
+        <p class="muted">We’re ${BIZ.based}. AI setup can happen in person around here. Ads, content and the rest run online, so you can be anywhere.</p>
       </section>
     </div>
 

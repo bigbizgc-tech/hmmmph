@@ -97,7 +97,7 @@ const SECTIONS = (c) => [
   {
     id: 'who', t: 'Who you’re dealing with',
     body: `
-<p>These terms cover anything you buy from ${BIZ.name}, a ${BIZ.legal} company in ${BIZ.city}, ${BIZ.regionLong}, run by founder ${BIZ.founder}. “We” and “us” means ${BIZ.name}. “You” means the person or business buying.</p>
+<p>These terms cover anything you buy from ${BIZ.name}, a ${BIZ.legal} company, ${BIZ.based}, run by founder ${BIZ.founder}. “We” and “us” means ${BIZ.name}. “You” means the person or business buying.</p>
 <p>Paying for a package or service means you agree to these terms. For quoted work, the written quote you approve is part of the deal too.</p>
 <p>You need to be at least 18 to buy, or have a parent or guardian handle it for you.</p>`,
   },
@@ -267,9 +267,9 @@ ${c.priced ? `<fieldset class="lg-split">
   {
     id: 'contact', t: 'Contact',
     body: `
-<p>Question about these terms? Ask before you buy. A real person in ${BIZ.city} answers.</p>
+<p>Question about these terms? Ask before you buy. A real person in ${BIZ.areaName} answers.</p>
 ${c.contactLines()}
-<p class="small muted">${BIZ.name} · a ${BIZ.legal} company · ${BIZ.city}, ${BIZ.regionLong} · How we handle your information is on the <a href="${c.link('privacy.html')}">privacy page</a>.</p>`,
+<p class="small muted">${BIZ.name} · a ${BIZ.legal} company · ${BIZ.based} · How we handle your information is on the <a href="${c.link('privacy.html')}">privacy page</a>.</p>`,
   },
 ];
 
