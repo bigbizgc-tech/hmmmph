@@ -88,6 +88,13 @@ and `last_package` (the last package file they opened). Tag your X ad links with
 This works no matter what the payment processor is doing. Turn it on once checkout is confirmed working, and the one-time
 packages also get a "Pay online" button pointing at the matching store product page.
 
+The Pay page, every package **Pay** button, and the Washington **Donate** button use Biz's live PayPal
+Business account. Paste `paypalLiveClientId`, `paypalPayButtonId` and `paypalDonateButtonId` in `src/config.mjs`
+(public values from a **Customer set price** button built at paypal.com, not sandbox). Until those are set,
+those buttons keep opening `payUrl` / `donateUrl` (`https://www.paypal.biz/blackoutsyn`). See the comments on
+those keys for the exact clicks in the PayPal account, including **PayPal Account Optional**, which is what
+lets a payer use a card without a PayPal login.
+
 **Before turning it on**, replace each package's `store` link in `src/data/offers.mjs`. They still point at the old Wix
 product pages (`/product-page/...`), which disappear once the domain moves off Wix. The build also writes `docs/_redirects`
 (used by Netlify and Cloudflare Pages) so those old Wix product addresses, if anyone shared or bookmarked them, land on the

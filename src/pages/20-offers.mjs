@@ -174,11 +174,11 @@ const NOTES = {
 };
 
 // Meta descriptions the default template leaves under 120 characters. Built from the offer data.
-const where = `Blackout Syndicate, ${BIZ.city}, ${BIZ.region}.`;
+const where = `Blackout Syndicate, ${BIZ.areaName}.`;
 const META = {
   surge: (o) => `${o.name}: paid ads every month on up to 2 platforms, about ${money(adOf(o))} a month of it in the ads. ${o.price}${o.suffix}, or ${o.oneMonth} for one month. ${where}`,
-  overdrive: (o) => `${o.name}: everything in ${S.surge.name} plus automatic posting and AI tools set up for you. ${o.price}${o.suffix} launch price, or ${o.oneMonth} for one month. ${BIZ.city}, ${BIZ.region}.`,
-  'total-blackout': (o) => `${o.name}: ads, AI-made posts, an AI assistant that answers customers and a clean web page, done for you. ${o.price}${o.suffix}, or ${o.oneMonth} for one month. ${BIZ.city}, ${BIZ.region}.`,
+  overdrive: (o) => `${o.name}: everything in ${S.surge.name} plus automatic posting and AI tools set up for you. ${o.price}${o.suffix} launch price, or ${o.oneMonth} for one month. ${BIZ.areaName}.`,
+  'total-blackout': (o) => `${o.name}: ads, AI-made posts, an AI assistant that answers customers and a clean web page, done for you. ${o.price}${o.suffix}, or ${o.oneMonth} for one month. ${BIZ.areaName}.`,
   'profile-fix': (o) => `${o.name}: a rewritten bio, a pinned post plan, organized highlights and a shot list, so your page makes sense before ads send people. ${o.price}, one time.`,
   'ai-automation': (o) => `${o.name}: automatic replies, lead capture, follow-ups and post scheduling built around your business. Quoted per job. ${where}`,
 };
@@ -187,7 +187,7 @@ const META_PLAIN = {
   spark: (o) => `${o.name}: a small, real paid push on the platform you pick, a ${o.run} with the ${S['post-kit'].name} included. Free quote. Ask for price. ${where}`,
   surge: (o) => `${o.name}: paid ads every month on up to 2 platforms, aim adjusted as numbers come in, and a monthly recap. Free quote. Ask for price. ${where}`,
   overdrive: (o) => `${o.name}: everything in ${S.surge.name} plus automatic posting and AI tools set up for you. Month to month. Free quote. Ask for price. ${where}`,
-  'total-blackout': (o) => `${o.name}: ads, AI-made posts, an AI assistant that answers customers and a clean web page, done for you. Free quote. Ask for price. ${BIZ.city}, ${BIZ.region}.`,
+  'total-blackout': (o) => `${o.name}: ads, AI-made posts, an AI assistant that answers customers and a clean web page, done for you. Free quote. Ask for price. ${BIZ.areaName}.`,
   'post-kit': (o) => `${o.name}: a 30-day posting calendar and 12 captions written for your business, emailed as a PDF within 2 business days. Free quote. Ask for price.`,
   'profile-fix': (o) => `${o.name}: a rewritten bio, a pinned post plan, organized highlights and a shot list, so your page makes sense before ads send people. Free quote. Ask for price.`,
   'ai-automation': META['ai-automation'],
@@ -236,8 +236,8 @@ export default (cfg = {}) => OFFERS.map((src, i) => {
       '@type': 'Service',
       name: o.name,
       description: o.summary,
-      provider: { '@type': 'LocalBusiness', name: BIZ.name, telephone: '+1-574-213-9097', address: { '@type': 'PostalAddress', addressLocality: 'South Bend', addressRegion: 'IN', addressCountry: 'US' } },
-      areaServed: BIZ.area.map((c) => c + ', IN'),
+      provider: { '@type': 'LocalBusiness', name: BIZ.name, telephone: '+1-574-213-9097', address: { '@type': 'PostalAddress', addressLocality: BIZ.areaName, addressRegion: 'IN', addressCountry: 'US' } },
+      areaServed: [BIZ.areaName],
       url: cfg.siteUrl + '/' + path,
       // No Offer at all with prices hidden: an Offer without a price is not valid structured data.
       ...(isService || !pricesOn(cfg) ? {} : { offers: { '@type': 'Offer', price: o.price.replace('$', ''), priceCurrency: 'USD', ...(o.suffix ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: o.price.replace('$', ''), priceCurrency: 'USD', unitText: 'MONTH' } } : {}) } }),
@@ -289,7 +289,7 @@ export default (cfg = {}) => OFFERS.map((src, i) => {
         <p class="lede">${o.tagline}</p>
         <div class="ctas">
           ${c.btn(claim + ' ' + c.arrow, claimHref, 'lg')}
-          ${payLink ? c.btn('Pay online', o.store, 'ghost lg') : c.btn('Call ' + BIZ.phone, BIZ.phoneHref, 'ghost lg') + c.btn('Text us', BIZ.sms, 'ghost lg')}${c.config.payUrl ? c.btn('Pay', 'pay.html', 'ghost lg') : ''}
+          ${payLink ? c.btn('Pay online', o.store, 'ghost lg') : c.btn('Call ' + BIZ.phone, BIZ.phoneHref, 'ghost lg') + c.btn('Text us', BIZ.sms, 'ghost lg')}${c.config.payUrl ? c.btn('Pay', 'pay.html#pay-now', 'ghost lg') : ''}
         </div>
       </div>
       <aside class="offer-card" aria-label="${o.name} at a glance">

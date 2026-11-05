@@ -73,7 +73,7 @@ const GROUPS = [
   {
     id: 'local', t: 'Local, and who we work with', blurb: 'Where we are, who we’re for, and who runs it.',
     items: [
-      { id: 'where', q: 'Where are you? Do I have to be local?', a: (c) => `<p>We’re in ${BIZ.city}, ${BIZ.regionLong}, and we work with people in ${andList(BIZ.area)}. You don’t have to be local. Ads, posts and setups all work from anywhere online.</p><p><a href="${c.link(offerPath(bySlug['ai-consulting']))}">AI Consulting</a> can be done in person around ${andList(BIZ.area)}, or on a call.</p>` },
+      { id: 'where', q: 'Where are you? Do I have to be local?', a: (c) => `<p>We’re ${BIZ.based}, and we work with people in ${BIZ.areaName}. You don’t have to be local. Ads, posts and setups all work from anywhere online.</p><p><a href="${c.link(offerPath(bySlug['ai-consulting']))}">AI Consulting</a> can be done in person around ${BIZ.areaName}, or on a call.</p>` },
       { id: 'who-for', q: 'Who do you work with?', a: () => `<p>Creators, streamers, solo businesses and local shops. Musicians and events too.</p><p>Not sure you fit? Ask. We’ll tell you straight which package makes sense, or whether you need one at all.</p>` },
       { id: 'who-runs', q: 'Who is behind Blackout Syndicate?', a: (c) => `<p>${BIZ.founder}, known as ${BIZ.founderShort}. A ${BIZ.city} guy who spent ten years building things with his hands before he started building reach. ${BIZ.name} is a ${BIZ.legal} company.</p><p>His story is on the <a href="${c.link('about.html')}">About page</a>. You can also call or text ${tel} or email ${mail} and talk to a real person.</p>` },
     ],
@@ -252,7 +252,7 @@ export default {
   navTitle: 'FAQ',
   section: 'faq',
   title: 'FAQ',
-  description: 'Straight answers on buying, refunds, the ads, results, monthly plans, your accounts and privacy, from Blackout Syndicate in South Bend, Indiana.',
+  description: 'Straight answers on buying, refunds, the ads, results, monthly plans, your accounts and privacy, from Blackout Syndicate, Michiana based.',
   teaser: 'Every question people ask before they buy, answered straight.',
   next: 'contact.html',
   css,
@@ -317,7 +317,7 @@ export default {
     <div class="ask__main rv">
       <p class="label">Not on file</p>
       <h2 class="h2" id="ask-h">Didn’t see <span class="whisper">your question?</span></h2>
-      <p class="lede">Ask it straight. A real person in ${BIZ.city} reads it and gives you a straight answer, in plain English.</p>
+      <p class="lede">Ask it straight. A real person in ${BIZ.areaName} reads it and gives you a straight answer, in plain English.</p>
       <div class="ctas">${c.btn('Ask us ' + c.arrow, 'contact.html', 'paper lg')}${c.btn('How it works', 'how-it-works.html', 'paper ghost lg')}</div>
     </div>
     <div class="ask__lines rv" style="--d:.1s">
@@ -325,7 +325,7 @@ export default {
       <p class="label">Or reach us direct</p>
       <a class="ask__phone" href="${BIZ.phoneHref}">${BIZ.phone}</a>
       <a class="ask__mail" href="mailto:${BIZ.email}">${BIZ.email}</a>
-      <p class="ask__note">Call or text. ${andList(BIZ.area)}, and anywhere online.</p>
+      <p class="ask__note">Call or text. ${BIZ.areaName} and anywhere online.</p>
     </div>
   </div>
 </section>`;

@@ -39,7 +39,7 @@ export default {
   path: 'getstarted.html',
   section: 'contact',
   title: 'Get started',
-  description: 'Get seen in South Bend, Mishawaka and Elkhart. Pick a package, take the 3-question match, or call or text (574) 213-9097. Real ads, real people, no bots.',
+  description: 'Get seen in Michiana. Pick a package, take the 3-question match, or call or text (574) 213-9097. Real ads, real people, no bots.',
   teaser: 'Three doors. Pick one and we take it from there.',
   next: 'packages.html',
   css: css + BOOKING_CSS, js: BOOKING_JS,
@@ -84,7 +84,7 @@ export default {
       <div class="door" data-spot>
         <span class="door__no">03</span><span class="label">I’d rather talk</span><b>Call or text</b>
         <a class="lines__big" href="${BIZ.phoneHref}">${BIZ.phone}</a>
-        <span>Calls and texts go to a real person in South Bend. Ask anything, including whether you need us at all.</span>
+        <span>Calls and texts go to a real person in ${BIZ.areaName}. Ask anything, including whether you need us at all.</span>
         <button class="copy" type="button" data-copy="${BIZ.phone}">Copy number</button>
       </div>
     </div>

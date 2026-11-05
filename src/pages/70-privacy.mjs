@@ -286,7 +286,7 @@ const SECTIONS = (c) => [
   {
     id: 'who-we-are', t: 'Who we are',
     body: `
-<p>${BIZ.name} is a small marketing business in ${BIZ.city}, ${BIZ.regionLong}. We run paid social media ads, content and AI setup for creators, streamers, solo businesses and local shops. ${BIZ.name} is a ${BIZ.legal} company, run by founder ${BIZ.founder}.</p>
+<p>${BIZ.name} is a small marketing business, ${BIZ.based}. We run paid social media ads, content and AI setup for creators, streamers, solo businesses and local shops. ${BIZ.name} is a ${BIZ.legal} company, run by founder ${BIZ.founder}.</p>
 <p>This policy covers this website, ${siteHost(c)}, and what happens to anything you send us through it. When we say “we” or “us”, we mean ${BIZ.name}.</p>
 <p>Questions about your information go to ${mail} or ${tel}, by call or text.</p>`,
   },
@@ -462,7 +462,7 @@ const SECTIONS = (c) => [
     body: `
 <p>Anything about your information, ask us straight.</p>
 ${c.contactLines()}
-<p class="small muted">${BIZ.name} · a ${BIZ.legal} company · ${BIZ.city}, ${BIZ.regionLong}</p>`,
+<p class="small muted">${BIZ.name} · a ${BIZ.legal} company · ${BIZ.based}</p>`,
   },
 ];
 

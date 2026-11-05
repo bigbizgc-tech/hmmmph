@@ -54,14 +54,14 @@ const RULES = [
   { t: 'Price before work', d: `Boosts, plans and add-ons have their price on the page. ${POLICY.quoted}`, plain: (c) => `${c.ASK.line} on any boost, plan or add-on, and you have it before anything starts. ${POLICY.quoted}` },
   { t: 'No promised numbers', d: BIZ.resultsNote },
   { t: 'Stay or walk', d: POLICY.plans },
-  { t: 'A local person answers', d: `Call or text ${BIZ.phone}. You deal with a person in ${BIZ.city}.` },
+  { t: 'A local person answers', d: `Call or text ${BIZ.phone}. You deal with a person in ${BIZ.areaName}.` },
 ];
 
 // The map (viewBox 0 0 800 500). Stylized, not to scale. West to east: South Bend, Mishawaka, Elkhart.
 const TOWNS = [
-  { k: 'sb', name: 'South Bend', x: 208, y: 392, lx: 236, ly: 444, anchor: 'start', tag: 'Home base', note: 'Home base. GC is a South Bend guy, and the city takes its name from the bend in the river.' },
+  { k: 'sb', name: 'South Bend', x: 208, y: 392, lx: 236, ly: 444, anchor: 'start', tag: 'The bend', note: 'GC is a South Bend guy, and the city takes its name from the bend in the river.' },
   { k: 'mi', name: 'Mishawaka', x: 372, y: 302, lx: 372, ly: 352, anchor: 'middle', tag: 'Next door', note: 'Right next door to South Bend, a short way up the river to the east.' },
-  { k: 'el', name: 'Elkhart', x: 660, y: 222, lx: 660, ly: 186, anchor: 'middle', tag: 'East end', note: 'The east end of the territory, and the furthest up the river of the three.' },
+  { k: 'el', name: 'Elkhart', x: 660, y: 222, lx: 660, ly: 186, anchor: 'middle', tag: 'East end', note: 'The furthest up the river of the three.' },
 ];
 const RIVER = 'M790 30C770 100 730 170 660 222C620 248 580 250 540 262C490 278 430 300 372 302C326 304 292 300 266 322C242 342 238 384 208 392C180 399 160 374 158 336C156 290 178 236 164 178C152 128 130 80 122 0';
 
@@ -351,7 +351,7 @@ export default {
   navTitle: 'About',
   section: 'about',
   title: 'About the Syndicate',
-  description: 'Meet Gregory Clark, the South Bend founder of Blackout Syndicate: ten years building with his hands, now building real reach for creators and local shops.',
+  description: 'Meet Gregory Clark, the Michiana based founder of Blackout Syndicate: ten years building with his hands, now building real reach for creators and local shops.',
   teaser: 'The man behind the Syndicate, the rules he runs by, and the ground he covers.',
   next: 'packages/post-kit.html',
   css, js,
@@ -366,7 +366,7 @@ export default {
       alternateName: ['GC', 'Biz'],
       jobTitle: 'Founder',
       worksFor: { '@type': 'Organization', name: BIZ.name, parentOrganization: { '@type': 'Organization', name: BIZ.legal } },
-      homeLocation: { '@type': 'City', name: `${BIZ.city}, ${BIZ.region}` },
+      homeLocation: { '@type': 'Place', name: BIZ.areaName },
     },
   }),
   body: (c) => `
@@ -374,7 +374,7 @@ export default {
   <div class="wrap ab-head__in">
     <div class="ab-head__main">
       ${c.crumbs([{ t: 'Home', p: 'index.html' }, { t: 'About' }])}
-      <p class="label">${c.page.file} · Personnel · <span class="ab-nw">${BIZ.city}, ${BIZ.regionLong}</span></p>
+      <p class="label">${c.page.file} · Personnel · <span class="ab-nw">${BIZ.based}</span></p>
       <h1 class="h1 ab-head__title">Who runs <span class="whisper">the Syndicate.</span></h1>
       <p class="lede"><strong>Gregory Clark. Goes by GC.</strong> A South Bend guy who built things with his hands for ten years. Now he builds reach for creators, streamers, solo businesses and local shops.</p>
       <div class="ctas">
@@ -470,8 +470,8 @@ export default {
   <div class="wrap ab-turf">
     <div class="ab-turf__text rv">
       <p class="label">The territory</p>
-      <h2 class="h2" id="turf-h">Three towns. One river.</h2>
-      <p class="lede">${AREA} all sit on the St. Joseph River. That’s our ground.</p>
+      <h2 class="h2" id="turf-h">Michiana based.</h2>
+      <p class="lede">We’re ${BIZ.based}. That’s our ground.</p>
       <p class="muted">We meet in person around here for AI setup and consulting. Ads and online work reach anywhere you want them aimed.</p>
       <ul class="ab-towns" aria-label="Towns on the map">
         ${TOWNS.map((t) => `<li><button type="button" data-town="${t.k}" aria-pressed="false"><b>${t.name}</b><small>${t.tag}</small><span>${t.note}</span></button></li>`).join('')}
@@ -479,7 +479,7 @@ export default {
     </div>
     <figure class="ab-map rv" data-map style="--d:.1s">
       <div class="ab-map__box">${MAP}${c.mark('m1')}</div>
-      <figcaption><span>Drawn for style, not to scale.</span><span>West to east: ${BIZ.area.join(' · ')}</span></figcaption>
+      <figcaption><span>Michiana. Drawn for style, not to scale.</span></figcaption>
     </figure>
   </div>
 </section>

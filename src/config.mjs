@@ -46,8 +46,35 @@ export default {
   //         footer, Get started and the class page.
   // Empty = no page and no links anywhere. Empty it again once the trip is over.
   donateUrl: 'https://www.paypal.biz/blackoutsyn',
-  // Biz's PayPal Business page. The Pay page and every Pay button open it; the payer types the amount on PayPal.
+  // Biz's PayPal Business page. Fallback when the live button IDs below are empty.
+  // paypal.biz (and paypal.me) make the payer log in before they can type an amount.
   payUrl: 'https://www.paypal.biz/blackoutsyn',
+
+  // ── LIVE PAYPAL (customer set price) ───────────────────────────────────────
+  // Lets a payer type any amount and pay with PayPal or a debit/credit card,
+  // including as a guest, on the Pay page and the Washington Donate button.
+  // Package Pay buttons open the Pay page. Leave these blank to keep payUrl / donateUrl.
+  // Public values from the button code. Not secrets. Never a sandbox client ID.
+  //
+  // Where Biz gets them (live Business account only):
+  // 1. Log in at https://www.paypal.com — not sandbox.paypal.com, and not the
+  //    Sandbox toggle on developer.paypal.com.
+  // 2. Pay & Get Paid → Create Payment Links and Buttons → Payment buttons.
+  // 3. Pay button: item name "Blackout Syndicate". Under Price choose
+  //    "Customer set price". Label the amount field "Amount". Build it.
+  // 4. Open the Stacked Buttons tab (not Single button). From that code copy:
+  //      client-id=...          → paypalLiveClientId
+  //      hostedButtonId: "..."  → paypalPayButtonId
+  //    Do not copy a Secret. The client ID in this snippet is public.
+  // 5. Create a second button the same way, item name "Send Biz to Washington",
+  //    and paste its hostedButtonId into paypalDonateButtonId. Same client ID.
+  // 6. So a card is offered without a PayPal login: Settings (gear) →
+  //    Account Settings → Payments → Website payments → PayPal Account Optional → On.
+  //    PayPal still decides per buyer whether guest checkout shows.
+  // 7. Save, run `npm run build`, and publish the new docs/ (see README).
+  paypalLiveClientId: '',
+  paypalPayButtonId: '',
+  paypalDonateButtonId: '',
 
   // Preview mode: the form skips the network and goes straight to the thank-you page.
   // The build turns this on automatically for `npm run build:preview`.
