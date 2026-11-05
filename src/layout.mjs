@@ -231,6 +231,22 @@ twq('config','${esc(config.xPixelId)}');
 </script>`;
 }
 
+// ── Pixel (Meta) ─────────────────────────────────────────────────────────────
+// Meta's standard base code. Only an all-digit ID is accepted, so a typo can never inject anything.
+// autoConfig off: Meta's script doesn't scrape buttons or page details on its own; only the events below are sent.
+function metaPixel(config) {
+  const id = String(config.metaPixelId || '').trim();
+  if (!/^\d{6,20}$/.test(id)) return '';
+  return `<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;
+s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('set','autoConfig',false,'${id}');
+fbq('init','${id}');
+fbq('track','PageView');
+</script>`;
+}
+
 // Only what the site uses: Archivo upright 400-700 (no width axis, no italics), Big Shoulders 800 and 900,
 // Bodoni Moda italic 500 and 700 at one optical size (the accent words), Courier Prime 400 and 700.
 // About 110 KB of Latin font files instead of 202 KB. site.css has metric-matched fallbacks for the swap.
@@ -291,6 +307,7 @@ ${css}
 <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js')</script>
 ${cfg}
 ${pixel(config)}
+${metaPixel(config)}
 ${page.css ? `<style>${page.css}</style>` : ''}
 ${ld}`;
 

@@ -20,6 +20,14 @@ export default {
     call: '',          // fires when someone taps a phone (call), text or email link on any page
   },
 
+  // ── META PIXEL (Facebook / Instagram) ──────────────────────────────────────
+  // Meta Events Manager → Data sources → your pixel (Meta calls it a "dataset") → copy the ID
+  // (all digits, about 15-16 long). Leave '' to load no Meta tracking at all.
+  // Set = Meta's base code on every page (PageView), ViewContent on package pages, Contact on
+  // call / text / email taps, and Lead once on thank-you.html after a real send (same one-time
+  // token the X Lead uses, sent to Meta as the event ID).
+  metaPixelId: '',
+
   // ── LEAD FORM ──────────────────────────────────────────────────────────────
   // Any endpoint that accepts a JSON POST works (FormSubmit, Formspree, Basin, your own).
   // FormSubmit needs no account: the very first submission sends an activation

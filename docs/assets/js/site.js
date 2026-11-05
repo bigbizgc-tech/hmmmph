@@ -1,5 +1,5 @@
 /* Blackout Syndicate 2.0 — core engine.
-   Clearance (XP + levels), searchlight, redaction, drawer, toasts, lead form, X pixel events.
+   Clearance (XP + levels), searchlight, redaction, drawer, toasts, lead form, X and Meta pixel events.
    Exposes window.BS for page scripts: BS.award(), BS.track(), BS.toast(), BS.state(), BS.stamps(), BS.level(). */
 (() => {
   'use strict';
@@ -563,9 +563,22 @@
 
   /* ── X pixel events ────────────────────────────────────────────────── */
   // An event whose ID is still '' in config does nothing.
+  // The same moments go to the Meta Pixel as Meta's standard events, when metaPixelId is set.
+  const META = { packageView: 'ViewContent', call: 'Contact', lead: 'Lead' };
   function track(name, params) {
     const id = (CFG.xEvents || {})[name];
     try { if (id && typeof window.twq === 'function') window.twq('event', id, params || {}); } catch (e) { /* never break the page */ }
+    const m = META[name];
+    try {
+      if (m && CFG.metaPixelId && typeof window.fbq === 'function') {
+        const p = params || {}, c = (p.contents || [])[0] || {};
+        const data = {};
+        if (c.content_name) data.content_name = String(c.content_name).slice(0, 100);
+        if (c.content_id) data.content_ids = [String(c.content_id).slice(0, 100)];
+        if (p.conversion_id) window.fbq('track', m, data, { eventID: String(p.conversion_id) });
+        else window.fbq('track', m, data);
+      }
+    } catch (e) { /* never break the page */ }
   }
   if (['boost', 'plan', 'addon', 'service'].includes(KIND)) track('packageView', { contents: [{ content_id: host.dataset.offer, content_name: document.title }] });
   if (PATH === 'contact.html') track('contactView');

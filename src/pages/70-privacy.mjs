@@ -1,7 +1,7 @@
 // Privacy policy. Plain-English draft for the owner to have reviewed.
 // Written against what the site actually does (see src/assets/js/site.js, src/layout.mjs, src/config.mjs):
 // the lead form posts JSON to config.formEndpoint (FormSubmit by default), the X Pixel loads when
-// config.xPixelId is set, clearance lives in localStorage key "bs2.clearance.v1", the form and
+// config.xPixelId is set (the Meta Pixel too, when config.metaPixelId is set), clearance lives in localStorage key "bs2.clearance.v1", the form and
 // thank-you page use sessionStorage for the current tab only, and fonts load from Google Fonts.
 // This module also exports the shared legal-page pieces that 71-terms.mjs imports.
 import { BIZ, SOCIALS, XP } from '../data/business.mjs';
@@ -364,6 +364,39 @@ const SECTIONS = (c) => [
 </ul>
 <p>Blocking the pixel doesn’t break anything here. Every page still works.</p>`,
   },
+  ...(c.config.metaPixelId ? [{
+    id: 'meta-pixel', t: 'The Meta Pixel',
+    body: `
+<p>This site also uses the Meta Pixel, a small piece of code from Meta, the company behind Facebook and Instagram. We run ads there too, and the pixel tells us whether those ads lead to real visits and real inquiries.</p>
+<h3>What it measures</h3>
+<ul>
+  <li>Visits to pages on this site</li>
+  <li>Views of package and service pages, with the name of the package</li>
+  <li>A successful form send and the thank-you page after it, with the package you picked</li>
+  <li>Taps on our call, text and email links, with the page or package they were on</li>
+</ul>
+<div class="lg-pair">
+  <div><p class="label">What Meta can see</p><ul class="ticks">
+    <li>Cookies or similar identifiers the pixel sets in your browser</li>
+    <li>Your IP address, browser and device type</li>
+    <li>The page you’re on and the page that sent you</li>
+    <li>Your Facebook or Instagram account, if you’re logged in</li>
+  </ul></div>
+  <div><p class="label label--red">What we never pass to Meta</p><ul class="ticks ticks--no">
+    <li>Your name</li>
+    <li>Your email or phone number</li>
+    <li>Your message</li>
+    <li>Your clearance file</li>
+  </ul></div>
+</div>
+<p>Meta handles pixel data under its own <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">privacy policy</a>. What we get back is reporting in our Meta ads account, like how many visits or form sends followed an ad. Those reports don’t tell us who you are.</p>
+<h3>How to limit it</h3>
+<ul>
+  <li><strong>On Facebook or Instagram:</strong> open Accounts Center, then Ad preferences, and review the activity information from ad partners. <a href="https://accountscenter.facebook.com/ad_preferences" target="_blank" rel="noopener">Your Meta ad preferences</a>.</li>
+  <li><strong>In your browser:</strong> block third-party cookies, clear cookies for this site, or use a content blocker that stops tracking pixels.</li>
+</ul>
+<p>Blocking the pixel doesn’t break anything here. Every page still works.</p>`,
+  }] : []),
   {
     // not 'clearance': that id belongs to the clearance panel on every page
     id: 'clearance-data', t: 'The clearance game',
@@ -404,7 +437,7 @@ const SECTIONS = (c) => [
     body: `
 <p>The lettering on this site comes from Google Fonts. To show it, your browser asks Google’s servers for the font files, which tells Google your IP address and browser details. Google handles that under its <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">privacy policy</a>. If the fonts are blocked, the site falls back to fonts already on your device.</p>
 <p>Like any website, the service that hosts this site may keep standard server logs: IP address, browser type, the page asked for and the time. Those logs are used to run and protect the site.</p>
-<p>Besides the X Pixel, this site runs no other tracking or analytics.</p>`,
+<p>Besides the X Pixel${c.config.metaPixelId ? ' and the Meta Pixel' : ''}, this site runs no other tracking or analytics.</p>`,
   },
   {
     id: 'links', t: 'Links to YouTube and social platforms',
@@ -422,7 +455,7 @@ const SECTIONS = (c) => [
     id: 'no-selling', t: 'We don’t sell your information',
     body: `
 <p class="lg-quote">We don’t sell your personal information. We don’t rent it or trade it either.</p>
-<p>The only outside companies that handle it are the ones named on this page: the form-delivery service, our email and phone providers, X for the pixel, Google for the fonts and the booking calendar, our web host, and the platforms that run the work you approve. We would also share information if the law required it.</p>`,
+<p>The only outside companies that handle it are the ones named on this page: the form-delivery service, our email and phone providers, ${c.config.metaPixelId ? 'X and Meta for their pixels' : 'X for the pixel'}, Google for the fonts and the booking calendar, our web host, and the platforms that run the work you approve. We would also share information if the law required it.</p>`,
   },
   {
     id: 'how-long', t: 'How long we keep it',
@@ -442,7 +475,8 @@ const SECTIONS = (c) => [
   <li><strong>Fix it.</strong> Tell us what’s wrong and we’ll correct it.</li>
   <li><strong>Delete it.</strong> Ask and we’ll delete your inquiry and contact details, except records the law makes us keep.</li>
   <li><strong>Limit the X Pixel.</strong> Use your X settings or your browser settings, as explained in <a href="#x-pixel">The X Pixel</a>.</li>
-  <li><strong>Burn your clearance.</strong> Burn my file, at the bottom of the clearance panel.</li>
+${c.config.metaPixelId ? `  <li><strong>Limit the Meta Pixel.</strong> Use your Meta ad preferences or your browser settings, as explained in <a href="#meta-pixel">The Meta Pixel</a>.</li>
+` : ''}  <li><strong>Burn your clearance.</strong> Burn my file, at the bottom of the clearance panel.</li>
 </ul>
 <p>To ask, email ${mail} or call or text ${tel}. We may ask you to confirm it’s you before we hand over or delete anything.</p>`,
   },
@@ -497,7 +531,9 @@ ${legalShort({
   h2: 'Four things <span class="whisper">to know.</span>',
   cells: [
     { t: 'What you send us', p: 'The contact form, calls, texts and email. We use it to answer you and do the work.', go: 'contact-form', link: 'The contact form' },
-    { t: 'What X sees', p: 'The X Pixel counts visits and form sends from our X ads. X handles that under its own policy.', go: 'x-pixel', link: 'The X Pixel' },
+    c.config.metaPixelId
+      ? { t: 'What X and Meta see', p: 'The X Pixel and the Meta Pixel count visits and form sends from our ads. Each handles that under its own policy.', go: 'x-pixel', link: 'The pixels' }
+      : { t: 'What X sees', p: 'The X Pixel counts visits and form sends from our X ads. X handles that under its own policy.', go: 'x-pixel', link: 'The X Pixel' },
     { t: 'What stays with you', p: 'Your clearance lives in your own browser. Burn it any time.', go: 'clearance-data', link: 'The clearance game' },
     { t: 'What we never do', p: 'Sell your information. Or rent it, or trade it.', go: 'no-selling', link: 'No selling' },
   ],
